@@ -50,18 +50,6 @@ var ViewModel = function() {
         self.ballparkList.push(new Ballpark(ballparkItem));
 
     });
-
-    this.getMarker = function() {
-        var markerJSON = {
-            map: map,
-            position: {
-                lat: 33,
-                lng: -75
-            },
-            title: 'Fakie Field'
-        };
-        return markerJSON;
-    };
 };
 
 ko.applyBindings(new ViewModel());
@@ -71,10 +59,10 @@ function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         // coordinates to show entire US on a 1600x900px display
         center: {
-            lat: 40.4470471765,
-            lng: -80.0061745423
+            lat: 41.5,
+            lng: -80.5
         },
-        zoom: 4
+        zoom: 6
     });
 
     // create map markers for all ballparks
