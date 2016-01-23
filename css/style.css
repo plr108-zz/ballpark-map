@@ -1,3 +1,7 @@
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
 html,
 body {
     height: 100%;
@@ -5,10 +9,21 @@ body {
     padding: 0;
 }
 
-#map {
+.container {
     height: 100%;
+    width: 100%;
+    display: flex;
 }
 
-h1 {
-	text-align: center;
+#info {
+    color: white;
+    background-color: rgb(0, 153, 0);
+    width: 25%;
+    height: 100%;
+    float: left;
+}
+
+#map {
+    height: 100%;
+    width: 75%;
 }
