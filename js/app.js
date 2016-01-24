@@ -53,7 +53,8 @@ window.initMap = function() {
         var marker = new google.maps.Marker({
             map: map,
             title: ballparks[i].title,
-            position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng)
+            position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
+            animation: google.maps.Animation.DROP
         });
     }
 

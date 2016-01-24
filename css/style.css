@@ -9,6 +9,11 @@ body {
     padding: 0;
 }
 
+li {
+	border: 1px solid rgb(0, 51, 0);
+	list-style-type: none;
+}
+
 .container {
     height: 100%;
     width: 100%;
