@@ -56,8 +56,27 @@ window.initMap = function() {
             position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
             animation: google.maps.Animation.DROP
         });
-    }
 
+        var infowindow = new google.maps.InfoWindow({
+            content: '<p>Info goes here</p>'
+        });
+
+        // TODO: add closure to event listener
+        // Add click listener to toggle bounce
+        google.maps.event.addListener(marker, 'click', function() {
+            toggleBounce();
+            infowindow.open(map, marker);
+            setTimeout(toggleBounce, 750);
+        });
+
+        function toggleBounce() {
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        };
+    }
 };
 
 // End View ///////////////////////////////////////////////////////////////////
