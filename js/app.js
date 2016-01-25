@@ -61,20 +61,20 @@ window.initMap = function() {
             content: '<p>Info goes here</p>'
         });
 
-        // TODO: add closure to event listener
-        // Add click listener to toggle bounce
-        google.maps.event.addListener(marker, 'click', function() {
-            toggleBounce();
-            infowindow.open(map, marker);
-            setTimeout(toggleBounce, 750);
-        });
+        google.maps.event.addListener(marker, 'click', (function(thisMarker) {
+            return function() {
+                setBounce(thisMarker);
+                infowindow.open(map, thisMarker);
+            };
+        })(marker));
 
-        function toggleBounce() {
-            if (marker.getAnimation() != null) {
-                marker.setAnimation(null);
-            } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
+        // make the marker bounce for 750ms
+        function setBounce(thisMarker) {
+            thisMarker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() {
+                thisMarker.setAnimation(null);
+            }, 750);
+
         };
     }
 };
