@@ -57,25 +57,44 @@ window.initMap = function() {
             animation: google.maps.Animation.DROP
         });
 
-        var infowindow = new google.maps.InfoWindow({
-            content: '<p>Info goes here</p>'
-        });
+        // create infoWindow
+        var infoWindow = new google.maps.InfoWindow();
 
-        google.maps.event.addListener(marker, 'click', (function(thisMarker) {
-            return function() {
-                setBounce(thisMarker);
-                infowindow.open(map, thisMarker);
-            };
-        })(marker));
+
+        // create infoWindow contentHTML
+        var contentHTML = ballparks[i].title;
+
+        var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
+
+            // TODO: only show one map marker at a time
+
+            // set InfoWindow content
+            infoWindow.setContent(contentHTML);
+
+            // create event listener for clicking the marker
+            google.maps.event.addListener(marker, 'click', (function(marker) {
+                return function() {
+                    // make the marker bounce for 750ms
+                    setBounce(marker);
+
+                    // open the infoWindow
+                    infoWindow.open(map, marker);
+                };
+            })(marker));
+        }
+
 
         // make the marker bounce for 750ms
-        function setBounce(thisMarker) {
-            thisMarker.setAnimation(google.maps.Animation.BOUNCE);
+        function setBounce(marker) {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
-                thisMarker.setAnimation(null);
+                marker.setAnimation(null);
             }, 750);
 
         };
+
+        // initialize infoWindow
+        initializeInfoWindow(marker, contentHTML, infoWindow);
     }
 };
 
