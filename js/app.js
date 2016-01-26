@@ -1,39 +1,43 @@
 // Model //////////////////////////////////////////////////////////////////////
-var ballparks = [{
-    title: 'PNC Park',
-    lat: 40.4470471765,
-    lng: -80.0061745423
-}, {
-    title: 'Citizens Bank Park',
-    lat: 39.905569,
-    lng: -75.166591
-}, {
-    title: 'Oriole Park at Camden Yards',
-    lat: 39.283505,
-    lng: -76.621911
-}, {
-    title: 'Progressive Field',
-    lat: 41.495537,
-    lng: -81.685278
-}, {
-    title: 'U.S. Cellular Field',
-    lat: 41.830176,
-    lng: -87.634225
-}, {
-    title: 'Great American Ball Park',
-    lat: 39.097466,
-    lng: -84.507029
-}, {
-    title: 'Wrigley Field',
-    lat: 41.947902,
-    lng: -87.655823
-}];
+var model = {
+    ballparks : [{
+        title: 'PNC Park',
+        lat: 40.4470471765,
+        lng: -80.0061745423
+    }, {
+        title: 'Citizens Bank Park',
+        lat: 39.905569,
+        lng: -75.166591
+    }, {
+        title: 'Oriole Park at Camden Yards',
+        lat: 39.283505,
+        lng: -76.621911
+    }, {
+        title: 'Progressive Field',
+        lat: 41.495537,
+        lng: -81.685278
+    }, {
+        title: 'U.S. Cellular Field',
+        lat: 41.830176,
+        lng: -87.634225
+    }, {
+        title: 'Great American Ball Park',
+        lat: 39.097466,
+        lng: -84.507029
+    }, {
+        title: 'Wrigley Field',
+        lat: 41.947902,
+        lng: -87.655823
+    }],
 
+    activeBallpark : null
+};
 var Ballpark = function(data) {
     this.title = ko.observable(data.title);
     this.lat = ko.observable(data.lat);
     this.lng = ko.observable(data.lng);
 };
+
 // End Model //////////////////////////////////////////////////////////////////
 
 // View ///////////////////////////////////////////////////////////////////////
@@ -48,39 +52,42 @@ window.initMap = function() {
         zoom: 6
     });
 
+    // create one infoWindow for use by the marker for the activeBallpark
+    var infoWindow = new google.maps.InfoWindow();
+
     // create map markers for all ballparks
-    for (i = 0; i < ballparks.length; i++) {
+    for (i = 0; i < model.ballparks.length; i++) {
         var marker = new google.maps.Marker({
             map: map,
-            title: ballparks[i].title,
-            position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
+            title: model.ballparks[i].title,
+            position: new google.maps.LatLng(model.ballparks[i].lat, model.ballparks[i].lng),
             animation: google.maps.Animation.DROP
         });
 
-        // create infoWindow
-        var infoWindow = new google.maps.InfoWindow();
+        // create event listener for clicking the marker
+        google.maps.event.addListener(marker, 'click', (function(marker) {
+            return function() {
+                // make the marker bounce for 750ms
+                setBounce(marker);
 
+                // create infoWindow contentHTML
+                var contentHTML = marker.title;
 
-        // create infoWindow contentHTML
-        var contentHTML = ballparks[i].title;
+                // close the infoWindow (if it is open)
+                infoWindow.close();
+
+                // initialize infoWindow
+                initializeInfoWindow(marker, contentHTML, infoWindow);
+
+                // open the infoWindow
+                infoWindow.open(map, marker);
+            };
+        })(marker));
 
         var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
 
-            // TODO: only show one map marker at a time
-
             // set InfoWindow content
             infoWindow.setContent(contentHTML);
-
-            // create event listener for clicking the marker
-            google.maps.event.addListener(marker, 'click', (function(marker) {
-                return function() {
-                    // make the marker bounce for 750ms
-                    setBounce(marker);
-
-                    // open the infoWindow
-                    infoWindow.open(map, marker);
-                };
-            })(marker));
         }
 
 
@@ -92,9 +99,6 @@ window.initMap = function() {
             }, 750);
 
         };
-
-        // initialize infoWindow
-        initializeInfoWindow(marker, contentHTML, infoWindow);
     }
 };
 
@@ -109,7 +113,7 @@ var ViewModel = function() {
     this.ballparkList = ko.observableArray([]);
     this.activeBallpark = null;
 
-    ballparks.forEach(function(ballparkItem) {
+    model.ballparks.forEach(function(ballparkItem) {
         self.ballparkList.push(new Ballpark(ballparkItem));
 
     });
