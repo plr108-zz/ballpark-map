@@ -49,6 +49,106 @@ var ballparks = [{
     lat: 39.051839,
     lng: -94.480303,
     markerID: 9
+}, {
+    title: 'AT&T Park',
+    lat: 37.778858,
+    lng: -122.389248,
+    markerID: 10
+}, {
+    title: 'O.co Coliseum',
+    lat: 37.751595,
+    lng: -122.200528,
+    markerID: 11
+}, {
+    title: 'Nationals Park',
+    lat: 38.873219,
+    lng: -77.007411,
+    markerID: 12
+}, {
+    title: 'Safeco Field',
+    lat: 47.591653,
+    lng: -122.332335,
+    markerID: 13
+}, {
+    title: 'Target Field',
+    lat: 44.981911,
+    lng: -93.277830,
+    markerID: 14
+}, {
+    title: 'Miller Park',
+    lat: 43.028213,
+    lng: -87.971172,
+    markerID: 15
+}, {
+    title: 'Turner Field',
+    lat: 33.735085,
+    lng: -84.389973,
+    markerID: 16
+}, {
+    title: 'Globe Life Park in Arlington',
+    lat: 32.750289,
+    lng: -97.081287,
+    markerID: 17
+}, {
+    title: 'Minute Maid Park',
+    lat: 29.757413,
+    lng: -95.355529,
+    markerID: 18
+}, {
+    title: 'Tropicana Field',
+    lat: 27.768485,
+    lng: -82.653345,
+    markerID: 19
+}, {
+    title: 'Marlins Park',
+    lat: 25.778344,
+    lng: -80.219723,
+    markerID: 20
+}, {
+    title: 'Yankee Stadium',
+    lat: 40.829848,
+    lng: -73.926191,
+    markerID: 21
+}, {
+    title: 'Citi Field',
+    lat: 40.757226,
+    lng: -73.845824,
+    markerID: 22
+}, {
+    title: 'Comerica Park',
+    lat: 42.339420,
+    lng: -83.048942,
+    markerID: 23
+}, {
+    title: 'Rogers Centre',
+    lat: 43.641453,
+    lng: -79.389353,
+    markerID: 24
+}, {
+    title: 'Chase Field',
+    lat: 33.445039,
+    lng: -112.066732,
+    markerID: 25
+}, {
+    title: 'Coors Field',
+    lat: 39.755907,
+    lng: -104.994173,
+    markerID: 26
+}, {
+    title: 'Petco Park',
+    lat: 32.707582,
+    lng: -117.156999,
+    markerID: 27
+}, {
+    title: 'Angel Stadium of Anaheim',
+    lat: 33.800326,
+    lng: -117.882762,
+    markerID: 28
+}, {
+    title: 'Dodger Stadium',
+    lat: 34.072974,
+    lng: -118.240619,
+    markerID: 29
 }];
 
 // Ballpark object used by KO
@@ -67,10 +167,10 @@ window.initMap = function() {
     var map = new google.maps.Map(document.getElementById('map'), {
         // coordinates are in the center of the ballparks
         center: {
-            lat: 40.37,
-            lng: -80.5
+            lat: 39.6,
+            lng: -98.4
         },
-        zoom: 5
+        zoom: 4
     });
 
     // create one infoWindow for use by the marker for the activeBallpark
