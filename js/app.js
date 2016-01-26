@@ -29,8 +29,6 @@ var model = {
         lat: 41.947902,
         lng: -87.655823
     }],
-
-    activeBallpark : null
 };
 var Ballpark = function(data) {
     this.title = ko.observable(data.title);
@@ -41,6 +39,15 @@ var Ballpark = function(data) {
 // End Model //////////////////////////////////////////////////////////////////
 
 // View ///////////////////////////////////////////////////////////////////////
+//
+var mapView = {
+
+    // markers will be used to track the map markers
+    markers : []
+
+    // TODO: populate markers[] via ViewModel
+};
+
 // Google Maps callback function
 window.initMap = function() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -88,6 +95,7 @@ window.initMap = function() {
 
             // set InfoWindow content
             infoWindow.setContent(contentHTML);
+
         }
 
 
@@ -125,5 +133,6 @@ var ViewModel = function() {
     }
 };
 
+// activate Knockout
 ko.applyBindings(new ViewModel());
 // End View Model /////////////////////////////////////////////////////////////
