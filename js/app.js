@@ -1,42 +1,40 @@
 // Model //////////////////////////////////////////////////////////////////////
-var model = {
-    ballparks: [{
-        title: 'PNC Park',
-        lat: 40.4470471765,
-        lng: -80.0061745423,
-        markerID: 0
-    }, {
-        title: 'Citizens Bank Park',
-        lat: 39.905569,
-        lng: -75.166591,
-        markerID: 1
-    }, {
-        title: 'Oriole Park at Camden Yards',
-        lat: 39.283505,
-        lng: -76.621911,
-        markerID: 2
-    }, {
-        title: 'Progressive Field',
-        lat: 41.495537,
-        lng: -81.685278,
-        markerID: 3
-    }, {
-        title: 'U.S. Cellular Field',
-        lat: 41.830176,
-        lng: -87.634225,
-        markerID: 4
-    }, {
-        title: 'Great American Ball Park',
-        lat: 39.097466,
-        lng: -84.507029,
-        markerID: 5
-    }, {
-        title: 'Wrigley Field',
-        lat: 41.947902,
-        lng: -87.655823,
-        markerID: 6
-    }],
-};
+var ballparks = [{
+    title: 'PNC Park',
+    lat: 40.4470471765,
+    lng: -80.0061745423,
+    markerID: 0
+}, {
+    title: 'Citizens Bank Park',
+    lat: 39.905569,
+    lng: -75.166591,
+    markerID: 1
+}, {
+    title: 'Oriole Park at Camden Yards',
+    lat: 39.283505,
+    lng: -76.621911,
+    markerID: 2
+}, {
+    title: 'Progressive Field',
+    lat: 41.495537,
+    lng: -81.685278,
+    markerID: 3
+}, {
+    title: 'U.S. Cellular Field',
+    lat: 41.830176,
+    lng: -87.634225,
+    markerID: 4
+}, {
+    title: 'Great American Ball Park',
+    lat: 39.097466,
+    lng: -84.507029,
+    markerID: 5
+}, {
+    title: 'Wrigley Field',
+    lat: 41.947902,
+    lng: -87.655823,
+    markerID: 6
+}];
 
 // Ballpark object used by KO
 var Ballpark = function(data) {
@@ -68,16 +66,16 @@ window.initMap = function() {
     var infoWindow = new google.maps.InfoWindow();
 
     // create map markers for all ballparks
-    for (i = 0; i < model.ballparks.length; i++) {
+    for (i = 0; i < ballparks.length; i++) {
         markers[i] = new google.maps.Marker({
             map: map,
-            title: model.ballparks[i].title,
-            position: new google.maps.LatLng(model.ballparks[i].lat, model.ballparks[i].lng),
+            title: ballparks[i].title,
+            position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
             animation: google.maps.Animation.DROP
         });
 
         // set markerID
-        model.ballparks[i].markerID = i;
+        ballparks[i].markerID = i;
 
         // create event listener for clicking the marker
         google.maps.event.addListener(markers[i], 'click', (function(marker) {
@@ -129,7 +127,7 @@ var ViewModel = function() {
     this.ballparkList = ko.observableArray([]);
     this.activeBallpark = null;
 
-    model.ballparks.forEach(function(ballparkItem) {
+    ballparks.forEach(function(ballparkItem) {
         self.ballparkList.push(new Ballpark(ballparkItem));
 
     });
