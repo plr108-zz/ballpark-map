@@ -9,10 +9,12 @@
 <body>
     <div class="container">
         <div id="info">
-        	<div id="ballpark" data-bind="with:activeBallpark">
-        	<h1>Active Ballpark:</h1>
-        	<h2 data-bind="text: title" id="ballpark-title"></h2>
+        	<div id="header">
+        	<h1>Major League Ballparks</h1>
         	</div>
+            <div id="search">
+                <input id="search-input" placeholder="Search">
+            </div>
 
             <ul data-bind="foreach: ballparkList" id="ballpark-list">
                 <li data-bind="text: title, click: $parent.setActiveBallpark"></li>

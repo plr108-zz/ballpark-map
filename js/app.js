@@ -5,14 +5,14 @@ var ballparks = [{
     lng: -80.0061745423,
     markerID: 0
 }, {
-    title: 'Citizens Bank Park',
-    lat: 39.905569,
-    lng: -75.166591,
-    markerID: 1
-}, {
     title: 'Oriole Park at Camden Yards',
     lat: 39.283505,
     lng: -76.621911,
+    markerID: 1
+}, {
+    title: 'Citizens Bank Park',
+    lat: 39.905569,
+    lng: -75.166591,
     markerID: 2
 }, {
     title: 'Progressive Field',
