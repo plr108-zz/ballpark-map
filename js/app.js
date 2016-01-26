@@ -1,4 +1,4 @@
-// Model //////////////////////////////////////////////////////////////////////
+// The locations for this app are ballparks for Major League Baseball teams
 var ballparks = [{
     title: 'PNC Park',
     lat: 40.4470471765,
@@ -34,6 +34,21 @@ var ballparks = [{
     lat: 41.947902,
     lng: -87.655823,
     markerID: 6
+}, {
+    title: 'Fenway Park',
+    lat: 42.346859,
+    lng: -71.097229,
+    markerID: 7
+}, {
+    title: 'Busch Stadium',
+    lat: 38.622837,
+    lng: -90.192799,
+    markerID: 8
+}, {
+    title: 'Kauffman Stadium',
+    lat: 39.051839,
+    lng: -94.480303,
+    markerID: 9
 }];
 
 // Ballpark object used by KO
@@ -44,22 +59,18 @@ var Ballpark = function(data) {
     this.markerID = ko.observable(data.markerID);
 };
 
-// End Model //////////////////////////////////////////////////////////////////
-
-// View ///////////////////////////////////////////////////////////////////////
-
-// markers[] will be used to track the map markers
+// markers[] is used to track the map markers
 var markers = [];
 
 // Google Maps callback function
 window.initMap = function() {
     var map = new google.maps.Map(document.getElementById('map'), {
-        // coordinates are in the center of current ballparks
+        // coordinates are in the center of the ballparks
         center: {
-            lat: 41.5,
+            lat: 40.37,
             lng: -80.5
         },
-        zoom: 6
+        zoom: 5
     });
 
     // create one infoWindow for use by the marker for the activeBallpark
@@ -73,9 +84,6 @@ window.initMap = function() {
             position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
             animation: google.maps.Animation.DROP
         });
-
-        // set markerID
-        ballparks[i].markerID = i;
 
         // create event listener for clicking the marker
         google.maps.event.addListener(markers[i], 'click', (function(marker) {
@@ -101,9 +109,7 @@ window.initMap = function() {
 
             // set InfoWindow content
             infoWindow.setContent(contentHTML);
-
         }
-
 
         // make the marker bounce for 750ms
         function setBounce(marker) {
@@ -111,14 +117,13 @@ window.initMap = function() {
             setTimeout(function() {
                 marker.setAnimation(null);
             }, 750);
-
         };
     }
 };
 
-// End View ///////////////////////////////////////////////////////////////////
 
-// View Model /////////////////////////////////////////////////////////////////
+
+
 var ViewModel = function() {
     // self is the ViewModel binding
     var self = this;
@@ -127,8 +132,8 @@ var ViewModel = function() {
     this.ballparkList = ko.observableArray([]);
     this.activeBallpark = null;
 
-    ballparks.forEach(function(ballparkItem) {
-        self.ballparkList.push(new Ballpark(ballparkItem));
+    ballparks.forEach(function(ballpark) {
+        self.ballparkList.push(new Ballpark(ballpark));
 
     });
 
@@ -147,4 +152,3 @@ var ViewModel = function() {
 
 // activate Knockout
 ko.applyBindings(new ViewModel());
-// End View Model /////////////////////////////////////////////////////////////
