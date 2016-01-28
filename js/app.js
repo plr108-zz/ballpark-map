@@ -163,7 +163,7 @@ var Ballpark = function(data) {
 var markers = [];
 
 // Google Maps callback function
-window.initMap = function() {
+initMap = function() {
     var map = new google.maps.Map(document.getElementById('map'), {
         // coordinates are in the center of the ballparks
         center: {
@@ -172,7 +172,6 @@ window.initMap = function() {
         },
         zoom: 4
     });
-
     // create one infoWindow for use by the marker for the activeBallpark
     var infoWindow = new google.maps.InfoWindow();
 
@@ -224,31 +223,84 @@ window.initMap = function() {
 
 
 
-var ViewModel = function() {
-    // self is the ViewModel binding
-    var self = this;
 
-    // self.ballparkList
-    this.ballparkList = ko.observableArray([]);
-    this.activeBallpark = null;
+var viewModel = {
 
-    ballparks.forEach(function(ballpark) {
-        self.ballparkList.push(new Ballpark(ballpark));
+    /*    // self is the ViewModel binding
+        var self = this;
 
-    });
+        // self.ballparkList
+        this.ballparkList = ko.observableArray([]);
+        this.activeBallpark = null;
 
-    this.activeBallpark = ko.observable(this.ballparkList()[0]);
+        ballparks.forEach(function(ballpark) {
+            self.ballparkList.push(new Ballpark(ballpark));
 
-    this.setActiveBallpark = function(activeBallpark) {
-        // set KO binding
-        self.activeBallpark(activeBallpark);
+        });
+
+        this.activeBallpark = ko.observable(this.ballparkList()[0]);
+
+        this.setActiveBallpark = function(activeBallpark) {
+            // set KO binding
+            self.activeBallpark(activeBallpark);
+
+            // simulate marker click to show infoWindow containing activeBallpark info
+            google.maps.event.trigger(markers[activeBallpark.markerID()], 'click', {
+                latLng: new google.maps.LatLng(0, 0)
+            });
+        }
+    */
+
+    ballparks: ko.observableArray([]),
+    query: ko.observable(''),
+    activeBallpark: null,
+
+    init: function() {
+
+
+        this.ballparkList = ko.observableArray([]);
+        this.activeBallpark = null;
+
+        this.showAllBallparks();
+    },
+
+    setActiveBallpark: function(activeBallpark) {
+        this.activeBallpark = activeBallpark;
 
         // simulate marker click to show infoWindow containing activeBallpark info
-        google.maps.event.trigger(markers[activeBallpark.markerID()], 'click', {
+        google.maps.event.trigger(markers[activeBallpark.markerID], 'click', {
             latLng: new google.maps.LatLng(0, 0)
         });
+    },
+
+    showAllBallparks: function() {
+        for (i = 0; i < ballparks.length; i++) {
+            console.log("HERE");
+            this.ballparks.push(ballparks[i]);
+        }
+    },
+
+    search: function(value) {
+        console.log("this: " + this);
+        viewModel.ballparks.removeAll();
+
+        if (value == '') return;
+
+        for (var ballpark in ballparks) {
+            if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                viewModel.ballparks.push(ballparks[ballpark]);
+            }
+        }
     }
+
 };
 
+
+// subscribe to search results
+viewModel.query.subscribe(viewModel.search);
+
 // activate Knockout
-ko.applyBindings(new ViewModel());
+ko.applyBindings(viewModel);
+
+// Initialize the viewModel
+viewModel.init();

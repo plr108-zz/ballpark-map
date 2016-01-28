@@ -4,21 +4,23 @@
 <head>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Major League Ballparks Map</title>
 </head>
 
 <body>
     <div class="container">
         <div id="info">
-        	<div id="header">
-        	<h1>Major League Ballparks</h1>
-        	</div>
-            <div id="search">
-                <input id="search-input" placeholder="Search">
+            <div id="header">
+                <h1>Major League Ballparks</h1>
             </div>
-
-            <ul data-bind="foreach: ballparkList" id="ballpark-list">
-                <li data-bind="text: title, click: $parent.setActiveBallpark"></li>
-            </ul>
+            <div id="search">
+                <input id="search-input" type="search" name="search" placeholder="Search for a ballpark" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off" />
+            </div>
+            <div data-bind="visible: ballparks().length > 0">
+                <ul data-bind="foreach: ballparks">
+                    <li data-bind="text: title, click: $parent.setActiveBallpark"></li>
+                </ul>
+            </div>
         </div>
         <div id="map"></div>
     </div>
