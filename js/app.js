@@ -282,7 +282,10 @@ var viewModel = {
     search: function(value) {
         viewModel.ballparks.removeAll();
 
-        if (value == '') return;
+        if (value == '') {
+            viewModel.showAllBallparks();
+            return;
+        }
 
         for (var ballpark in ballparks) {
             if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
