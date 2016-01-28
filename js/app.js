@@ -275,13 +275,11 @@ var viewModel = {
 
     showAllBallparks: function() {
         for (i = 0; i < ballparks.length; i++) {
-            console.log("HERE");
             this.ballparks.push(ballparks[i]);
         }
     },
 
     search: function(value) {
-        console.log("this: " + this);
         viewModel.ballparks.removeAll();
 
         if (value == '') return;
