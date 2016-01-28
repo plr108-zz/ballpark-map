@@ -220,48 +220,21 @@ initMap = function() {
     }
 };
 
-
-
-
-
+// TODO: close infoWindow when this happens:
+// 1) infoWindow opened for a map marker
+// 2) Search is used (need to clear since marker may disappear since it is not in search results)
 var viewModel = {
 
-    /*    // self is the ViewModel binding
-        var self = this;
-
-        // self.ballparkList
-        this.ballparkList = ko.observableArray([]);
-        this.activeBallpark = null;
-
-        ballparks.forEach(function(ballpark) {
-            self.ballparkList.push(new Ballpark(ballpark));
-
-        });
-
-        this.activeBallpark = ko.observable(this.ballparkList()[0]);
-
-        this.setActiveBallpark = function(activeBallpark) {
-            // set KO binding
-            self.activeBallpark(activeBallpark);
-
-            // simulate marker click to show infoWindow containing activeBallpark info
-            google.maps.event.trigger(markers[activeBallpark.markerID()], 'click', {
-                latLng: new google.maps.LatLng(0, 0)
-            });
-        }
-    */
-
-    ballparks: ko.observableArray([]),
+    ballparks: ko.observableArray(),
     query: ko.observable(''),
     activeBallpark: null,
 
     init: function() {
 
-
-        this.ballparkList = ko.observableArray([]);
+        this.ballparkList = ko.observableArray();
         this.activeBallpark = null;
-
         this.showAllBallparks();
+
     },
 
     setActiveBallpark: function(activeBallpark) {
@@ -284,18 +257,30 @@ var viewModel = {
 
         if (value == '') {
             viewModel.showAllBallparks();
+
+            // set visibility of all map markers
+            for (i = 0; i < markers.length; i++) {
+                markers[i].setVisible(true);
+            }
             return;
+        }
+
+        // clear visibility of all map markers
+        for (i = 0; i < markers.length; i++) {
+            markers[i].setVisible(false);
         }
 
         for (var ballpark in ballparks) {
             if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+                // show ballpark in list
                 viewModel.ballparks.push(ballparks[ballpark]);
+
+                // make corresponding map marker visible
+                markers[ballpark].setVisible(true);
             }
         }
     }
-
 };
-
 
 // subscribe to search results
 viewModel.query.subscribe(viewModel.search);
