@@ -165,7 +165,7 @@ var markers = [];
 var infoWindow = null;
 
 // activeBallparkID is used to track ballpark shown in infoWindow
-var activeBallparkID = null;
+var activeMarker = null;
 
 // Google Maps callback function
 initMap = function() {
@@ -206,6 +206,14 @@ initMap = function() {
 
                 // open the infoWindow
                 infoWindow.open(map, marker);
+
+                // set activeMarker
+                activeMarker = marker;
+                activeBallpark = marker;
+                console.log("activeBallpark: " + activeBallpark.title);
+
+                // hide the search div
+                viewModel.infoVisible(false);
             };
         })(markers[i]));
 
@@ -227,6 +235,7 @@ initMap = function() {
 
 var viewModel = {
 
+    infoVisible : ko.observable(true),
     ballparks: ko.observableArray(),
     query: ko.observable(''),
     activeBallpark: null,
@@ -240,8 +249,6 @@ var viewModel = {
     },
 
     setActiveBallpark: function(activeBallpark) {
-        this.activeBallpark = activeBallpark;
-
         // simulate marker click to show infoWindow containing activeBallpark info
         google.maps.event.trigger(markers[activeBallpark.markerID], 'click', {
             latLng: new google.maps.LatLng(0, 0)

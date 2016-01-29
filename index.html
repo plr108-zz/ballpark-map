@@ -9,8 +9,8 @@
 
 <body>
     <div class="container">
-        <div id="info">
-            <div id="header">
+        <div id="info" data-bind="visible: infoVisible">
+            <div id="header" >
                 <h1>Major League Ballparks</h1>
             </div>
             <div id="search">
@@ -18,7 +18,7 @@
             </div>
             <div data-bind="visible: ballparks().length > 0">
                 <ul data-bind="foreach: ballparks">
-                    <li data-bind="text: title, click: $parent.setActiveBallpark"></li>
+                    <li data-bind="text: title, click: $parent.setActiveBallpark, "></li>
                 </ul>
             </div>
         </div>
