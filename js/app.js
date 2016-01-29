@@ -207,15 +207,22 @@ initMap = function() {
                 // open the infoWindow
                 infoWindow.open(map, marker);
 
+
+
                 // set activeMarker
                 activeMarker = marker;
                 activeBallpark = marker;
                 console.log("activeBallpark: " + activeBallpark.title);
 
                 // hide the search div
-                viewModel.infoVisible(false);
+                viewModel.searchVisible(false);
+
+                // show the activeBallpark div
+                viewModel.activeBallparkVisible(true);
             };
         })(markers[i]));
+
+
 
         var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
 
@@ -231,11 +238,25 @@ initMap = function() {
             }, 750);
         };
     }
+
+    google.maps.event.addListener(infoWindow, 'closeclick', function() {
+        // show the search div
+        viewModel.searchVisible(true);
+
+        // hide the activeBallpark div
+        viewModel.activeBallparkVisible(false);
+
+        // clear the activeMarker since no ballpark is active
+        activeMarker = null;
+        // TODO: is there a better way to do this?
+        infoWindow.setContent(null);
+    });
 };
 
 var viewModel = {
 
-    infoVisible : ko.observable(true),
+    searchVisible: ko.observable(true),
+    activeBallparkVisible: ko.observable(false),
     ballparks: ko.observableArray(),
     query: ko.observable(''),
     activeBallpark: null,
@@ -290,7 +311,10 @@ var viewModel = {
                 // make corresponding map marker visible
                 markers[ballpark].setVisible(true);
 
-                // NOTE: may have to search by activeBallparkID when content is something besides just the ballpark title
+                // NOTE: is there a better way to do this?
+                // may have to search by activeBallparkID if content is something besides just the ballpark title
+                // also this requires clearing infoWindow.content when closing infoWindow.
+                // Otherwise future search results may be incorrect.
                 if (ballparks[ballpark].title === infoWindow.content) {
                     // activeBallpark has been found in the search results
                     activeBallparkFound = true;
