@@ -162,6 +162,11 @@ var Ballpark = function(data) {
 // markers[] is used to track the map markers
 var markers = [];
 
+var infoWindow = null;
+
+// activeBallparkID is used to track ballpark shown in infoWindow
+var activeBallparkID = null;
+
 // Google Maps callback function
 initMap = function() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -173,7 +178,7 @@ initMap = function() {
         zoom: 4
     });
     // create one infoWindow for use by the marker for the activeBallpark
-    var infoWindow = new google.maps.InfoWindow();
+    infoWindow = new google.maps.InfoWindow();
 
     // create map markers for all ballparks
     for (i = 0; i < ballparks.length; i++) {
@@ -208,7 +213,7 @@ initMap = function() {
 
             // set InfoWindow content
             infoWindow.setContent(contentHTML);
-        }
+        };
 
         // make the marker bounce for 750ms
         function setBounce(marker) {
@@ -220,9 +225,6 @@ initMap = function() {
     }
 };
 
-// TODO: close infoWindow when this happens:
-// 1) infoWindow opened for a map marker
-// 2) Search is used (need to clear since marker may disappear since it is not in search results)
 var viewModel = {
 
     ballparks: ko.observableArray(),
@@ -270,6 +272,9 @@ var viewModel = {
             markers[i].setVisible(false);
         }
 
+
+        var activeBallparkFound = false;
+
         for (var ballpark in ballparks) {
             if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 // show ballpark in list
@@ -277,7 +282,20 @@ var viewModel = {
 
                 // make corresponding map marker visible
                 markers[ballpark].setVisible(true);
+
+                // NOTE: may have to search by activeBallparkID when content is something besides just the ballpark title
+                if (ballparks[ballpark].title === infoWindow.content) {
+                    // activeBallpark has been found in the search results
+                    activeBallparkFound = true;
+                    break;
+                }
             }
+        }
+
+        // if activeBallpark isn't found in the search results
+        if (!activeBallparkFound) {
+            // close the infoWindow
+            infoWindow.close();
         }
     }
 };
