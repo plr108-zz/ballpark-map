@@ -229,9 +229,18 @@ initMap = function() {
             // build URL for the Flickr API request
             var urlString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
 
-            // encode special characters in the ballparkName
-            urlString += encodeURIComponent(ballparkName);
-            urlString += "&sort=relevance&format=json&nojsoncallback=1";
+            // At the time of coding this, Flickr only returned 3 pictures for the search "AT&T Park baseball"
+            // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
+            // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
+            // https://www.flickr.com/search/?text=ATT%20park%20baseball
+            if(ballparkName === "AT&T Park") {
+                urlString += encodeURIComponent("ATT Park baseball")
+            } else {
+                // encode special characters in the ballparkName
+            urlString += encodeURIComponent(ballparkName + " baseball");
+            }
+
+            urlString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1";
 
             $.ajax({
 
@@ -242,7 +251,8 @@ initMap = function() {
 
                     for (i = 0; i < 20; i++) {
 
-                        var src = json.photos.photo[i].id;
+                            console.log(json.photos.photo[i]);
+                            //console.log("https://farm" + json.photos.photo[i].farm + ".staticflickr.com/{server-id}/{id}_{secret}.jpg)
 
                         var srcURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_m.jpg";
                         thisPicHTML = "<img src='" + srcURL + "'>";
