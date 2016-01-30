@@ -226,10 +226,16 @@ initMap = function() {
             console.log("Getting pics for " + ballparkName);
             $("#flickr-pics").remove();
 
+            // build URL for the Flickr API request
+            var urlString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
+
+            // encode special characters in the ballparkName
+            urlString += encodeURIComponent(ballparkName);
+            urlString += "&sort=relevance&format=json&nojsoncallback=1";
 
             $.ajax({
-                // URL for the Flickr API request
-                url: "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=Wrigley%20Field&sort=relevance&format=json&nojsoncallback=1",
+
+                url: urlString,
 
                 success: function(json) {
                     var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
