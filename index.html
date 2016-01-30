@@ -22,6 +22,8 @@
             <div id="active-ballpark" data-bind="visible: ! searchVisible()">
                 <h1>We're Here</h1>
                 <h1 data-bind="text: activeBallparkName"></h1>
+                <div id="flickr-container">
+                </div>
             </div>
         </div>
         <div id="map"></div>
@@ -31,7 +33,6 @@
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/app.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <script src="https://query.yahooapis.com/v1/public/yql?q=select * from flickr.photos.search where has_geo='true' and tags='PNC Park' and api_key='dj0yJmk9dG80NDQ0WHdVRXBDJmQ9WVdrOVZGQmlWMWhDTlRZbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1lMQ--'&format=json&callback=yqlCallback"></script>
 </body>
 
 </html>

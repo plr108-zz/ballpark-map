@@ -217,10 +217,48 @@ initMap = function() {
 
                 // hide the search div and show the activeBallpark div
                 viewModel.searchVisible(false);
+
+                getFlickrPics(activeBallpark.title);
             };
         })(markers[i]));
 
+        var getFlickrPics = function(ballparkName) {
+            console.log("Getting pics for " + ballparkName);
+            $("#flickr-pics").remove();
 
+
+            $.ajax({
+                // URL for the Flickr API request
+                url: "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=Wrigley%20Field&sort=relevance&format=json&nojsoncallback=1",
+
+                success: function(json) {
+                    var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
+
+                    for (i = 0; i < 20; i++) {
+
+                        var src = json.photos.photo[i].id;
+
+                        var srcURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_m.jpg";
+                        thisPicHTML = "<img src='" + srcURL + "'>";
+                        flickrPicsHTML += thisPicHTML;
+                    }
+
+                    flickrPicsHTML += '</div>';
+                    //console.log(flickrPicsHTML);
+                    $("#flickr-container").append(flickrPicsHTML);
+                },
+                // code to run if the request fails; the raw request and
+                // status codes are passed to the function
+                error: function(xhr, status, errorThrown) {
+                    alert("Sorry, there was an error getting pictures from Flickr.");
+                    console.log("Error: " + errorThrown);
+                    console.log("Status: " + status);
+                    console.dir(xhr);
+                },
+            });
+
+            console.log("OK you should have pics now");
+        };
 
         var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
 
