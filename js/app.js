@@ -212,6 +212,9 @@ initMap = function() {
                 activeBallpark = marker;
                 console.log("activeBallpark: " + activeBallpark.title);
 
+                // set activeBallparkName for activeBallpark div
+                viewModel.activeBallparkName(activeBallpark.title);
+
                 // hide the search div and show the activeBallpark div
                 viewModel.searchVisible(false);
             };
@@ -251,7 +254,7 @@ var viewModel = {
     activeBallparkVisible: ko.observable(false),
     ballparks: ko.observableArray(),
     query: ko.observable(''),
-    activeBallpark: null,
+    activeBallparkName: ko.observable("???"),
 
     init: function() {
 
