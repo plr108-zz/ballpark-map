@@ -210,7 +210,6 @@ initMap = function() {
                 // set activeMarker
                 activeMarker = marker;
                 activeBallpark = marker;
-                console.log("activeBallpark: " + activeBallpark.title);
 
                 // set activeBallparkName for activeBallpark div
                 viewModel.activeBallparkName(activeBallpark.title);
@@ -219,11 +218,18 @@ initMap = function() {
                 viewModel.searchVisible(false);
 
                 getFlickrPics(activeBallpark.title);
+                getWikipediaArticles(activeBallpark.title)
             };
         })(markers[i]));
 
+        var getWikipediaArticles = function(ballparkName) {
+            // sample string https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=PNC%20Park
+            console.log("Getting Wikipedia articles for " + ballparkName);
+
+        }
+
         var getFlickrPics = function(ballparkName) {
-            console.log("Getting pics for " + ballparkName);
+
             $("#flickr-pics").remove();
 
             // build URL for the Flickr API request
@@ -251,16 +257,13 @@ initMap = function() {
 
                     for (i = 0; i < 20; i++) {
 
-                            console.log(json.photos.photo[i]);
-                            //console.log("https://farm" + json.photos.photo[i].farm + ".staticflickr.com/{server-id}/{id}_{secret}.jpg)
-
                         var srcURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_m.jpg";
                         thisPicHTML = "<img src='" + srcURL + "'>";
                         flickrPicsHTML += thisPicHTML;
                     }
 
                     flickrPicsHTML += '</div>';
-                    //console.log(flickrPicsHTML);
+
                     $("#flickr-container").append(flickrPicsHTML);
                 },
                 // code to run if the request fails; the raw request and
@@ -272,8 +275,6 @@ initMap = function() {
                     console.dir(xhr);
                 },
             });
-
-            console.log("OK you should have pics now");
         };
 
         var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
