@@ -41,6 +41,7 @@ li {
     height: 100%;
     float: left;
     margin: 0;
+    overflow-y: auto;
 }
 
 #search-input {
