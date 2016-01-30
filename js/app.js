@@ -207,18 +207,13 @@ initMap = function() {
                 // open the infoWindow
                 infoWindow.open(map, marker);
 
-
-
                 // set activeMarker
                 activeMarker = marker;
                 activeBallpark = marker;
                 console.log("activeBallpark: " + activeBallpark.title);
 
-                // hide the search div
+                // hide the search div and show the activeBallpark div
                 viewModel.searchVisible(false);
-
-                // show the activeBallpark div
-                viewModel.activeBallparkVisible(true);
             };
         })(markers[i]));
 
@@ -240,11 +235,8 @@ initMap = function() {
     }
 
     google.maps.event.addListener(infoWindow, 'closeclick', function() {
-        // show the search div
+        // show the search div and hide the activeBallpark div
         viewModel.searchVisible(true);
-
-        // hide the activeBallpark div
-        viewModel.activeBallparkVisible(false);
 
         // clear the activeMarker since no ballpark is active
         activeMarker = null;
