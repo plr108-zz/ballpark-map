@@ -218,7 +218,7 @@ initMap = function() {
                 viewModel.searchVisible(false);
 
                 getFlickrPics(activeBallpark.title);
-                getWikipediaArticles(activeBallpark.title)
+                getWikipediaArticles(activeBallpark.title);
             };
         })(markers[i]));
 
@@ -226,8 +226,72 @@ initMap = function() {
             // sample string https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=PNC%20Park
             console.log("Getting Wikipedia articles for " + ballparkName);
 
+            $("#wikipedia-link").remove();
+
+            var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
+
+            searchWiki('en.wikipedia.org', ballparkName, {
+                ssl: true,
+                success: function(title, link) {
+                    if (title === null) {
+                        console.log('Article Not found');
+                        wikipediaLinkHTML += '<p>Wikipedia Article not Found</p></div>'
+                    } else {
+                        wikipediaLinkHTML += '<a target="_blank" href=' + link + '>' + title + '</a></div>';
+                        console.log(wikipediaLinkHTML);
+                    }
+                    console.log("HERE");
+                    $("#wikipedia-container").append(wikipediaLinkHTML);
+                }
+            });
+
+
+
+
+
         }
 
+        var searchWiki = function(site, search, callback, opts) {
+            if (typeof callback == 'object') {
+                opts = callback;
+                callback = null;
+            } else {
+                opts = opts || {};
+            }
+            // Build the required URLs
+            var siteUrl = (opts.ssl ? 'https' : 'http') + '://' + site;
+            var apiUrl = siteUrl + (opts.apiBase || '/w/') + 'api.php';
+            var queryUrl = apiUrl + '?action=query&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=' + (opts.maxResults || 1) + '&format=json';
+            console.log(queryUrl + '&callback=?');
+            // Issue the AJAX request
+            $.ajax(queryUrl + '&callback=?', {
+                dataType: 'jsonp',
+                // This prevents warnings about the unrecognized parameter "_"
+                cache: true,
+                success: function(data) {
+                    // Get all returned pages
+                    var titles = [],
+                        links = [];
+                    for (var i = 0; i < data.query.search.length; i++) {
+                        var title = data.query.search[i].title,
+                            link = siteUrl + (opts.wikiBase || '/wiki/') + encodeURIComponent(title);
+                        titles.push(title);
+                        links.push(link);
+                    }
+                    if (!opts.maxResults) {
+                        // Single result requested
+                        if (data.query.search.length == 0) {
+                            titles = links = null;
+                        } else {
+                            titles = titles[0];
+                            links = links[0];
+                        }
+                    }
+                    // Call the callback
+                    (callback || opts.success || function() {})(titles, links);
+                }
+            });
+        }
         var getFlickrPics = function(ballparkName) {
 
             $("#flickr-pics").remove();
@@ -239,11 +303,11 @@ initMap = function() {
             // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
             // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
             // https://www.flickr.com/search/?text=ATT%20park%20baseball
-            if(ballparkName === "AT&T Park") {
+            if (ballparkName === "AT&T Park") {
                 urlString += encodeURIComponent("ATT Park baseball")
             } else {
                 // encode special characters in the ballparkName
-            urlString += encodeURIComponent(ballparkName + " baseball");
+                urlString += encodeURIComponent(ballparkName + " baseball");
             }
 
             urlString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1";
