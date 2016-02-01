@@ -223,8 +223,6 @@ initMap = function() {
         })(markers[i]));
 
         var getWikipediaArticles = function(ballparkName) {
-            // sample string https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=PNC%20Park
-            console.log("Getting Wikipedia articles for " + ballparkName);
 
             $("#wikipedia-link").remove();
 
@@ -315,13 +313,15 @@ initMap = function() {
                     var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
 
                     // Show 20 Flickr pictures for the ActiveBallpark
-                    for (i = 0; i < 20; i++) {
+                    for (i = 0; i < 3; i++) {
 
-                        console.log(json);
+                        // flickrURL is the link to open the pic on flickr.com
+                        var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
+                        // staticURL is the link to display the pic outside of flickr.com
                         // '_n' option requests a picture of 320px on longest side
-                        var srcURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
-                        thisPicHTML = "<img src='" + srcURL + "'>";
-                        console.log(thisPicHTML)
+                        var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
+                        thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
+
                         flickrPicsHTML += thisPicHTML;
                     }
 
