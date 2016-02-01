@@ -244,11 +244,6 @@ initMap = function() {
                     $("#wikipedia-container").append(wikipediaLinkHTML);
                 }
             });
-
-
-
-
-
         }
 
         var searchWiki = function(site, search, callback, opts) {
@@ -310,7 +305,7 @@ initMap = function() {
                 urlString += encodeURIComponent(ballparkName + " baseball");
             }
 
-            urlString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1";
+            urlString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
 
             $.ajax({
 
@@ -319,10 +314,14 @@ initMap = function() {
                 success: function(json) {
                     var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
 
+                    // Show 20 Flickr pictures for the ActiveBallpark
                     for (i = 0; i < 20; i++) {
 
-                        var srcURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_m.jpg";
+                        console.log(json);
+                        // '_n' option requests a picture of 320px on longest side
+                        var srcURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
                         thisPicHTML = "<img src='" + srcURL + "'>";
+                        console.log(thisPicHTML)
                         flickrPicsHTML += thisPicHTML;
                     }
 

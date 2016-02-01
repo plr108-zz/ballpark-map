@@ -51,6 +51,13 @@ li {
     font-size: 16px;
 }
 
+#wikipedia-container {
+    text-align: center;
+}
+
+#flickr-container {
+    text-align: center;
+}
 #map {
     height: 100%;
     width: 70%;
