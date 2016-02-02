@@ -198,6 +198,13 @@ var mapView = {
                 // create event listener for clicking the marker
                 google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
                     return function() {
+
+                        // call get FlickrPics first since this operation will take the longest
+                        viewModel.getFlickrPics(marker.title);
+
+                        // get Wikipedia article
+                        viewModel.getWikipediaArticles(marker.title);
+
                         // make the marker bounce for 750ms
                         mapView.setBounce(marker);
 
@@ -213,16 +220,11 @@ var mapView = {
                         // open the infoWindow
                         infoWindow.open(map, marker);
 
-                        activeBallpark = marker;
-
                         // set activeBallparkName for activeBallpark div
-                        viewModel.activeBallparkName(activeBallpark.title);
+                        viewModel.activeBallparkName(marker.title);
 
                         // hide the search div and show the activeBallpark div
                         viewModel.searchVisible(false);
-
-                        getFlickrPics(activeBallpark.title);
-                        viewModel.getWikipediaArticles(activeBallpark.title);
                     };
                 })(mapView.markers[i]));
             }
@@ -255,55 +257,7 @@ var mapView = {
 
 
 
-var getFlickrPics = function(ballparkName) {
 
-    $("#flickr-pics").remove();
-
-    // build URL for the Flickr API request
-    var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
-
-    // At the time of coding this, Flickr only returned 3 pictures for the search "AT&T Park baseball"
-    // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
-    // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
-    // https://www.flickr.com/search/?text=ATT%20park%20baseball
-    if (ballparkName === "AT&T Park") {
-        requestString += encodeURIComponent("ATT Park baseball")
-    } else {
-        // encode special characters in the ballparkName
-        requestString += encodeURIComponent(ballparkName + " baseball");
-    }
-
-    requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
-
-    var result = $.getJSON(requestString)
-        .done(function(json) {
-            var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
-            // Show 20 Flickr pictures for the ActiveBallpark
-            for (i = 0; i < 20; i++) {
-
-                // flickrURL is the link to open the pic on flickr.com
-                var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
-                // staticURL is the link to display the pic outside of flickr.com
-                // '_n' option requests a picture of 320px on longest side
-                var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server;
-                staticURL += "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
-                thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
-
-                flickrPicsHTML += thisPicHTML;
-            }
-
-            flickrPicsHTML += '</div>';
-
-            $("#flickr-container").append(flickrPicsHTML);
-        })
-        .fail(function(jqxhr, textStatus, error) {
-            alert("Sorry, there was an error getting pictures from Flickr.");
-            console.log("Error getting pictures from Flickr");
-            console.log(jqxhr);
-            console.log(textStatus);
-            console.dir(error);
-        });
-};
 
 // START HERE: use ballpark object to track current ballpark and display wikipedia snippet in info window
 // Ballpark object used by KO
@@ -414,6 +368,56 @@ var viewModel = {
             .fail(function(jqxhr, textStatus, error) {
                 alert("Sorry, there was an error getting an article from Wikipedia.");
                 console.log("Error getting article from Wikipedia");
+                console.log(jqxhr);
+                console.log(textStatus);
+                console.dir(error);
+            });
+    },
+
+    getFlickrPics: function(ballparkName) {
+
+        $("#flickr-pics").remove();
+
+        // build URL for the Flickr API request
+        var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
+
+        // At the time of coding this, Flickr only returned 3 pictures for the search "AT&T Park baseball"
+        // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
+        // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
+        // https://www.flickr.com/search/?text=ATT%20park%20baseball
+        if (ballparkName === "AT&T Park") {
+            requestString += encodeURIComponent("ATT Park baseball")
+        } else {
+            // encode special characters in the ballparkName
+            requestString += encodeURIComponent(ballparkName + " baseball");
+        }
+
+        requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
+
+        var result = $.getJSON(requestString)
+            .done(function(json) {
+                var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
+                // Show 20 Flickr pictures for the ActiveBallpark
+                for (i = 0; i < 20; i++) {
+
+                    // flickrURL is the link to open the pic on flickr.com
+                    var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
+                    // staticURL is the link to display the pic outside of flickr.com
+                    // '_n' option requests a picture of 320px on longest side
+                    var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server;
+                    staticURL += "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
+                    thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
+
+                    flickrPicsHTML += thisPicHTML;
+                }
+
+                flickrPicsHTML += '</div>';
+
+                $("#flickr-container").append(flickrPicsHTML);
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                alert("Sorry, there was an error getting pictures from Flickr.");
+                console.log("Error getting pictures from Flickr");
                 console.log(jqxhr);
                 console.log(textStatus);
                 console.dir(error);
