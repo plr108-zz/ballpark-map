@@ -268,11 +268,11 @@ var viewModel = {
     // used to show search results
     query: ko.observable(''),
 
-    // used to display the snippet of the activeBallpark's Wikipedia article
+    // used to display the snippet of the activeBallpark's Wikipedia article and the article link
     snippet: ko.observable(),
 
-    // used to set the link of the activeBallpark's Wikipedia article
-    articleLink: ko.observable(),
+    // used to display the flickr pictures and the picture links
+    flickrPics: ko.observable(),
 
     init: function() {
         mapView.init();
@@ -354,12 +354,9 @@ var viewModel = {
                 console.log(textStatus);
                 console.dir(error);
             });
-
     },
 
     getFlickrPics: function(ballparkName) {
-
-        $("#flickr-pics").remove();
 
         // build URL for the Flickr API request
         var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
@@ -396,7 +393,7 @@ var viewModel = {
 
                 flickrPicsHTML += '</div>';
 
-                $("#flickr-container").append(flickrPicsHTML);
+                viewModel.flickrPics(flickrPicsHTML);
             })
             .fail(function(jqxhr, textStatus, error) {
                 alert("Sorry, there was an error getting pictures from Flickr.");
