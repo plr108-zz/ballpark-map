@@ -269,7 +269,6 @@ var initMap = function() {
     }
 };
 
-// getWikipediaArticles() was created by following the MediaWiki search approach shown here: http://jsfiddle.net/ht9wd/
 var getWikipediaArticles = function(ballparkName) {
 
     $("#wikipedia-link").remove();
@@ -290,49 +289,19 @@ var getWikipediaArticles = function(ballparkName) {
         requestString = ballparkName;
     }
 
-    searchMediaWikiAPI(requestString, {
-
-        success: function(result) {
-            if (result === null) {
-                alert("Sorry, a Wikipedia article for this ballpark was not found.");
-                console.log("Error: " + errorThrown);
-                console.log("Status: " + status);
-                console.dir(xhr);
-            } else {
-                var linkURL = "https://en.wikipedia.org/wiki/" + result.title;
-
-                $("#wikipedia-article").remove();
-                $("#wikipedia-container").append(
-                    '<div id="wikipedia-article"><h2>' + result.title + '</h2><p>' + result.snippet + '...<a href="' + linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
-                );
-            }
-        },
-
-        error: function() {
-            alert("Sorry, there was an error getting an article from Wikipedia.");
-            console.log("Error: " + errorThrown);
-            console.log("Status: " + status);
-            console.dir(xhr);
-        }
-    });
-};
-
-var searchMediaWikiAPI = function(search, callback) {
-
-    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
+    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=' + encodeURIComponent(requestString) + '&srlimit=1&format=json';
 
     $.getJSON(queryUrl)
         .done(function(json) {
-            var title = null;
-            var snippet = null;
 
-            title = json.query.search[0].title;
-            snippet = json.query.search[0].snippet;
+            var title = json.query.search[0].title;
+            var snippet = json.query.search[0].snippet;
+            var linkURL = "https://en.wikipedia.org/wiki/" + title;
 
-            // Call the callback
-            callback.success({
-                title, snippet
-            });
+            $("#wikipedia-article").remove();
+            $("#wikipedia-container").append(
+                '<div id="wikipedia-article"><h2>' + title + '</h2><p>' + snippet + '...<a href="' + linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
+            );
         })
         .fail(function(jqxhr, textStatus, error) {
             alert("Sorry, there was an error getting an article from Wikipedia.");
@@ -341,7 +310,7 @@ var searchMediaWikiAPI = function(search, callback) {
             console.log(textStatus);
             console.dir(error);
         });
-}
+};
 
 var getFlickrPics = function(ballparkName) {
 
