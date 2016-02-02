@@ -247,29 +247,22 @@ var mapView = {
     }
 };
 
-
-
-
 var viewModel = {
 
-    ballpark: function(data) {
-        this.title = ko.observable(data.title);
-        this.lat = ko.observable(data.lat);
-        this.lng = ko.observable(data.lng);
-        this.markerID = ko.observable(data.markerID);
-        this.articleTitle = ko.observable(data.title);
-        this.snippet = ko.observable(data.snippet);
-    },
-
-    searchVisible: ko.observable(true),
-    ballparks: ko.observableArray(),
-    query: ko.observable(''),
+    // used to display the active Ballpark name in activeBallpark div and infoWindow
     activeBallparkName: ko.observable(),
+
+    // used to display list of ballparks when search is visible
+    ballparks: ko.observableArray(),
+
+    // used to toggle between search view and activeBallpark view
+    searchVisible: ko.observable(true),
+
+    // used to show search results
+    query: ko.observable(''),
 
     init: function() {
         mapView.init();
-        this.ballparkList = ko.observableArray();
-        this.activeBallpark = null;
         this.showAllBallparks();
     },
 
@@ -347,7 +340,7 @@ var viewModel = {
                 var snippet = json.query.search[0].snippet;
                 var linkURL = "https://en.wikipedia.org/wiki/" + title;
 
-                var appendString = '<div id="wikipedia-article"><h2>' + title + '</h2><p>' + snippet + '...<a href="';
+                var appendString = '<div id="wikipedia-article"><p>' + snippet + '...<a href="';
                 appendString += linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
 
                 $("#wikipedia-article").remove();
