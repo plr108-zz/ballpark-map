@@ -319,21 +319,15 @@ var getWikipediaArticles = function(ballparkName) {
 
 var searchMediaWikiAPI = function(search, callback) {
 
-    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
+    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
 
     $.getJSON(queryUrl)
         .done(function(json) {
             var title = null;
             var snippet = null;
-            console.log("WikiJSON");
 
-            for (var i = 0; i < 1; i++) {
-                title = json.query.search[0].title;
-                snippet = json.query.search[0].snippet;
-            }
-
-            console.log(title);
-            console.log(snipped);
+            title = json.query.search[0].title;
+            snippet = json.query.search[0].snippet;
 
             // Call the callback
             callback.success({
