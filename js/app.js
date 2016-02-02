@@ -152,13 +152,76 @@ var ballparks = [{
 }];
 
 var mapView = {
-    infoWindow: null,
+
     // markers is used to track the map markers
     markers: [],
     init: function() {
+
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
             .done(function() {
-                mapView.render();
+
+                // make a map
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    // coordinates are in the center of the ballparks
+                    center: {
+                        lat: 39.6,
+                        lng: -98.4
+                    },
+                    zoom: 4
+                });
+
+                // create one infoWindow for use by the marker for the activeBallpark
+                infoWindow = new google.maps.InfoWindow();
+
+                // create map markers for all ballparks
+                for (i = 0; i < ballparks.length; i++) {
+                    mapView.markers[i] = new google.maps.Marker({
+                        map: map,
+                        title: ballparks[i].title,
+                        position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    // create event listener for clicking the marker
+                    google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
+                        return function() {
+
+                            // call Flickr API first since downloading the picture thumbnails is slowest the operation
+                            viewModel.getFlickrPics(marker.title);
+
+                            // get Wikipedia article
+                            viewModel.getWikipediaArticles(marker.title);
+
+                            // make the marker bounce for 750ms
+                            mapView.setBounce(marker);
+
+                            // create infoWindow contentHTML
+                            var contentHTML = marker.title;
+
+                            // close the infoWindow (if it is open)
+                            infoWindow.close();
+
+                            // initialize infoWindow
+                            mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
+
+                            // open the infoWindow
+                            infoWindow.open(map, marker);
+
+                            // set activeBallparkName for activeBallpark div
+                            viewModel.activeBallparkName(marker.title);
+
+                            // hide the search div and show the activeBallpark div
+                            viewModel.searchVisible(false);
+                        };
+                    })(mapView.markers[i]));
+                }
+
+                // create event listener for closing the infoWindow
+                google.maps.event.addListener(infoWindow, 'closeclick', function() {
+
+                    // show the search div and hide the activeBallpark div
+                    viewModel.searchVisible(true);
+                })
             })
             .fail(function(jqxhr, textStatus, error) {
                 alert("Sorry, there was an error loading Google Maps.");
@@ -167,73 +230,6 @@ var mapView = {
                 console.log(textStatus);
                 console.dir(error);
             });
-    },
-
-    render: function() {
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-            // coordinates are in the center of the ballparks
-            center: {
-                lat: 39.6,
-                lng: -98.4
-            },
-            zoom: 4
-        });
-
-        // create one infoWindow for use by the marker for the activeBallpark
-        infoWindow = new google.maps.InfoWindow();
-
-        // create map markers for all ballparks
-        for (i = 0; i < ballparks.length; i++) {
-            mapView.markers[i] = new google.maps.Marker({
-                map: map,
-                title: ballparks[i].title,
-                position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
-                animation: google.maps.Animation.DROP
-            });
-
-            // create event listener for clicking the marker
-            google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
-                return function() {
-
-                    // call Flickr API first since downloading the picture thumbnails is slowest the operation
-                    viewModel.getFlickrPics(marker.title);
-
-                    // get Wikipedia article
-                    viewModel.getWikipediaArticles(marker.title);
-
-                    // make the marker bounce for 750ms
-                    mapView.setBounce(marker);
-
-                    // create infoWindow contentHTML
-                    var contentHTML = marker.title;
-
-                    // close the infoWindow (if it is open)
-                    infoWindow.close();
-
-                    // initialize infoWindow
-                    mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
-
-                    // open the infoWindow
-                    infoWindow.open(map, marker);
-
-                    // set activeBallparkName for activeBallpark div
-                    viewModel.activeBallparkName(marker.title);
-
-                    // hide the search div and show the activeBallpark div
-                    viewModel.searchVisible(false);
-                };
-            })(mapView.markers[i]));
-        }
-
-        // create event listener for closing the infoWindow
-        google.maps.event.addListener(infoWindow, 'closeclick', function() {
-
-            // show the search div and hide the activeBallpark div
-            viewModel.searchVisible(true);
-
-        });
-
     },
 
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
@@ -252,10 +248,7 @@ var mapView = {
 };
 
 
-
-
-
-// START HERE: use ballpark object to track current ballpark and display wikipedia snippet in info window
+// START HERE: use ballpark object to track current ballpark and display wikipedia snippet in infoWindow
 // Ballpark object used by KO
 var Ballpark = function(data) {
     this.title = ko.observable(data.title);
