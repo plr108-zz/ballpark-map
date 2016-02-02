@@ -168,7 +168,7 @@ var infoWindow = null;
 var activeMarker = null;
 
 // Google Maps callback function
-initMap = function() {
+var initMap = function() {
     var map = new google.maps.Map(document.getElementById('map'), {
         // coordinates are in the center of the ballparks
         center: {
@@ -222,98 +222,100 @@ initMap = function() {
             };
         })(markers[i]));
 
+        // getWikipediaArticles() was created by following the MediaWiki search approach shown here: http://jsfiddle.net/ht9wd/
         var getWikipediaArticles = function(ballparkName) {
 
             $("#wikipedia-link").remove();
 
             var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
 
-            searchWiki('en.wikipedia.org', ballparkName, {
-                ssl: true,
-                success: function(title, link) {
-                    if (title === null) {
+            var requestString = null;
+
+            // Searching for "Miller Park" returns a disambiguation page:
+            // https://en.wikipedia.org/wiki/Miller_Park
+            // For a better user experience, search for "Miller Park Milwaukee"
+            // which returns the Miller Park ballpark page:
+            // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
+            if (ballparkName === "Miller Park") {
+                requestString = ballparkName + " Milwaukee";
+            } else {
+                // encode special characters in the ballparkName
+                requestString = ballparkName;
+            }
+
+            searchMediaWikiAPI(requestString, {
+                success: function(result) {
+                    if (result === null) {
                         console.log('Article Not found');
                         wikipediaLinkHTML += '<p>Wikipedia Article not Found</p></div>'
                     } else {
-                        wikipediaLinkHTML += '<a target="_blank" href=' + link + '>' + title + '</a></div>';
-                        console.log(wikipediaLinkHTML);
+                        console.log("Returned result:" + result.title);
                     }
-                    console.log("HERE");
-                    $("#wikipedia-container").append(wikipediaLinkHTML);
+
+                    var linkURL = "https://en.wikipedia.org/wiki/" + result.title;
+
+                    $("#wikipedia-article").remove();
+                    $("#wikipedia-container").append(
+                        '<div id="wikipedia-article"><h2>' + result.title + '</h2><p>' + result.snippet + '...<a href="' + linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
+                    );
+                }
+            });
+        };
+
+        var searchMediaWikiAPI = function(search, callback) {
+
+            var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
+
+            // Issue the AJAX request
+            $.ajax(queryUrl + '&callback=?', {
+                dataType: 'jsonp',
+                success: function(data) {
+
+                    var title = null;
+                    var snippet = null;
+
+                    for (var i = 0; i < 1; i++) {
+                        title = data.query.search[0].title;
+                        snippet = data.query.search[0].snippet;
+                    }
+
+                    // Call the callback
+                    callback.success({
+                        title, snippet
+                    });
                 }
             });
         }
 
-        var searchWiki = function(site, search, callback, opts) {
-            if (typeof callback == 'object') {
-                opts = callback;
-                callback = null;
-            } else {
-                opts = opts || {};
-            }
-            // Build the required URLs
-            var siteUrl = (opts.ssl ? 'https' : 'http') + '://' + site;
-            var apiUrl = siteUrl + (opts.apiBase || '/w/') + 'api.php';
-            var queryUrl = apiUrl + '?action=query&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=' + (opts.maxResults || 1) + '&format=json';
-            console.log(queryUrl + '&callback=?');
-            // Issue the AJAX request
-            $.ajax(queryUrl + '&callback=?', {
-                dataType: 'jsonp',
-                // This prevents warnings about the unrecognized parameter "_"
-                cache: true,
-                success: function(data) {
-                    // Get all returned pages
-                    var titles = [],
-                        links = [];
-                    for (var i = 0; i < data.query.search.length; i++) {
-                        var title = data.query.search[i].title,
-                            link = siteUrl + (opts.wikiBase || '/wiki/') + encodeURIComponent(title);
-                        titles.push(title);
-                        links.push(link);
-                    }
-                    if (!opts.maxResults) {
-                        // Single result requested
-                        if (data.query.search.length == 0) {
-                            titles = links = null;
-                        } else {
-                            titles = titles[0];
-                            links = links[0];
-                        }
-                    }
-                    // Call the callback
-                    (callback || opts.success || function() {})(titles, links);
-                }
-            });
-        }
         var getFlickrPics = function(ballparkName) {
 
             $("#flickr-pics").remove();
 
             // build URL for the Flickr API request
-            var urlString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
+            var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
 
             // At the time of coding this, Flickr only returned 3 pictures for the search "AT&T Park baseball"
             // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
             // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
             // https://www.flickr.com/search/?text=ATT%20park%20baseball
             if (ballparkName === "AT&T Park") {
-                urlString += encodeURIComponent("ATT Park baseball")
+                requestString += encodeURIComponent("ATT Park baseball")
             } else {
                 // encode special characters in the ballparkName
-                urlString += encodeURIComponent(ballparkName + " baseball");
+                requestString += encodeURIComponent(ballparkName + " baseball");
             }
 
-            urlString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
+            requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
 
             $.ajax({
 
-                url: urlString,
+                url: requestString,
 
                 success: function(json) {
                     var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
 
                     // Show 20 Flickr pictures for the ActiveBallpark
-                    for (i = 0; i < 3; i++) {
+                    for (i = 0; i < 20; i++) {
 
                         // flickrURL is the link to open the pic on flickr.com
                         var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
