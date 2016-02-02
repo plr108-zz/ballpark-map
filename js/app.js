@@ -158,7 +158,7 @@ var Ballpark = function(data) {
     this.lat = ko.observable(data.lat);
     this.lng = ko.observable(data.lng);
     this.markerID = ko.observable(data.markerID);
-    this.
+    this.articleTitle = ko.observable(data.title);
     this.snippet = ko.observable(data.snippet);
 };
 
@@ -379,6 +379,7 @@ var viewModel = {
     activeBallparkName: ko.observable(),
 
     init: function() {
+        mapView.init();
         this.ballparkList = ko.observableArray();
         this.activeBallpark = null;
         this.showAllBallparks();
@@ -424,23 +425,7 @@ var viewModel = {
 
                 // make corresponding map marker visible
                 markers[ballpark].setVisible(true);
-
-                // NOTE: is there a better way to do this?
-                // may have to search by activeBallparkID if content is something besides just the ballpark title
-                // also this requires clearing infoWindow.content when closing infoWindow.
-                // Otherwise future search results may be incorrect.
-                if (ballparks[ballpark].title === infoWindow.content) {
-                    // activeBallpark has been found in the search results
-                    activeBallparkFound = true;
-                    break;
-                }
             }
-        }
-
-        // if activeBallpark isn't found in the search results
-        if (!activeBallparkFound) {
-            // close the infoWindow
-            infoWindow.close();
         }
     }
 };
@@ -453,5 +438,3 @@ ko.applyBindings(viewModel);
 
 // Initialize the viewModel
 viewModel.init();
-
-mapView.init();
