@@ -157,6 +157,7 @@ var mapView = {
     markers: [],
     init: function() {
 
+        // error handling in case Google Maps API cannot be loaded
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
             .done(function() {
 
@@ -178,6 +179,8 @@ var mapView = {
                     mapView.markers[i] = new google.maps.Marker({
                         map: map,
                         title: ballparks[i].title,
+                        lat: ballparks[i].lat,
+                        lng: ballparks[i].lng,
                         position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
                         animation: google.maps.Animation.DROP
                     });
@@ -195,8 +198,8 @@ var mapView = {
                             // make the marker bounce for 750ms
                             mapView.setBounce(marker);
 
-                            // create infoWindow contentHTML
-                            var contentHTML = marker.title;
+                            // content for infoWindow is ballpark name and lat/lng coordinates
+                            var contentHTML = '<h4>' + marker.title + '</h4><p>Latitude: ' + marker.lat + '</p><p>Longitude: ' + marker.lng + '</p>';
 
                             // close the infoWindow (if it is open)
                             infoWindow.close();
@@ -235,6 +238,10 @@ var mapView = {
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
 
         // set InfoWindow content
+        // I decided to show the Wikipedia article snipped and Flicker pics
+        // in the activeBallpark div because it just looked better to me.
+        // To meet the rubric requirement of "[each marker] shows unique information
+        // about a location in an infoWindow" I am showing each parks latitude and longitude.
         infoWindow.setContent(contentHTML);
     },
 
