@@ -166,14 +166,10 @@ var Ballpark = function(data) {
 // markers[] is used to track the map markers
 var markers = [];
 
-var infoWindow = null;
-
-// activeBallparkID is used to track ballpark shown in infoWindow
-var activeMarker = null;
-
-var googleMapsAPILoaded = false;
-
 var mapView = {
+    googleMapsAPILoaded : false,
+    infoWindow : null,
+
     init: function() {
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
             .done(function() {
@@ -231,8 +227,6 @@ var mapView = {
                         // open the infoWindow
                         infoWindow.open(map, marker);
 
-                        // set activeMarker
-                        activeMarker = marker;
                         activeBallpark = marker;
 
                         // set activeBallparkName for activeBallpark div
@@ -253,8 +247,6 @@ var mapView = {
                 // show the search div and hide the activeBallpark div
                 viewModel.searchVisible(true);
 
-                // clear the activeMarker since no ballpark is active
-                activeMarker = null;
             });
 
         }
