@@ -151,25 +151,10 @@ var ballparks = [{
     markerID: 29
 }];
 
-// START HERE: use ballpark object to track current ballpark and display wikipedia snippet in info window
-// Ballpark object used by KO
-var Ballpark = function(data) {
-    this.title = ko.observable(data.title);
-    this.lat = ko.observable(data.lat);
-    this.lng = ko.observable(data.lng);
-    this.markerID = ko.observable(data.markerID);
-    this.articleTitle = ko.observable(data.title);
-    this.snippet = ko.observable(data.snippet);
-};
-
-
-// markers[] is used to track the map markers
-var markers = [];
-
 var mapView = {
     googleMapsAPILoaded : false,
     infoWindow : null,
-
+    markers : [],
     init: function() {
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
             .done(function() {
@@ -202,7 +187,7 @@ var mapView = {
 
             // create map markers for all ballparks
             for (i = 0; i < ballparks.length; i++) {
-                markers[i] = new google.maps.Marker({
+                mapView.markers[i] = new google.maps.Marker({
                     map: map,
                     title: ballparks[i].title,
                     position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
@@ -210,7 +195,7 @@ var mapView = {
                 });
 
                 // create event listener for clicking the marker
-                google.maps.event.addListener(markers[i], 'click', (function(marker) {
+                google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
                     return function() {
                         // make the marker bounce for 750ms
                         mapView.setBounce(marker);
@@ -238,7 +223,7 @@ var mapView = {
                         getFlickrPics(activeBallpark.title);
                         getWikipediaArticles(activeBallpark.title);
                     };
-                })(markers[i]));
+                })(mapView.markers[i]));
             }
 
             // create event listener for closing the infoWindow
@@ -362,6 +347,17 @@ var getFlickrPics = function(ballparkName) {
         });
 };
 
+// START HERE: use ballpark object to track current ballpark and display wikipedia snippet in info window
+// Ballpark object used by KO
+var Ballpark = function(data) {
+    this.title = ko.observable(data.title);
+    this.lat = ko.observable(data.lat);
+    this.lng = ko.observable(data.lng);
+    this.markerID = ko.observable(data.markerID);
+    this.articleTitle = ko.observable(data.title);
+    this.snippet = ko.observable(data.snippet);
+};
+
 var viewModel = {
 
     searchVisible: ko.observable(true),
@@ -379,7 +375,7 @@ var viewModel = {
 
     setActiveBallpark: function(activeBallpark) {
         // simulate marker click to show infoWindow containing activeBallpark info
-        google.maps.event.trigger(markers[activeBallpark.markerID], 'click', {
+        google.maps.event.trigger(mapView.markers[activeBallpark.markerID], 'click', {
             latLng: new google.maps.LatLng(0, 0)
         });
     },
@@ -397,15 +393,15 @@ var viewModel = {
             viewModel.showAllBallparks();
 
             // set visibility of all map markers
-            for (i = 0; i < markers.length; i++) {
-                markers[i].setVisible(true);
+            for (i = 0; i < mapView.markers.length; i++) {
+                mapView.markers[i].setVisible(true);
             }
             return;
         }
 
         // clear visibility of all map markers
-        for (i = 0; i < markers.length; i++) {
-            markers[i].setVisible(false);
+        for (i = 0; i < mapView.markers.length; i++) {
+            mapView.markers[i].setVisible(false);
         }
 
         var activeBallparkFound = false;
@@ -416,7 +412,7 @@ var viewModel = {
                 viewModel.ballparks.push(ballparks[ballpark]);
 
                 // make corresponding map marker visible
-                markers[ballpark].setVisible(true);
+                mapView.markers[ballpark].setVisible(true);
             }
         }
     }
