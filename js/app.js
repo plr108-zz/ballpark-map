@@ -295,7 +295,8 @@ var getWikipediaArticles = function(ballparkName) {
         requestString = ballparkName;
     }
 
-    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=' + encodeURIComponent(requestString) + '&srlimit=1&format=json';
+    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=';
+    queryUrl += encodeURIComponent(requestString) + '&srlimit=1&format=json';
 
     $.getJSON(queryUrl)
         .done(function(json) {
@@ -304,10 +305,11 @@ var getWikipediaArticles = function(ballparkName) {
             var snippet = json.query.search[0].snippet;
             var linkURL = "https://en.wikipedia.org/wiki/" + title;
 
+            var appendString = '<div id="wikipedia-article"><h2>' + title + '</h2><p>' + snippet + '...<a href="';
+            appendString += linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
+
             $("#wikipedia-article").remove();
-            $("#wikipedia-container").append(
-                '<div id="wikipedia-article"><h2>' + title + '</h2><p>' + snippet + '...<a href="' + linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
-            );
+            $("#wikipedia-container").append(appendString);
         })
         .fail(function(jqxhr, textStatus, error) {
             alert("Sorry, there was an error getting an article from Wikipedia.");
@@ -348,7 +350,8 @@ var getFlickrPics = function(ballparkName) {
                 var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
                 // staticURL is the link to display the pic outside of flickr.com
                 // '_n' option requests a picture of 320px on longest side
-                var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
+                var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server;
+                staticURL += "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
                 thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
 
                 flickrPicsHTML += thisPicHTML;
