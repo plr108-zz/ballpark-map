@@ -319,35 +319,34 @@ var getWikipediaArticles = function(ballparkName) {
 
 var searchMediaWikiAPI = function(search, callback) {
 
-    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
+    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
 
-    // Issue the AJAX request
-    $.ajax(queryUrl + '&callback=?', {
-        dataType: 'jsonp',
-        success: function(data) {
-
+    $.getJSON(queryUrl)
+        .done(function(json) {
             var title = null;
             var snippet = null;
+            console.log("WikiJSON");
 
             for (var i = 0; i < 1; i++) {
-                title = data.query.search[0].title;
-                snippet = data.query.search[0].snippet;
+                title = json.query.search[0].title;
+                snippet = json.query.search[0].snippet;
             }
+
+            console.log(title);
+            console.log(snipped);
 
             // Call the callback
             callback.success({
                 title, snippet
             });
-        },
-        // code to run if the request fails; the raw request and
-        // status codes are passed to the function
-        error: function(xhr, status, errorThrown) {
+        })
+        .fail(function(jqxhr, textStatus, error) {
             alert("Sorry, there was an error getting an article from Wikipedia.");
-            console.log("Error: " + errorThrown);
-            console.log("Status: " + status);
-            console.dir(xhr);
-        }
-    });
+            console.log("Error getting article from Wikipedia");
+            console.log(jqxhr);
+            console.log(textStatus);
+            console.dir(error);
+        });
 }
 
 var getFlickrPics = function(ballparkName) {
