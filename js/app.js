@@ -175,15 +175,17 @@ var loadGoogleMapsAPI = function() {
             googleMapsAPILoaded = true;
             initMap();
         })
-        .fail(function() {
-            console.log("Google Maps API did not load.");
-            alert("Sorry, there was an error getting the Google Map.");
+        .fail(function(jqxhr, textStatus, error) {
+            alert("Sorry, there was an error loading Google Maps.");
+            console.log("Error loading Google Maps API script");
+            console.log(jqxhr);
+            console.log(textStatus);
+            console.dir(error);
         });
 }
 var initMap = function() {
 
     if (googleMapsAPILoaded) {
-
 
         var map = new google.maps.Map(document.getElementById('map'), {
             // coordinates are in the center of the ballparks
@@ -289,6 +291,7 @@ var getWikipediaArticles = function(ballparkName) {
     }
 
     searchMediaWikiAPI(requestString, {
+
         success: function(result) {
             if (result === null) {
                 alert("Sorry, a Wikipedia article for this ballpark was not found.");
@@ -367,13 +370,9 @@ var getFlickrPics = function(ballparkName) {
 
     requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
 
-    $.ajax({
-
-        url: requestString,
-
-        success: function(json) {
+    var result = $.getJSON(requestString)
+        .done(function(json) {
             var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
-
             // Show 20 Flickr pictures for the ActiveBallpark
             for (i = 0; i < 20; i++) {
 
@@ -390,16 +389,14 @@ var getFlickrPics = function(ballparkName) {
             flickrPicsHTML += '</div>';
 
             $("#flickr-container").append(flickrPicsHTML);
-        },
-        // code to run if the request fails; the raw request and
-        // status codes are passed to the function
-        error: function(xhr, status, errorThrown) {
+        })
+        .fail(function(jqxhr, textStatus, error) {
             alert("Sorry, there was an error getting pictures from Flickr.");
-            console.log("Error: " + errorThrown);
-            console.log("Status: " + status);
-            console.dir(xhr);
-        }
-    });
+            console.log("Error getting pictures from Flickr");
+            console.log(jqxhr);
+            console.log(textStatus);
+            console.dir(error);
+        });
 };
 
 var viewModel = {
@@ -488,4 +485,3 @@ ko.applyBindings(viewModel);
 
 // Initialize the viewModel
 viewModel.init();
-
