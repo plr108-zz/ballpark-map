@@ -152,9 +152,10 @@ var ballparks = [{
 }];
 
 var mapView = {
-    googleMapsAPILoaded : false,
-    infoWindow : null,
-    markers : [],
+    googleMapsAPILoaded: false,
+    infoWindow: null,
+    // markers is used to track the map markers
+    markers: [],
     init: function() {
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
             .done(function() {
@@ -221,7 +222,7 @@ var mapView = {
                         viewModel.searchVisible(false);
 
                         getFlickrPics(activeBallpark.title);
-                        getWikipediaArticles(activeBallpark.title);
+                        viewModel.getWikipediaArticles(activeBallpark.title);
                     };
                 })(mapView.markers[i]));
             }
@@ -252,50 +253,7 @@ var mapView = {
     }
 };
 
-var getWikipediaArticles = function(ballparkName) {
 
-    $("#wikipedia-link").remove();
-
-    var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
-
-    var requestString = null;
-
-    // Searching for "Miller Park" returns a disambiguation page:
-    // https://en.wikipedia.org/wiki/Miller_Park
-    // For a better user experience, search for "Miller Park Milwaukee"
-    // which returns the Miller Park ballpark page:
-    // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
-    if (ballparkName === "Miller Park") {
-        requestString = ballparkName + " Milwaukee";
-    } else {
-        // encode special characters in the ballparkName
-        requestString = ballparkName;
-    }
-
-    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=';
-    queryUrl += encodeURIComponent(requestString) + '&srlimit=1&format=json';
-
-    $.getJSON(queryUrl)
-        .done(function(json) {
-
-            var title = json.query.search[0].title;
-            var snippet = json.query.search[0].snippet;
-            var linkURL = "https://en.wikipedia.org/wiki/" + title;
-
-            var appendString = '<div id="wikipedia-article"><h2>' + title + '</h2><p>' + snippet + '...<a href="';
-            appendString += linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
-
-            $("#wikipedia-article").remove();
-            $("#wikipedia-container").append(appendString);
-        })
-        .fail(function(jqxhr, textStatus, error) {
-            alert("Sorry, there was an error getting an article from Wikipedia.");
-            console.log("Error getting article from Wikipedia");
-            console.log(jqxhr);
-            console.log(textStatus);
-            console.dir(error);
-        });
-};
 
 var getFlickrPics = function(ballparkName) {
 
@@ -415,6 +373,51 @@ var viewModel = {
                 mapView.markers[ballpark].setVisible(true);
             }
         }
+    },
+
+    getWikipediaArticles: function(ballparkName) {
+
+        $("#wikipedia-link").remove();
+
+        var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
+
+        var requestString = null;
+
+        // Searching for "Miller Park" returns a disambiguation page:
+        // https://en.wikipedia.org/wiki/Miller_Park
+        // For a better user experience, search for "Miller Park Milwaukee"
+        // which returns the Miller Park ballpark page:
+        // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
+        if (ballparkName === "Miller Park") {
+            requestString = ballparkName + " Milwaukee";
+        } else {
+            // encode special characters in the ballparkName
+            requestString = ballparkName;
+        }
+
+        var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&callback=?&list=search&srsearch=';
+        queryUrl += encodeURIComponent(requestString) + '&srlimit=1&format=json';
+
+        $.getJSON(queryUrl)
+            .done(function(json) {
+
+                var title = json.query.search[0].title;
+                var snippet = json.query.search[0].snippet;
+                var linkURL = "https://en.wikipedia.org/wiki/" + title;
+
+                var appendString = '<div id="wikipedia-article"><h2>' + title + '</h2><p>' + snippet + '...<a href="';
+                appendString += linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
+
+                $("#wikipedia-article").remove();
+                $("#wikipedia-container").append(appendString);
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                alert("Sorry, there was an error getting an article from Wikipedia.");
+                console.log("Error getting article from Wikipedia");
+                console.log(jqxhr);
+                console.log(textStatus);
+                console.dir(error);
+            });
     }
 };
 
