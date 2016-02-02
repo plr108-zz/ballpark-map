@@ -167,204 +167,238 @@ var infoWindow = null;
 // activeBallparkID is used to track ballpark shown in infoWindow
 var activeMarker = null;
 
-// Google Maps callback function
-var initMap = function() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-        // coordinates are in the center of the ballparks
-        center: {
-            lat: 39.6,
-            lng: -98.4
-        },
-        zoom: 4
-    });
-    // create one infoWindow for use by the marker for the activeBallpark
-    infoWindow = new google.maps.InfoWindow();
+var googleMapsAPILoaded = false;
 
-    // create map markers for all ballparks
-    for (i = 0; i < ballparks.length; i++) {
-        markers[i] = new google.maps.Marker({
-            map: map,
-            title: ballparks[i].title,
-            position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
-            animation: google.maps.Animation.DROP
+var loadGoogleMapsAPI = function() {
+    $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw&callback=initMap")
+        .done(function() {
+            googleMapsAPILoaded = true;
+            initMap();
+        })
+        .fail(function() {
+            console.log("Google Maps API did not load.");
+            alert("Sorry, there was an error getting the Google Map.");
+        });
+}
+var initMap = function() {
+
+    if (googleMapsAPILoaded) {
+
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            // coordinates are in the center of the ballparks
+            center: {
+                lat: 39.6,
+                lng: -98.4
+            },
+            zoom: 4
         });
 
-        // create event listener for clicking the marker
-        google.maps.event.addListener(markers[i], 'click', (function(marker) {
-            return function() {
-                // make the marker bounce for 750ms
-                setBounce(marker);
+        // create one infoWindow for use by the marker for the activeBallpark
+        infoWindow = new google.maps.InfoWindow();
 
-                // create infoWindow contentHTML
-                var contentHTML = marker.title;
-
-                // close the infoWindow (if it is open)
-                infoWindow.close();
-
-                // initialize infoWindow
-                initializeInfoWindow(marker, contentHTML, infoWindow);
-
-                // open the infoWindow
-                infoWindow.open(map, marker);
-
-                // set activeMarker
-                activeMarker = marker;
-                activeBallpark = marker;
-
-                // set activeBallparkName for activeBallpark div
-                viewModel.activeBallparkName(activeBallpark.title);
-
-                // hide the search div and show the activeBallpark div
-                viewModel.searchVisible(false);
-
-                getFlickrPics(activeBallpark.title);
-                getWikipediaArticles(activeBallpark.title);
-            };
-        })(markers[i]));
-
-        // getWikipediaArticles() was created by following the MediaWiki search approach shown here: http://jsfiddle.net/ht9wd/
-        var getWikipediaArticles = function(ballparkName) {
-
-            $("#wikipedia-link").remove();
-
-            var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
-
-            var requestString = null;
-
-            // Searching for "Miller Park" returns a disambiguation page:
-            // https://en.wikipedia.org/wiki/Miller_Park
-            // For a better user experience, search for "Miller Park Milwaukee"
-            // which returns the Miller Park ballpark page:
-            // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
-            if (ballparkName === "Miller Park") {
-                requestString = ballparkName + " Milwaukee";
-            } else {
-                // encode special characters in the ballparkName
-                requestString = ballparkName;
-            }
-
-            searchMediaWikiAPI(requestString, {
-                success: function(result) {
-                    if (result === null) {
-                        console.log('Article Not found');
-                        wikipediaLinkHTML += '<p>Wikipedia Article not Found</p></div>'
-                    } else {
-                        console.log("Returned result:" + result.title);
-                    }
-
-                    var linkURL = "https://en.wikipedia.org/wiki/" + result.title;
-
-                    $("#wikipedia-article").remove();
-                    $("#wikipedia-container").append(
-                        '<div id="wikipedia-article"><h2>' + result.title + '</h2><p>' + result.snippet + '...<a href="' + linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
-                    );
-                }
+        // create map markers for all ballparks
+        for (i = 0; i < ballparks.length; i++) {
+            markers[i] = new google.maps.Marker({
+                map: map,
+                title: ballparks[i].title,
+                position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
+                animation: google.maps.Animation.DROP
             });
-        };
 
-        var searchMediaWikiAPI = function(search, callback) {
+            // create event listener for clicking the marker
+            google.maps.event.addListener(markers[i], 'click', (function(marker) {
+                return function() {
+                    // make the marker bounce for 750ms
+                    setBounce(marker);
 
-            var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
+                    // create infoWindow contentHTML
+                    var contentHTML = marker.title;
 
-            // Issue the AJAX request
-            $.ajax(queryUrl + '&callback=?', {
-                dataType: 'jsonp',
-                success: function(data) {
+                    // close the infoWindow (if it is open)
+                    infoWindow.close();
 
-                    var title = null;
-                    var snippet = null;
+                    // initialize infoWindow
+                    initializeInfoWindow(marker, contentHTML, infoWindow);
 
-                    for (var i = 0; i < 1; i++) {
-                        title = data.query.search[0].title;
-                        snippet = data.query.search[0].snippet;
-                    }
+                    // open the infoWindow
+                    infoWindow.open(map, marker);
 
-                    // Call the callback
-                    callback.success({
-                        title, snippet
-                    });
-                }
+                    // set activeMarker
+                    activeMarker = marker;
+                    activeBallpark = marker;
+
+                    // set activeBallparkName for activeBallpark div
+                    viewModel.activeBallparkName(activeBallpark.title);
+
+                    // hide the search div and show the activeBallpark div
+                    viewModel.searchVisible(false);
+
+                    getFlickrPics(activeBallpark.title);
+                    getWikipediaArticles(activeBallpark.title);
+                };
+            })(markers[i]));
+
+            var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
+
+                // set InfoWindow content
+                infoWindow.setContent(contentHTML);
+            };
+
+            // make the marker bounce for 750ms
+            function setBounce(marker) {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function() {
+                    marker.setAnimation(null);
+                }, 750);
+            };
+
+
+            google.maps.event.addListener(infoWindow, 'closeclick', function() {
+                // show the search div and hide the activeBallpark div
+                viewModel.searchVisible(true);
+
+                // clear the activeMarker since no ballpark is active
+                activeMarker = null;
+                // TODO: is there a better way to do this?
+                infoWindow.setContent(null);
             });
         }
+    }
+};
 
-        var getFlickrPics = function(ballparkName) {
+// getWikipediaArticles() was created by following the MediaWiki search approach shown here: http://jsfiddle.net/ht9wd/
+var getWikipediaArticles = function(ballparkName) {
 
-            $("#flickr-pics").remove();
+    $("#wikipedia-link").remove();
 
-            // build URL for the Flickr API request
-            var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
+    var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
 
-            // At the time of coding this, Flickr only returned 3 pictures for the search "AT&T Park baseball"
-            // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
-            // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
-            // https://www.flickr.com/search/?text=ATT%20park%20baseball
-            if (ballparkName === "AT&T Park") {
-                requestString += encodeURIComponent("ATT Park baseball")
-            } else {
-                // encode special characters in the ballparkName
-                requestString += encodeURIComponent(ballparkName + " baseball");
-            }
+    var requestString = null;
 
-            requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
-
-            $.ajax({
-
-                url: requestString,
-
-                success: function(json) {
-                    var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
-
-                    // Show 20 Flickr pictures for the ActiveBallpark
-                    for (i = 0; i < 20; i++) {
-
-                        // flickrURL is the link to open the pic on flickr.com
-                        var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
-                        // staticURL is the link to display the pic outside of flickr.com
-                        // '_n' option requests a picture of 320px on longest side
-                        var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
-                        thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
-
-                        flickrPicsHTML += thisPicHTML;
-                    }
-
-                    flickrPicsHTML += '</div>';
-
-                    $("#flickr-container").append(flickrPicsHTML);
-                },
-                // code to run if the request fails; the raw request and
-                // status codes are passed to the function
-                error: function(xhr, status, errorThrown) {
-                    alert("Sorry, there was an error getting pictures from Flickr.");
-                    console.log("Error: " + errorThrown);
-                    console.log("Status: " + status);
-                    console.dir(xhr);
-                },
-            });
-        };
-
-        var initializeInfoWindow = function(marker, contentHTML, infoWindow) {
-
-            // set InfoWindow content
-            infoWindow.setContent(contentHTML);
-        };
-
-        // make the marker bounce for 750ms
-        function setBounce(marker) {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function() {
-                marker.setAnimation(null);
-            }, 750);
-        };
+    // Searching for "Miller Park" returns a disambiguation page:
+    // https://en.wikipedia.org/wiki/Miller_Park
+    // For a better user experience, search for "Miller Park Milwaukee"
+    // which returns the Miller Park ballpark page:
+    // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
+    if (ballparkName === "Miller Park") {
+        requestString = ballparkName + " Milwaukee";
+    } else {
+        // encode special characters in the ballparkName
+        requestString = ballparkName;
     }
 
-    google.maps.event.addListener(infoWindow, 'closeclick', function() {
-        // show the search div and hide the activeBallpark div
-        viewModel.searchVisible(true);
+    searchMediaWikiAPI(requestString, {
+        success: function(result) {
+            if (result === null) {
+                alert("Sorry, a Wikipedia article for this ballpark was not found.");
+                console.log("Error: " + errorThrown);
+                console.log("Status: " + status);
+                console.dir(xhr);
+            } else {
+                var linkURL = "https://en.wikipedia.org/wiki/" + result.title;
 
-        // clear the activeMarker since no ballpark is active
-        activeMarker = null;
-        // TODO: is there a better way to do this?
-        infoWindow.setContent(null);
+                $("#wikipedia-article").remove();
+                $("#wikipedia-container").append(
+                    '<div id="wikipedia-article"><h2>' + result.title + '</h2><p>' + result.snippet + '...<a href="' + linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
+                );
+            }
+        },
+
+        error: function() {
+            alert("Sorry, there was an error getting an article from Wikipedia.");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        }
+    });
+};
+
+var searchMediaWikiAPI = function(search, callback) {
+
+    var queryUrl = 'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(search) + '&srlimit=1&format=json';
+
+    // Issue the AJAX request
+    $.ajax(queryUrl + '&callback=?', {
+        dataType: 'jsonp',
+        success: function(data) {
+
+            var title = null;
+            var snippet = null;
+
+            for (var i = 0; i < 1; i++) {
+                title = data.query.search[0].title;
+                snippet = data.query.search[0].snippet;
+            }
+
+            // Call the callback
+            callback.success({
+                title, snippet
+            });
+        },
+        // code to run if the request fails; the raw request and
+        // status codes are passed to the function
+        error: function(xhr, status, errorThrown) {
+            alert("Sorry, there was an error getting an article from Wikipedia.");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        }
+    });
+}
+
+var getFlickrPics = function(ballparkName) {
+
+    $("#flickr-pics").remove();
+
+    // build URL for the Flickr API request
+    var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
+
+    // At the time of coding this, Flickr only returned 3 pictures for the search "AT&T Park baseball"
+    // https://www.flickr.com/search/?text=AT%26T%20park%20baseball
+    // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
+    // https://www.flickr.com/search/?text=ATT%20park%20baseball
+    if (ballparkName === "AT&T Park") {
+        requestString += encodeURIComponent("ATT Park baseball")
+    } else {
+        // encode special characters in the ballparkName
+        requestString += encodeURIComponent(ballparkName + " baseball");
+    }
+
+    requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
+
+    $.ajax({
+
+        url: requestString,
+
+        success: function(json) {
+            var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
+
+            // Show 20 Flickr pictures for the ActiveBallpark
+            for (i = 0; i < 20; i++) {
+
+                // flickrURL is the link to open the pic on flickr.com
+                var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
+                // staticURL is the link to display the pic outside of flickr.com
+                // '_n' option requests a picture of 320px on longest side
+                var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server + "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
+                thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
+
+                flickrPicsHTML += thisPicHTML;
+            }
+
+            flickrPicsHTML += '</div>';
+
+            $("#flickr-container").append(flickrPicsHTML);
+        },
+        // code to run if the request fails; the raw request and
+        // status codes are passed to the function
+        error: function(xhr, status, errorThrown) {
+            alert("Sorry, there was an error getting pictures from Flickr.");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        }
     });
 };
 
@@ -377,7 +411,7 @@ var viewModel = {
     activeBallparkName: ko.observable("???"),
 
     init: function() {
-
+        loadGoogleMapsAPI();
         this.ballparkList = ko.observableArray();
         this.activeBallpark = null;
         this.showAllBallparks();
@@ -454,3 +488,4 @@ ko.applyBindings(viewModel);
 
 // Initialize the viewModel
 viewModel.init();
+
