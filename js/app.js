@@ -238,7 +238,7 @@ var mapView = {
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
 
         // set InfoWindow content
-        // I decided to show the Wikipedia article snipped and Flicker pics
+        // I decided to show the Wikipedia article snippet and Flicker pics
         // in the activeBallpark div because it just looked better to me.
         // To meet the rubric requirement of "[each marker] shows unique information
         // about a location in an infoWindow" I am showing each parks latitude and longitude.
@@ -267,6 +267,12 @@ var viewModel = {
 
     // used to show search results
     query: ko.observable(''),
+
+    // used to display the snippet of the activeBallpark's Wikipedia article
+    snippet: ko.observable(),
+
+    // used to set the link of the activeBallpark's Wikipedia article
+    articleLink: ko.observable(),
 
     init: function() {
         mapView.init();
@@ -319,10 +325,6 @@ var viewModel = {
 
     getWikipediaArticles: function(ballparkName) {
 
-        $("#wikipedia-link").remove();
-
-        var wikipediaLinkHTML = '<div id="wikipedia-link"><h2>Wikipedia Article</h2>';
-
         var requestString = null;
 
         // Searching for "Miller Park" returns a disambiguation page:
@@ -342,16 +344,8 @@ var viewModel = {
 
         $.getJSON(queryUrl)
             .done(function(json) {
-
                 var title = json.query.search[0].title;
-                var snippet = json.query.search[0].snippet;
-                var linkURL = "https://en.wikipedia.org/wiki/" + title;
-
-                var appendString = '<div id="wikipedia-article"><p>' + snippet + '...<a href="';
-                appendString += linkURL + '"" target="_blank" class="more-link">  (click for more)</a></p></div>'
-
-                $("#wikipedia-article").remove();
-                $("#wikipedia-container").append(appendString);
+                viewModel.snippet('<p>' + json.query.search[0].snippet + '  <a target="_blank" href="https://en.wikipedia.org/wiki/' + title + '">(Click for More)</a></p>');
             })
             .fail(function(jqxhr, textStatus, error) {
                 alert("Sorry, there was an error getting an article from Wikipedia.");
@@ -360,6 +354,7 @@ var viewModel = {
                 console.log(textStatus);
                 console.dir(error);
             });
+
     },
 
     getFlickrPics: function(ballparkName) {

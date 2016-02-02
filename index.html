@@ -22,16 +22,23 @@
             <div id="active-ballpark" data-bind="visible: ! searchVisible()">
                 <h1>We're Here</h1>
                 <h1 data-bind="text: activeBallparkName"></h1>
-                <div id="wikipedia-container"></div>
+                <div id="wikipedia-container">
+                    <div id="wikipedia-link">
+                        <h2>Wikipedia Article</h2>
+                        <div id="wikipedia-article">
+                            <div data-bind="html: viewModel.snippet">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="flickr-container"></div>
             </div>
         </div>
         <div id="map"></div>
-    </div>
-    <script src="js/lib/knockout-3.4.0.js"></script>
-    <script src="js/lib/jquery.min.js"></script>
-    <script src="js/app.js"></script>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+        <script src="js/lib/knockout-3.4.0.js"></script>
+        <script src="js/lib/jquery.min.js"></script>
+        <script src="js/app.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 </body>
 
 </html>
