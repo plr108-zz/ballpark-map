@@ -248,21 +248,20 @@ var mapView = {
 };
 
 
-// START HERE: use ballpark object to track current ballpark and display wikipedia snippet in infoWindow
-// Ballpark object used by KO
-var Ballpark = function(data) {
-    this.title = ko.observable(data.title);
-    this.lat = ko.observable(data.lat);
-    this.lng = ko.observable(data.lng);
-    this.markerID = ko.observable(data.markerID);
-    this.articleTitle = ko.observable(data.title);
-    this.snippet = ko.observable(data.snippet);
-};
+
 
 var viewModel = {
 
+    ballpark: function(data) {
+        this.title = ko.observable(data.title);
+        this.lat = ko.observable(data.lat);
+        this.lng = ko.observable(data.lng);
+        this.markerID = ko.observable(data.markerID);
+        this.articleTitle = ko.observable(data.title);
+        this.snippet = ko.observable(data.snippet);
+    },
+
     searchVisible: ko.observable(true),
-    activeBallparkVisible: ko.observable(false),
     ballparks: ko.observableArray(),
     query: ko.observable(''),
     activeBallparkName: ko.observable(),

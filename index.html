@@ -13,7 +13,7 @@
             <div id="search" data-bind="visible: searchVisible()">
                 <h1>Major League Ballparks</h1>
                 <input id="search-input" type="search" name="search" placeholder="Search for a ballpark" data-bind="value: query, valueUpdate: 'input'" autocomplete="off" />
-                <div data-bind="visible: ballparks().length > 0">
+                <div data-bind="visible: viewModel.ballparks().length > 0">
                     <ul data-bind="foreach: ballparks">
                         <li data-bind="text: title, click: $parent.setActiveBallpark, "></li>
                     </ul>
