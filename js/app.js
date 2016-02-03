@@ -1,151 +1,241 @@
 // The locations for this app are ballparks for Major League Baseball teams
 var ballparks = [{
     title: 'Angel Stadium of Anaheim',
+    abbrev: 'LAA',
+    location: 'Los Angeles',
+    nickname: 'Angels',
     lat: 33.800326,
     lng: -117.882762,
     markerID: 0
 }, {
     title: 'AT&T Park',
+    abbrev: 'SF',
+    location: 'San Francisco',
+    nickname: 'Giants',
     lat: 37.778858,
     lng: -122.389248,
     markerID: 1
 }, {
     title: 'Busch Stadium',
+    abbrev: 'STL',
+    location: 'St. Louis',
+    nickname: 'Cardinals',
     lat: 38.622837,
     lng: -90.192799,
     markerID: 2
 }, {
     title: 'Chase Field',
+    abbrev: 'ARI',
+    location: 'Arizona',
+    nickname: 'Diamondbacks',
     lat: 33.445039,
     lng: -112.066732,
     markerID: 3
 }, {
     title: 'Citi Field',
+    abbrev: 'NYM',
+    location: 'New York',
+    nickname: 'Mets',
     lat: 40.757226,
     lng: -73.845824,
     markerID: 4
 }, {
     title: 'Citizens Bank Park',
+    abbrev: 'PHI',
+    location: 'Philadelphia',
+    nickname: 'Phillies',
     lat: 39.905569,
     lng: -75.166591,
     markerID: 5
 }, {
     title: 'Comerica Park',
+    abbrev: 'DET',
+    location: 'Detroit',
+    nickname: 'Tigers',
     lat: 42.339420,
     lng: -83.048942,
     markerID: 6
 }, {
     title: 'Coors Field',
+    abbrev: 'COL',
+    location: 'Colorado',
+    nickname: 'Rockies',
     lat: 39.755907,
     lng: -104.994173,
     markerID: 7
 }, {
     title: 'Dodger Stadium',
+    abbrev: 'LAD',
+    location: 'Los Angeles',
+    nickname: 'Dodgers',
     lat: 34.072974,
     lng: -118.240619,
     markerID: 8
 }, {
     title: 'Fenway Park',
+    abbrev: 'BOS',
+    location: 'Boston',
+    nickname: 'Red Sox',
     lat: 42.346859,
     lng: -71.097229,
     markerID: 9
 }, {
     title: 'Great American Ball Park',
+    abbrev: 'CIN',
+    location: 'Cincinnati',
+    nickname: 'Reds',
     lat: 39.097466,
     lng: -84.507029,
     markerID: 10
 }, {
     title: 'Globe Life Park in Arlington',
+    abbrev: 'TEX',
+    location: 'Texas',
+    nickname: 'Rangers',
     lat: 32.750289,
     lng: -97.081287,
     markerID: 11
 }, {
     title: 'Kauffman Stadium',
+    abbrev: 'KC',
+    location: 'Kansas City',
+    nickname: 'Royals',
     lat: 39.051839,
     lng: -94.480303,
     markerID: 12
 }, {
     title: 'Marlins Park',
+    abbrev: 'MIA',
+    location: 'Miami',
+    nickname: 'Marlins',
     lat: 25.778344,
     lng: -80.219723,
     markerID: 13
 }, {
     title: 'Miller Park',
+    abbrev: 'MIL',
+    location: 'Milwaukee',
+    nickname: 'Brewers',
     lat: 43.028213,
     lng: -87.971172,
     markerID: 14
 }, {
     title: 'Minute Maid Park',
+    abbrev: 'HOU',
+    location: 'Houston',
+    nickname: 'Astros',
     lat: 29.757413,
     lng: -95.355529,
     markerID: 15
 }, {
     title: 'Nationals Park',
+    abbrev: 'WSH',
+    location: 'Washington',
+    nickname: 'Nationals',
     lat: 38.873219,
     lng: -77.007411,
     markerID: 16
 }, {
     title: 'O.co Coliseum',
+    abbrev: 'OAK',
+    location: 'Oakland',
+    nickname: 'Athletics',
     lat: 37.751595,
     lng: -122.200528,
     markerID: 17
 }, {
     title: 'Oriole Park at Camden Yards',
+    abbrev: 'BAL',
+    location: 'Baltimore',
+    nickname: 'Orioles',
     lat: 39.283505,
     lng: -76.621911,
     markerID: 18
 }, {
     title: 'Petco Park',
+    abbrev: 'SD',
+    location: 'San Diego',
+    nickname: 'Padres',
     lat: 32.707582,
     lng: -117.156999,
     markerID: 19
 }, {
     title: 'PNC Park',
+    abbrev: 'PIT',
+    location: 'Pittsburgh',
+    nickname: 'Pirates',
     lat: 40.4470471765,
     lng: -80.0061745423,
     markerID: 20
 }, {
     title: 'Progressive Field',
+    abbrev: 'CLE',
+    location: 'Cleveland',
+    nickname: 'Indians',
     lat: 41.495537,
     lng: -81.685278,
     markerID: 21
 }, {
     title: 'Rogers Centre',
+    abbrev: 'TOR',
+    location: 'Toronto',
+    nickname: 'Blue Jays',
     lat: 43.641453,
     lng: -79.389353,
     markerID: 22
 }, {
     title: 'Safeco Field',
+    abbrev: 'SEA',
+    location: 'Seattle',
+    nickname: 'Mariners',
     lat: 47.591653,
     lng: -122.332335,
     markerID: 23
 }, {
     title: 'Target Field',
+    abbrev: 'MIN',
+    location: 'Minnesota',
+    nickname: 'Twins',
     lat: 44.981911,
     lng: -93.277830,
     markerID: 24
 }, {
     title: 'Tropicana Field',
+    abbrev: 'TB',
+    location: 'Tampa Bay',
+    nickname: 'Rays',
     lat: 27.768485,
     lng: -82.653345,
     markerID: 25
 }, {
     title: 'Turner Field',
+    abbrev: 'ATL',
+    location: 'Atlanta',
+    nickname: 'Braves',
     lat: 33.735085,
     lng: -84.389973,
     markerID: 26
 }, {
     title: 'U.S. Cellular Field',
+    abbrev: 'CWS',
+    location: 'Chicago',
+    nickname: 'White Sox',
     lat: 41.830176,
     lng: -87.634225,
     markerID: 27
 }, {
     title: 'Wrigley Field',
+    abbrev: 'CHC',
+    location: 'Chicago',
+    nickname: 'Cubs',
     lat: 41.947902,
     lng: -87.655823,
     markerID: 28
 }, {
     title: 'Yankee Stadium',
+    abbrev: 'NYY',
+    location: 'New York',
+    nickname: 'Yankees',
     lat: 40.829848,
     lng: -73.926191,
     markerID: 29
@@ -193,8 +283,14 @@ var mapView = {
 
             // create map markers for all ballparks
             for (i = 0; i < ballparks.length; i++) {
+                    // Create path to custom marker.
+                    // Each marker features a color of the ballpark's home team!
+                    var image = "img/" + ballparks[i].abbrev + '.png';
                 mapView.markers[i] = new google.maps.Marker({
                     map: map,
+                    icon: image,
+                    location: ballparks[i].location,
+                    nickname: ballparks[i].nickname,
                     title: ballparks[i].title,
                     lat: ballparks[i].lat,
                     lng: ballparks[i].lng,
@@ -215,8 +311,18 @@ var mapView = {
                         // make the marker bounce for 750ms
                         mapView.setBounce(marker);
 
-                        // content for infoWindow is ballpark name and lat/lng coordinates
-                        var contentHTML = '<h4>' + marker.title + '</h4><p>Latitude: ' + marker.lat + '</p><p>Longitude: ' + marker.lng + '</p>';
+                        // content for infoWindow is
+                        // ballpark name ,
+                        // "Home of the (Location and Team Name)" message,
+                        // and lat/lng coordinates
+                        var contentHTML = '<h3>' + marker.title + '</h3><h4>Home of the ' + marker.location + ' ' + marker.nickname;
+
+                        // Add "of Anaheim" to the message for Angels Stadium
+                        if(marker.nickname === "Angels") {
+                            contentHTML += " of Anaheim";
+                        }
+
+                        contentHTML += '</h4><p><strong>Latitude: </strong>' + marker.lat + '</p><p><strong>Longitude: </strong>' + marker.lng + '</p>';
 
                         // close the infoWindow (if it is open)
                         infoWindow.close();
