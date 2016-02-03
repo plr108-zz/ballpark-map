@@ -155,84 +155,108 @@ var mapView = {
 
     // markers is used to track the map markers
     markers: [],
+
+
+
+    zoomIn: function() {
+        console.log(mapView.map);
+    },
+
+    zoomOut: function() {
+
+    },
+
     init: function() {
+
+        // These values will be used to center the map.
+        // Coordinates are in the center of the ballparks
+        defaultLat = 39.6;
+        defaultLng = -98.4;
+        defaultZoom = 4;
 
         // error handling in case Google Maps API cannot be loaded
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
-            .done(function() {
+        .done(function() {
 
-                // make a map
-                var map = new google.maps.Map(document.getElementById('map'), {
-                    // coordinates are in the center of the ballparks
-                    center: {
-                        lat: 39.6,
-                        lng: -98.4
-                    },
-                    zoom: 4
+            // make a map
+            var map = new google.maps.Map(document.getElementById('map'), {
+                // coordinates are in the center of the ballparks
+                center: {
+                    lat: defaultLat,
+                    lng: defaultLng
+                },
+                zoom: defaultZoom
+            });
+
+            // create one infoWindow for use by the marker for the activeBallpark
+            infoWindow = new google.maps.InfoWindow();
+
+            // create map markers for all ballparks
+            for (i = 0; i < ballparks.length; i++) {
+                mapView.markers[i] = new google.maps.Marker({
+                    map: map,
+                    title: ballparks[i].title,
+                    lat: ballparks[i].lat,
+                    lng: ballparks[i].lng,
+                    position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
+                    animation: google.maps.Animation.DROP
                 });
 
-                // create one infoWindow for use by the marker for the activeBallpark
-                infoWindow = new google.maps.InfoWindow();
+                // create event listener for clicking the marker
+                google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
+                    return function() {
 
-                // create map markers for all ballparks
-                for (i = 0; i < ballparks.length; i++) {
-                    mapView.markers[i] = new google.maps.Marker({
-                        map: map,
-                        title: ballparks[i].title,
-                        lat: ballparks[i].lat,
-                        lng: ballparks[i].lng,
-                        position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
-                        animation: google.maps.Animation.DROP
-                    });
+                        // call Flickr API first since downloading the picture thumbnails is slowest the operation
+                        viewModel.getFlickrPics(marker.title);
 
-                    // create event listener for clicking the marker
-                    google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
-                        return function() {
+                        // get Wikipedia article
+                        viewModel.getWikipediaArticles(marker.title);
 
-                            // call Flickr API first since downloading the picture thumbnails is slowest the operation
-                            viewModel.getFlickrPics(marker.title);
+                        // make the marker bounce for 750ms
+                        mapView.setBounce(marker);
 
-                            // get Wikipedia article
-                            viewModel.getWikipediaArticles(marker.title);
+                        // content for infoWindow is ballpark name and lat/lng coordinates
+                        var contentHTML = '<h4>' + marker.title + '</h4><p>Latitude: ' + marker.lat + '</p><p>Longitude: ' + marker.lng + '</p>';
 
-                            // make the marker bounce for 750ms
-                            mapView.setBounce(marker);
+                        // close the infoWindow (if it is open)
+                        infoWindow.close();
 
-                            // content for infoWindow is ballpark name and lat/lng coordinates
-                            var contentHTML = '<h4>' + marker.title + '</h4><p>Latitude: ' + marker.lat + '</p><p>Longitude: ' + marker.lng + '</p>';
+                        // initialize infoWindow
+                        mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
 
-                            // close the infoWindow (if it is open)
-                            infoWindow.close();
+                        // open the infoWindow
+                        infoWindow.open(map, marker);
 
-                            // initialize infoWindow
-                            mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
+                        // set activeBallparkName for activeBallpark div
+                        viewModel.activeBallparkName(marker.title);
 
-                            // open the infoWindow
-                            infoWindow.open(map, marker);
+                        // hide the search div and show the activeBallpark div
+                        viewModel.searchVisible(false);
 
-                            // set activeBallparkName for activeBallpark div
-                            viewModel.activeBallparkName(marker.title);
+                        // zoom in map on ballpark
+                        map.setZoom(15);
+                        map.setCenter(new google.maps.LatLng(marker.lat,marker.lng));
 
-                            // hide the search div and show the activeBallpark div
-                            viewModel.searchVisible(false);
-                        };
-                    })(mapView.markers[i]));
-                }
+                    };
+                })(mapView.markers[i]));
+            }
 
-                // create event listener for closing the infoWindow
-                google.maps.event.addListener(infoWindow, 'closeclick', function() {
-
-                    // show the search div and hide the activeBallpark div
-                    viewModel.searchVisible(true);
-                })
+            // create event listener for closing the infoWindow
+            google.maps.event.addListener(infoWindow, 'closeclick', function() {
+                // zoom out map to default view
+                map.setZoom(defaultZoom);
+                        map.setCenter(new google.maps.LatLng(defaultLat,defaultLng));
+                // show the search div and hide the activeBallpark div
+                viewModel.searchVisible(true);
             })
-            .fail(function(jqxhr, textStatus, error) {
-                alert("Sorry, there was an error loading Google Maps.");
-                console.log("Error loading Google Maps API script");
-                console.log(jqxhr);
-                console.log(textStatus);
-                console.dir(error);
-            });
+        })
+        .fail(function(jqxhr, textStatus, error) {
+            alert("Sorry, there was an error loading Google Maps.");
+            console.log("Error loading Google Maps API script");
+            console.log(jqxhr);
+            console.log(textStatus);
+            console.dir(error);
+        });
     },
 
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
