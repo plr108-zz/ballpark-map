@@ -243,18 +243,10 @@ var ballparks = [{
 
 var mapView = {
 
+    map: null,
+
     // markers is used to track the map markers
     markers: [],
-
-
-
-    zoomIn: function() {
-        console.log(mapView.map);
-    },
-
-    zoomOut: function() {
-
-    },
 
     init: function() {
 
@@ -264,105 +256,115 @@ var mapView = {
         defaultLng = -98.4;
         defaultZoom = 4;
 
-        // error handling in case Google Maps API cannot be loaded
+        // The Google Maps API call is made here instead of in HTML
+        // and uses jQuery's .getScript() and .fail() for error handling.
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
-        .done(function() {
+            .done(function() {
 
-            // make a map
-            var map = new google.maps.Map(document.getElementById('map'), {
-                // coordinates are in the center of the ballparks
-                center: {
-                    lat: defaultLat,
-                    lng: defaultLng
-                },
-                zoom: defaultZoom
-            });
-
-            // create one infoWindow for use by the marker for the activeBallpark
-            infoWindow = new google.maps.InfoWindow();
-
-            // create map markers for all ballparks
-            for (i = 0; i < ballparks.length; i++) {
-                    // Create path to custom marker.
-                    // Each marker features a color of the ballpark's home team!
-                    var image = "img/" + ballparks[i].abbrev + '.png';
-                mapView.markers[i] = new google.maps.Marker({
-                    map: map,
-                    icon: image,
-                    location: ballparks[i].location,
-                    nickname: ballparks[i].nickname,
-                    title: ballparks[i].title,
-                    lat: ballparks[i].lat,
-                    lng: ballparks[i].lng,
-                    position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
-                    animation: google.maps.Animation.DROP
+                // make a map
+                map = new google.maps.Map(document.getElementById('map'), {
+                    // coordinates are in the center of the ballparks
+                    center: {
+                        lat: defaultLat,
+                        lng: defaultLng
+                    },
+                    zoom: defaultZoom
                 });
 
-                // create event listener for clicking the marker
-                google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
-                    return function() {
+                // create one infoWindow for use by the marker for the activeBallpark
+                infoWindow = new google.maps.InfoWindow();
 
-                        // call Flickr API first since downloading the picture thumbnails is slowest the operation
-                        viewModel.getFlickrPics(marker.title);
+                // create map markers for all ballparks
+                for (i = 0; i < ballparks.length; i++) {
+                    // Create path to custom marker.
+                    // Each marker features a color of the ballpark's home team!
+                    // I built the markers on this site:
+                    // https://mapicons.mapsmarker.com/markers/sports/ball-sports/baseball/
+                    var image = "img/" + ballparks[i].abbrev + '.png';
+                    mapView.markers[i] = new google.maps.Marker({
+                        map: map,
+                        icon: image,
+                        location: ballparks[i].location,
+                        nickname: ballparks[i].nickname,
+                        title: ballparks[i].title,
+                        lat: ballparks[i].lat,
+                        lng: ballparks[i].lng,
+                        position: new google.maps.LatLng(ballparks[i].lat, ballparks[i].lng),
+                        animation: google.maps.Animation.DROP
+                    });
 
-                        // get Wikipedia article
-                        viewModel.getWikipediaArticles(marker.title);
+                    // create event listener for clicking the marker
+                    google.maps.event.addListener(mapView.markers[i], 'click', (function(marker) {
+                        return function() {
 
-                        // make the marker bounce for 750ms
-                        mapView.setBounce(marker);
+                            // call Flickr API first since downloading the picture thumbnails is slowest the operation
+                            viewModel.getFlickrPics(marker.title);
 
-                        // content for infoWindow is
-                        // ballpark name ,
-                        // "Home of the (Location and Team Name)" message,
-                        // and lat/lng coordinates
-                        var contentHTML = '<h3>' + marker.title + '</h3><h4>Home of the ' + marker.location + ' ' + marker.nickname;
+                            // get Wikipedia article
+                            viewModel.getWikipediaArticles(marker.title);
 
-                        // Add "of Anaheim" to the message for Angels Stadium
-                        if(marker.nickname === "Angels") {
-                            contentHTML += " of Anaheim";
-                        }
+                            // make the marker bounce for 750ms
+                            mapView.setBounce(marker);
 
-                        contentHTML += '</h4><p><strong>Latitude: </strong>' + marker.lat + '</p><p><strong>Longitude: </strong>' + marker.lng + '</p>';
+                            // content for infoWindow is
+                            // ballpark name,
+                            // "Home of the (Location and Team Name)" message,
+                            // and lat/lng coordinates
+                            var contentHTML = '<h3>' + marker.title + '</h3><h4>Home of the ' + marker.location + ' ' + marker.nickname;
 
-                        // close the infoWindow (if it is open)
-                        infoWindow.close();
+                            // Add "of Anaheim" to the message for Angels Stadium
+                            if (marker.nickname === "Angels") {
+                                contentHTML += " of Anaheim";
+                            }
 
-                        // initialize infoWindow
-                        mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
+                            contentHTML += '</h4><p><strong>Latitude: </strong>' + marker.lat + '</p><p><strong>Longitude: </strong>' + marker.lng + '</p>';
 
-                        // open the infoWindow
-                        infoWindow.open(map, marker);
+                            // close the infoWindow (if it is open)
+                            infoWindow.close();
 
-                        // set activeBallparkName for activeBallpark div
-                        viewModel.activeBallparkName(marker.title);
+                            // initialize infoWindow
+                            mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
 
-                        // hide the search div and show the activeBallpark div
-                        viewModel.searchVisible(false);
+                            // open the infoWindow
+                            infoWindow.open(map, marker);
 
-                        // zoom in map on ballpark
-                        map.setZoom(15);
-                        map.setCenter(new google.maps.LatLng(marker.lat,marker.lng));
+                            // set activeBallparkName for activeBallpark div
+                            viewModel.activeBallparkName(marker.title);
 
-                    };
-                })(mapView.markers[i]));
-            }
+                            // hide the search div and show the activeBallpark div
+                            viewModel.searchVisible(false);
 
-            // create event listener for closing the infoWindow
-            google.maps.event.addListener(infoWindow, 'closeclick', function() {
-                // zoom out map to default view
-                map.setZoom(defaultZoom);
-                        map.setCenter(new google.maps.LatLng(defaultLat,defaultLng));
-                // show the search div and hide the activeBallpark div
-                viewModel.searchVisible(true);
+                            // zoom in map on ballpark
+                            map.setZoom(15);
+                            map.setCenter(new google.maps.LatLng(marker.lat, marker.lng));
+
+                        };
+                    })(mapView.markers[i]));
+                }
+
+                // create event listener for closing the infoWindow
+                google.maps.event.addListener(infoWindow, 'closeclick', function() {
+                    mapView.reset(map);
+                })
             })
-        })
-        .fail(function(jqxhr, textStatus, error) {
-            alert("Sorry, there was an error loading Google Maps.");
-            console.log("Error loading Google Maps API script");
-            console.log(jqxhr);
-            console.log(textStatus);
-            console.dir(error);
-        });
+            .fail(function(jqxhr, textStatus, error) {
+                alert("Sorry, there was an error loading Google Maps.");
+                console.log("Error loading Google Maps API script");
+                console.log(jqxhr);
+                console.log(textStatus);
+                console.dir(error);
+            });
+    },
+
+    reset: function() {
+        // close the infoWindow
+        infoWindow.close();
+
+        // zoom out map to default view
+        map.setZoom(defaultZoom);
+        map.setCenter(new google.maps.LatLng(defaultLat, defaultLng));
+        // show the search div and hide the activeBallpark div
+        viewModel.searchVisible(true);
     },
 
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
@@ -453,13 +455,17 @@ var viewModel = {
         }
     },
 
+    reset: function() {
+        mapView.reset();
+    },
+
     getWikipediaArticles: function(ballparkName) {
 
         var requestString = null;
 
         // Searching for "Miller Park" returns a disambiguation page:
         // https://en.wikipedia.org/wiki/Miller_Park
-        // For a better user experience, search for "Miller Park Milwaukee"
+        // For a better user experience, the search query used is "Miller Park Milwaukee"
         // which returns the Miller Park ballpark page:
         // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
         if (ballparkName === "Miller Park") {

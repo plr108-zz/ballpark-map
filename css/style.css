@@ -19,7 +19,8 @@ ul {
     padding: 0;
 }
 
-li {
+li,
+#reset-div {
     border: 1px solid rgb(0, 51, 0);
     margin: 0;
     width: 75%;
@@ -42,13 +43,16 @@ li {
     float: left;
     margin: 0;
     overflow-y: auto;
+    text-align: center;
 }
 
-.ballpark:hover {
+.ballpark:hover,
+#reset-div:hover {
     color: yellow;
 }
 
-.ballpark:active {
+.ballpark:active,
+#reset-div:active {
     color: cyan;
 }
 
@@ -59,13 +63,6 @@ li {
     font-size: 16px;
 }
 
-#wikipedia-container {
-    text-align: center;
-}
-
-#flickr-container {
-    text-align: center;
-}
 #map {
     height: 100%;
     width: 70%;
