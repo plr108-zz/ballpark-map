@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div id="active-ballpark" data-bind="visible: ! searchVisible()">
-                <h1>We're Here</h1>
-                <h1 data-bind="text: activeBallparkName"></h1>
+                <h2>We're Here</h2>
+                <h1 id="active-ballpark-name" data-bind="text: activeBallparkName"></h1>
                 <div id="wikipedia-container">
                     <div id="wikipedia-link">
                         <h2>Wikipedia Article</h2>
@@ -31,7 +31,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="reset-div" data-bind="click: viewModel.reset"><h3>Search for another ballpark<h3></div>
+                <div id="reset-div" data-bind="click: viewModel.reset">
+                Search for another ballpark</div>
                 <div id="flickr-container">
                     <div id="flickr-pics" data-bind="html: viewModel.flickrPics"></div>
                 </div>

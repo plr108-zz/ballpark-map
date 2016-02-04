@@ -536,7 +536,7 @@ var viewModel = {
 
         var result = $.getJSON(requestString)
             .done(function(json) {
-                var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr pics</h2>';
+                var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr Pictures</h2>';
                 // Show 20 Flickr pictures for the ActiveBallpark
                 for (i = 0; i < 20; i++) {
 
