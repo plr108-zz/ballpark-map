@@ -26,6 +26,7 @@ li,
 .container {
     height: 100%;
     width: 100%;
+    display: flex;
 }
 
 #info {
@@ -35,16 +36,21 @@ li,
     margin: 0;
     overflow-y: auto;
     text-align: center;
-    float: left;
+    position: absolute;
+    z-index: 50;
 }
 
 .ballpark:hover,
-#reset-div:hover {
+#reset-div:hover,
+#close-info:hover,
+#open-info:hover {
     color: yellow;
 }
 
 .ballpark:active,
-#reset-div:active {
+#reset-div:active,
+#close-info:active,
+#open-info:active {
     color: cyan;
 }
 
@@ -54,9 +60,18 @@ li,
     margin-right: 12.5%;
 }
 
+#open-info {
+    position: absolute;
+    top: 100px;
+    left: 500px;
+    z-index: 99;
+}
+
 #map {
     height: 100%;
-    overflow: hidden;
+    width: 100%;
+    position: absolute;
+    z-index: 25;
 }
 
 @media only screen and (min-width: 1160px) {
@@ -82,6 +97,11 @@ li,
     #info {
         width: 330px;
         font-size: 15px;
+    }
+    #close-info {
+        text-align: right;
+        margin-top: 10px;
+        margin-right: 5%;
     }
 }
 
@@ -136,13 +156,7 @@ li,
 }
 
 @media only screen and (min-width: 1px) and (max-width: 810px) {
-    h1,
-    {
-        font-size: 14px;
-    }
-    h2,
-    h3,
-    h4 {
+    #info-window-content {
         font-size: 10px;
     }
     #info {

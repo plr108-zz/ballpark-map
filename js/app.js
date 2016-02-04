@@ -245,16 +245,46 @@ var mapView = {
 
     map: null,
 
+    // Default map coordinates are in center of the ballparks
+    defaultLat: 39,
+    defaultLng: -108,
+    defaultZoom: 3,
+
+
     // markers is used to track the map markers
     markers: [],
 
+    setMapDefaults: function() {
+
+        // if viewport width less than 1000px,
+        // Zoom out one level
+        // and set center of map so markers are on screen
+        var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+        console.log(width);
+
+
+        if (width < 610) {
+            // if width < 600 don't show info div by default
+            viewModel.infoVisible(false);
+            mapView.defaultLng = -97,
+                console.log("Width 609 or lower");
+        } else if (width < 1000) {
+            // Make center coordinates slightly west of the center of the ballparks
+            // to account for space info div takes up;
+            // info div is shown on top of the map.
+            mapView.defaultLng = -101 - (width) / 50;
+
+            console.log("Width 610 to 999");
+        } else {
+            mapView.defaultZoom = 4;
+            console.log("Width 1000 or greater");
+        }
+
+    },
+
     init: function() {
 
-        // These values will be used to center the map.
-        // Coordinates are in the center of the ballparks
-        defaultLat = 39.6;
-        defaultLng = -98.4;
-        defaultZoom = 4;
+        mapView.setMapDefaults();
 
         // The Google Maps API call is made here instead of in HTML
         // and uses jQuery's .getScript() and .fail() for error handling.
@@ -265,10 +295,10 @@ var mapView = {
                 map = new google.maps.Map(document.getElementById('map'), {
                     // coordinates are in the center of the ballparks
                     center: {
-                        lat: defaultLat,
-                        lng: defaultLng
+                        lat: mapView.defaultLat,
+                        lng: mapView.defaultLng
                     },
-                    zoom: defaultZoom
+                    zoom: mapView.defaultZoom
                 });
 
                 // create one infoWindow for use by the marker for the activeBallpark
@@ -310,14 +340,14 @@ var mapView = {
                             // ballpark name,
                             // "Home of the (Location and Team Name)" message,
                             // and lat/lng coordinates
-                            var contentHTML = '<h3>' + marker.title + '</h3><h4>Home of the ' + marker.location + ' ' + marker.nickname;
+                            var contentHTML = '<div id="info-window-content"><p><strong>' + marker.title + '</strong></p><p>Home of the ' + marker.location + ' ' + marker.nickname;
 
                             // Add "of Anaheim" to the message for Angels Stadium
                             if (marker.nickname === "Angels") {
                                 contentHTML += " of Anaheim";
                             }
 
-                            contentHTML += '</h4><p><strong>Latitude: </strong>' + marker.lat + '</p><p><strong>Longitude: </strong>' + marker.lng + '</p>';
+                            contentHTML += '</p><p><strong>Latitude: </strong>' + marker.lat + '</p><p><strong>Longitude: </strong>' + marker.lng + '</p></div>';
 
                             // close the infoWindow (if it is open)
                             infoWindow.close();
@@ -336,6 +366,7 @@ var mapView = {
 
                             // zoom in map on ballpark
                             map.setZoom(15);
+
                             map.setCenter(new google.maps.LatLng(marker.lat, marker.lng));
 
                         };
@@ -354,17 +385,33 @@ var mapView = {
                 console.log(textStatus);
                 console.dir(error);
             });
+
     },
 
     reset: function() {
         // close the infoWindow
         infoWindow.close();
 
-        // zoom out map to default view
-        map.setZoom(defaultZoom);
-        map.setCenter(new google.maps.LatLng(defaultLat, defaultLng));
+        var defaultZoom = null;
+        var defaultLat = null;
+        var defaultLng = null;
+
+        mapView.setMapDefaults();
+
+        map.setCenter(new google.maps.LatLng(mapView.defaultLat, mapView.defaultLng));
+        map.setZoom(mapView.defaultZoom);
+
         // show the search div and hide the activeBallpark div
         viewModel.searchVisible(true);
+
+        var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+
+        // only show the info window if viewport 610px or greater
+        if (width < 610) {
+            viewModel.infoVisible(false);
+        } else {
+            viewModel.infoVisible(true);
+        }
     },
 
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
@@ -396,6 +443,9 @@ var viewModel = {
 
     // used to toggle between search view and activeBallpark view
     searchVisible: ko.observable(true),
+
+    // Used to open and close the info div
+    infoVisible: ko.observable(true),
 
     // used to show search results
     query: ko.observable(''),
@@ -536,7 +586,7 @@ var viewModel = {
 
         var result = $.getJSON(requestString)
             .done(function(json) {
-                var flickrPicsHTML = '<div id="flickr-pics"><h2>Flickr Pictures</h2>';
+                var flickrPicsHTML = '';
                 // Show 20 Flickr pictures for the ActiveBallpark
                 for (i = 0; i < 20; i++) {
 
@@ -551,8 +601,6 @@ var viewModel = {
                     flickrPicsHTML += thisPicHTML;
                 }
 
-                flickrPicsHTML += '</div>';
-
                 viewModel.flickrPics(flickrPicsHTML);
             })
             .fail(function(jqxhr, textStatus, error) {
@@ -562,6 +610,17 @@ var viewModel = {
                 console.log(textStatus);
                 console.dir(error);
             });
+    },
+
+    showInfo: function() {
+        console.log("Show Info div now");
+        viewModel.infoVisible(true);
+
+    },
+
+    hideInfo: function() {
+        console.log("Hide Info div now");
+        viewModel.infoVisible(false);
     }
 };
 

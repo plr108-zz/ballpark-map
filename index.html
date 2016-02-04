@@ -9,10 +9,11 @@
 
 <body>
     <div class="container">
-        <div id="info">
+        <div id="info" data-bind="visible: infoVisible()">
             <div id="search" data-bind="visible: searchVisible()">
-                <h1>Major League Ballparks</h1>
-                <input id="search-input" type="search" name="search" placeholder="Search for a ballpark" data-bind="value: query, valueUpdate: 'input'" autocomplete="off" />
+                <div id="close-info" data-bind="click: viewModel.hideInfo">[Close]</div>
+                <div id="search-header">Major League Ballparks</div>
+                <input id="search-input" type="search" name="search" placeholder="Search" data-bind="value: query, valueUpdate: 'input'" autocomplete="off" />
                 <div data-bind="visible: viewModel.ballparks().length > 0">
                     <ul data-bind="foreach: ballparks">
                         <li class="ballpark" data-bind="text: title, click: $parent.setActiveBallpark, "></li>
@@ -20,25 +21,27 @@
                 </div>
             </div>
             <div id="active-ballpark" data-bind="visible: ! searchVisible()">
-                <h2>We're Here</h2>
-                <h1 id="active-ballpark-name" data-bind="text: activeBallparkName"></h1>
+                <div id="active-ballpark-here">We're Here</div>
+                <div id="active-ballpark-name" data-bind="text: activeBallparkName"></div>
                 <div id="wikipedia-container">
-                    <div id="wikipedia-link">
-                        <h2>Wikipedia Article</h2>
-                        <div id="wikipedia-article">
-                            <div data-bind="html: viewModel.snippet">
-                            </div>
+                    <div id="wikipedia-header">Wikipedia Article</div>
+                    <div id="wikipedia-article">
+                        <div id="snippet" data-bind="html: viewModel.snippet">
                         </div>
                     </div>
                 </div>
                 <div id="reset-div" data-bind="click: viewModel.reset">
-                Search for another ballpark</div>
+                    Search for another ballpark</div>
                 <div id="flickr-container">
-                    <div id="flickr-pics" data-bind="html: viewModel.flickrPics"></div>
+                    <div id="flickr-header">Flickr Pictures</div>
+                    <div id="flickr-pics" data-bind="html: viewModel.flickrPics">
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="map"></div>
+        <div id="open-info" data-bind="visible: ! infoVisible(), click: viewModel.showInfo">[Ballpark Info]</div>
+            <div id="map"></div>
+
         <script src="js/lib/knockout-3.4.0.js"></script>
         <script src="js/lib/jquery.min.js"></script>
         <script src="js/app.js"></script>
