@@ -409,8 +409,10 @@ var mapView = {
         // only show the info window if viewport 610px or greater
         if (width < 610) {
             viewModel.infoVisible(false);
+            viewModel.searchVisible(true);
         } else {
             viewModel.infoVisible(true);
+            viewModel.searchVisible(true);
         }
     },
 
