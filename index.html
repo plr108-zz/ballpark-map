@@ -10,8 +10,9 @@
 <body>
     <div class="container">
         <div id="info" data-bind="visible: infoVisible()">
+            <div id="close-info" data-bind="click: viewModel.hideInfo">[Close]</div>
             <div id="search" data-bind="visible: searchVisible()">
-                <div id="close-info" data-bind="click: viewModel.hideInfo">[Close]</div>
+
                 <div id="search-header">Major League Ballparks</div>
                 <input id="search-input" type="search" name="search" placeholder="Search" data-bind="value: query, valueUpdate: 'input'" autocomplete="off" />
                 <div data-bind="visible: viewModel.ballparks().length > 0">
