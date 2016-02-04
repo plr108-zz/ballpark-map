@@ -69,6 +69,12 @@ li,
     }
 }
 
+@media only screen and (max-width: 1159px) {
+    img {
+        width: 95%;
+    }
+}
+
 @media only screen and (min-width: 1100px) and (max-width: 1159px) {
     h1 {
         font-size: 19px;
