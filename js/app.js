@@ -409,6 +409,7 @@ var viewModel = {
     init: function() {
         mapView.init();
         this.showAllBallparks();
+        viewModel.keyListener();
     },
 
     setActiveBallpark: function(activeBallpark) {
@@ -452,6 +453,29 @@ var viewModel = {
                 // make corresponding map marker visible
                 mapView.markers[ballpark].setVisible(true);
             }
+        }
+    },
+
+    // Modified version of the keyboard input handler from Udacity FEND Project 3
+    keyListener: function() {
+
+        document.addEventListener('keyup', function(e) {
+            var allowedKeys = {
+                27: 'ESC'
+            };
+
+            viewModel.handleInput(allowedKeys[e.keyCode]);
+        });
+    },
+
+    handleInput: function(key) {
+        switch (key) {
+            case 'ESC':
+                // reset the mapView when escape key pressed
+                mapView.reset();
+                break;
+            default:
+                // do nothing
         }
     },
 
