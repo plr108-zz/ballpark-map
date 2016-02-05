@@ -256,7 +256,7 @@ var mapView = {
 
     setMapDefaults: function() {
 
-        // if viewport width less than 1000px,
+        // if viewport width less than 965px,
         // Zoom out one level
         // and set center of map so markers are on screen
         var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -264,17 +264,16 @@ var mapView = {
 
 
         if (width < 610) {
-            // if width < 600 don't show info div by default
+            // if width < 610 don't show info div by default
             viewModel.infoVisible(false);
-            mapView.defaultLng = -97,
-                console.log("Width 609 or lower");
-        } else if (width < 1000) {
+            mapView.defaultLng = -97;
+
+        } else if (width < 900) {
             // Make center coordinates slightly west of the center of the ballparks
             // to account for space info div takes up;
             // info div is shown on top of the map.
             mapView.defaultLng = -101 - (width) / 50;
 
-            console.log("Width 610 to 999");
         } else {
             mapView.defaultZoom = 4;
             console.log("Width 1000 or greater");
@@ -623,6 +622,7 @@ var viewModel = {
     hideInfo: function() {
         console.log("Hide Info div now");
         viewModel.infoVisible(false);
+
     }
 };
 

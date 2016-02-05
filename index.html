@@ -36,14 +36,19 @@
                 </div>
             </div>
         </div>
-        <div id="hide-info" data-bind="visible: infoVisible(), click: viewModel.hideInfo">Hide Ballpark Info</div>
-        <div id="open-info" data-bind="visible: ! infoVisible(), click: viewModel.showInfo">Show Ballpark Info</div>
-        <div id="map"></div>
-        <div id="search-again" data-bind="visible: ! searchVisible() && infoVisible(), click: viewModel.reset">Search Again</div>
-        <script src="js/lib/knockout-3.4.0.js"></script>
-        <script src="js/lib/jquery.min.js"></script>
-        <script src="js/app.js"></script>
-        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+        <div>
+            <div class="button" id="hide-info" data-bind="visible: infoVisible(), click: viewModel.hideInfo">Hide Ballpark Info</div>
+            <div class="button" id="open-info" data-bind="visible: ! infoVisible(), click: viewModel.showInfo">Show Ballpark Info</div>
+            <div id="map"></div>
+        </div>
+        <div>
+            <div class="button" id="search-again" data-bind="visible: infoVisible() && ! searchVisible(), click: viewModel.reset">Search Again</div>
+        </div>
+    </div>
+    <script src="js/lib/knockout-3.4.0.js"></script>
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 </body>
 
 </html>
