@@ -186,7 +186,7 @@ li {
     }
 }
 
-@media only screen and (min-width: 928px) and (max-width: 985px) {
+@media only screen and (min-width: 900px) and (max-width: 985px) {
     .big-text {
         font-size: 16px;
     }
@@ -204,25 +204,7 @@ li {
     }
 }
 
-@media only screen and (min-width: 871px) and (max-width: 927px) {
-    .big-text {
-        font-size: 16px;
-    }
-    .ballpark {
-        font-size: 14px;
-    }
-    #snippet,
-    .button,
-    #info-window-content {
-        font-size: 12px;
-    }
-    .button {
-        position: absolute;
-        left: 31%;
-    }
-}
-
-@media only screen and (min-width: 610px) and (max-width: 870px) {
+@media only screen and (min-width: 610px) and (max-width: 899px) {
     .big-text {
         font-size: 15px;
     }
@@ -258,17 +240,11 @@ li {
     #info-window-content {
         font-size: 12px;
     }
-    #open-info {
-        position: relative;
-        float: right;
-    }
-    #hide-info {
+    .button {
         position: relative;
         float: right;
     }
     #search-again {
-        position: relative;
-        float: right;
         clear: right;
         top: 78px;
     }

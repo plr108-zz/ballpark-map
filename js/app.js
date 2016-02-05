@@ -247,38 +247,49 @@ var mapView = {
 
     // Default map coordinates are in center of the ballparks
     defaultLat: 39,
-    defaultLng: -108,
+    defaultLng: -109,
     defaultZoom: 3,
 
+    windowWidth: null,
+    mapWidth: null,
 
     // markers is used to track the map markers
     markers: [],
 
+    // this function saves key window and view dimensions for future use.
+    // These dimensions are used to center the map based on window and map view size
+    recordViewDimensions() {
+        mapView.windowWidth = Math.max($(window).width(), $(window).innerWidth() || 0);
+
+        // infoWidth is a local variable because it is never referenced outside of this function
+        var infoWidth = $("#info").width();
+
+        // mapWidth is the width of the visible part of the map when info div is open
+        mapView.mapWidth = mapView.windowWidth - infoWidth;
+    },
+
     setMapDefaults: function() {
+
 
         // if viewport width less than 965px,
         // Zoom out one level
         // and set center of map so markers are on screen
-        var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-        console.log(width);
+        mapView.recordViewDimensions();
 
-
-        if (width < 610) {
+        if (mapView.windowWidth < 610) {
             // if width < 610 don't show info div by default
             viewModel.infoVisible(false);
             mapView.defaultLng = -97;
 
-        } else if (width < 900) {
+        } else if (mapView.windowWidth < 900) {
             // Make center coordinates slightly west of the center of the ballparks
             // to account for space info div takes up;
             // info div is shown on top of the map.
-            mapView.defaultLng = -101 - (width) / 50;
+            mapView.defaultLng = -108 - (mapView.windowWidth) / 50;
 
         } else {
             mapView.defaultZoom = 4;
-            console.log("Width 1000 or greater");
         }
-
     },
 
     init: function() {
@@ -366,7 +377,19 @@ var mapView = {
                             // zoom in map on ballpark
                             map.setZoom(15);
 
-                            map.setCenter(new google.maps.LatLng(marker.lat, marker.lng));
+
+                            mapView.recordViewDimensions();
+
+                            var mapLng = marker.lng;
+
+                            // if viewport is large enough that infowindow
+                            // will be show, shift map center so the ballpark appears
+                            // in center of visible portion of the map
+                            if(mapView.windowWidth > 609) {
+                                var mapLng = marker.lng - 0.005;
+                            }
+
+                            map.setCenter(new google.maps.LatLng(marker.lat, mapLng));
 
                         };
                     })(mapView.markers[i]));
@@ -403,10 +426,10 @@ var mapView = {
         // show the search div and hide the activeBallpark div
         viewModel.searchVisible(true);
 
-        var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+        mapView.setMapDefaults();
 
         // only show the info window if viewport 610px or greater
-        if (width < 610) {
+        if (mapView.windowWidth < 610) {
             viewModel.infoVisible(false);
             viewModel.searchVisible(true);
         } else {
@@ -614,15 +637,12 @@ var viewModel = {
     },
 
     showInfo: function() {
-        console.log("Show Info div now");
         viewModel.infoVisible(true);
 
     },
 
     hideInfo: function() {
-        console.log("Hide Info div now");
         viewModel.infoVisible(false);
-
     }
 };
 
