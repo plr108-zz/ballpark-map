@@ -558,6 +558,11 @@ var viewModel = {
         }
     },
 
+    // reset is calledby the "Search Again" button
+    reset: function() {
+        mapView.reset();
+    },
+
     getWikipediaArticles: function(ballparkName) {
 
         var requestString = null;
