@@ -343,9 +343,6 @@ var mapView = {
 
                     contentHTML += '</p><p><strong>Latitude: </strong>' + marker.lat + '</p><p><strong>Longitude: </strong>' + marker.lng + '</p></div>';
 
-                    // close the infoWindow (if it is open)
-                    infoWindow.close();
-
                     // initialize infoWindow
                     mapView.initializeInfoWindow(marker, contentHTML, infoWindow);
 
