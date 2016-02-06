@@ -17,7 +17,7 @@ The map shows markers for the 30 major league ballparks and the markers are in c
 #### Ballpark Info: Ballpark Search
 The left side of the page will show a Search filter and a list of the ballparks.  When a search input is entered, the ballpark list will update to show only those parks matching the input.  The markers on the map will also update to match the search input.  Note: On smaller screen sizes, the Ballpark Info view is hidden by default, but can be opened by clicking the Show Ballpark Info button.
 
-#### Ballpark Info: Wikipedia article and Flickr Pictures
+#### Ballpark Info: Wikipedia Article and Flickr Pictures
 Click on a ballpark's map marker or name in the list will show a snippet of the Wikipedia article for the park and a link to the full article.  Thumbnails of 20 pictures from Flickr will also be displayed.  Clicking on a picture will open the picture on Flickr.  Press the escape or click on the Search Again button to return to the Search filter.
 
 #### The Nuts and Bolts
