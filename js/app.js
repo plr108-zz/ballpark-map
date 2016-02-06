@@ -576,6 +576,9 @@ var viewModel = {
 
         var requestString = null;
 
+        // Clear the previously-displayed Wikipedia article snippet
+        viewModel.snippet("");
+
         // Searching for "Miller Park" returns this disambiguation page:
         // https://en.wikipedia.org/wiki/Miller_Park
         // For a better user experience, the search query used is "Miller Park Milwaukee"
@@ -605,6 +608,9 @@ var viewModel = {
     },
 
     getFlickrPics: function(ballparkName) {
+
+        // Clear any previously-displayed Flickr Pics
+        viewModel.flickrPics("");
 
         // build URL for the Flickr API request
         var requestString = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fb90366ca9b7f830a002e1ff0924da2a&text=";
