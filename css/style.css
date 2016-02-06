@@ -198,12 +198,11 @@ li {
         font-size: 14px;
     }
     #snippet,
-
     #info-window-content {
         font-size: 12px;
     }
-    .button{
-     font-size: 10px;
+    .button {
+        font-size: 10px;
     }
 }
 

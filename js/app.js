@@ -1,4 +1,4 @@
-// The locations for this app are ballparks for Major League Baseball teams
+// The locations for this map app are the ballparks for all 30 Major League Baseball teams
 var ballparks = [{
     title: 'Angel Stadium of Anaheim',
     abbrev: 'LAA',
@@ -241,63 +241,66 @@ var ballparks = [{
     markerID: 29
 }];
 
+// mapView is used to create and manipulate a map from the Google Maps API
 var mapView = {
 
     map: null,
 
-    // Default map coordinates are in center of the ballparks
+    // Default map coordinates are in the center of all 30 ballparks
     defaultLat: 39,
     defaultLng: -109,
     defaultZoom: 3,
 
+
     windowWidth: null,
-    mapWidth: null,
+
 
     // markers is used to track the map markers
     markers: [],
 
-    // this function saves key window and view dimensions for future use.
-    // These dimensions are used to center the map based on window and map view size
-    recordViewDimensions() {
+    // this function saves the width of the window (viewport) for future use.
+    getWindowWidth: function() {
         mapView.windowWidth = Math.max($(window).width(), $(window).innerWidth() || 0);
-
-        // infoWidth is a local variable because it is never referenced outside of this function
-        var infoWidth = $("#info").width();
-
-        // mapWidth is the width of the visible part of the map when info div is open
-        mapView.mapWidth = mapView.windowWidth - infoWidth;
     },
 
+    // setMapDefaults checks the viewport size and determines
+    // 1) the map zoom and center, and
+    // 2) if the info div should be shown or hidden
     setMapDefaults: function() {
 
+        // check the windowWidth
+        mapView.getWindowWidth();
 
-        // if viewport width less than 965px,
-        // Zoom out one level
-        // and set center of map so markers are on screen
-        mapView.recordViewDimensions();
-
+        // if windowWidth < 610px
         if (mapView.windowWidth < 610) {
-            // if width < 610 don't show info div by default
+
+            // hide the info div
             viewModel.infoVisible(false);
+
+            // recenter the map
             mapView.defaultLng = -97;
 
+            // 610 <= windowWidth < 900
         } else if (mapView.windowWidth < 900) {
             // Make center coordinates slightly west of the center of the ballparks
-            // to account for space info div takes up;
+            // to account for space info div takes up
             // info div is shown on top of the map.
             mapView.defaultLng = -108 - (mapView.windowWidth) / 50;
 
+            // windowWidth is >= 900
         } else {
+            // change zoom to show more detail
             mapView.defaultZoom = 4;
         }
     },
 
+    // initialize the map
     init: function() {
 
         mapView.setMapDefaults();
 
         // The Google Maps API call is made here instead of in HTML
-        // and uses jQuery's .getScript() and .fail() for error handling.
+        // and uses jQuery's .getScript() .done() and .fail() for error handling.
         $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw")
             .done(function() {
 
@@ -318,9 +321,11 @@ var mapView = {
                 for (i = 0; i < ballparks.length; i++) {
                     // Create path to custom marker.
                     // Each marker features a color of the ballpark's home team!
-                    // I built the markers on this site:
+                    // I got the markers from this site:
                     // https://mapicons.mapsmarker.com/markers/sports/ball-sports/baseball/
                     var image = "img/" + ballparks[i].abbrev + '.png';
+
+                    // create the map marker
                     mapView.markers[i] = new google.maps.Marker({
                         map: map,
                         icon: image,
@@ -346,7 +351,7 @@ var mapView = {
                             // make the marker bounce for 750ms
                             mapView.setBounce(marker);
 
-                            // content for infoWindow is
+                            // Content for infoWindow is:
                             // ballpark name,
                             // "Home of the (Location and Team Name)" message,
                             // and lat/lng coordinates
@@ -377,16 +382,16 @@ var mapView = {
                             // zoom in map on ballpark
                             map.setZoom(15);
 
-
-                            mapView.recordViewDimensions();
+                            // get the windowWidth
+                            mapView.getWindowWidth();
 
                             var mapLng = marker.lng;
 
                             // if viewport is large enough that infowindow
-                            // will be show, shift map center so the ballpark appears
+                            // will be shown, shift map center so the ballpark appears
                             // in center of visible portion of the map
-                            if(mapView.windowWidth > 609) {
-                                var mapLng = marker.lng - 0.005;
+                            if (mapView.windowWidth > 609) {
+                                mapLng = marker.lng - 0.005;
                             }
 
                             map.setCenter(new google.maps.LatLng(marker.lat, mapLng));
@@ -414,19 +419,12 @@ var mapView = {
         // close the infoWindow
         infoWindow.close();
 
-        var defaultZoom = null;
-        var defaultLat = null;
-        var defaultLng = null;
-
         mapView.setMapDefaults();
-
         map.setCenter(new google.maps.LatLng(mapView.defaultLat, mapView.defaultLng));
         map.setZoom(mapView.defaultZoom);
 
         // show the search div and hide the activeBallpark div
         viewModel.searchVisible(true);
-
-        mapView.setMapDefaults();
 
         // only show the info window if viewport 610px or greater
         if (mapView.windowWidth < 610) {
@@ -438,13 +436,12 @@ var mapView = {
         }
     },
 
+    // set InfoWindow content
+    // I decided to show the Wikipedia article snippet and Flicker pics
+    // in the activeBallpark div instead of infoWindow because it just looked better to me.
+    // To meet the rubric requirement of "[each marker] shows unique information
+    // about a location in an infoWindow" I am showing a "Home of the (Home Team)" message and the park's latitude and longitude.
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
-
-        // set InfoWindow content
-        // I decided to show the Wikipedia article snippet and Flicker pics
-        // in the activeBallpark div because it just looked better to me.
-        // To meet the rubric requirement of "[each marker] shows unique information
-        // about a location in an infoWindow" I am showing each parks latitude and longitude.
         infoWindow.setContent(contentHTML);
     },
 
@@ -457,6 +454,9 @@ var mapView = {
     }
 };
 
+// viewModel is used to display a search input and a ballpark list.
+// When a ballpark is selected, the activeBallpark is shown, a snippet of the ballpark's
+// Wikipedia article is shown, and Flickr pics of the ballpark are displayed.
 var viewModel = {
 
     // used to display the active Ballpark name in activeBallpark div and infoWindow
@@ -480,6 +480,7 @@ var viewModel = {
     // used to display the flickr pictures and the picture links
     flickrPics: ko.observable(),
 
+    // initialize the map, viewModel and key input listener
     init: function() {
         mapView.init();
         this.showAllBallparks();
@@ -500,9 +501,12 @@ var viewModel = {
     },
 
     search: function(value) {
+
+        // clear the ballpark list
         viewModel.ballparks.removeAll();
 
         if (value == '') {
+            // show all ballaparks if there is no search input
             viewModel.showAllBallparks();
 
             // set visibility of all map markers
@@ -530,7 +534,7 @@ var viewModel = {
         }
     },
 
-    // Modified version of the keyboard input handler from Udacity FEND Project 3
+    // Modified version of the keyboard input handler from mt Udacity FEND Project 3
     keyListener: function() {
 
         document.addEventListener('keyup', function(e) {
@@ -550,21 +554,18 @@ var viewModel = {
                 break;
             default:
                 // do nothing
+                break;
         }
-    },
-
-    reset: function() {
-        mapView.reset();
     },
 
     getWikipediaArticles: function(ballparkName) {
 
         var requestString = null;
 
-        // Searching for "Miller Park" returns a disambiguation page:
+        // Searching for "Miller Park" returns this disambiguation page:
         // https://en.wikipedia.org/wiki/Miller_Park
         // For a better user experience, the search query used is "Miller Park Milwaukee"
-        // which returns the Miller Park ballpark page:
+        // which returns this Miller Park ballpark page:
         // https://en.wikipedia.org/wiki/Miller_Park_(Milwaukee)
         if (ballparkName === "Miller Park") {
             requestString = ballparkName + " Milwaukee";
@@ -638,7 +639,6 @@ var viewModel = {
 
     showInfo: function() {
         viewModel.infoVisible(true);
-
     },
 
     hideInfo: function() {
