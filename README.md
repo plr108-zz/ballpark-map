@@ -20,5 +20,5 @@ The left side of the page will show a Search filter and a list of the ballparks.
 #### Ballpark Info: Wikipedia Article and Flickr Pictures
 Click on a ballpark's map marker or name in the list will show a snippet of the Wikipedia article for the park and a link to the full article.  Thumbnails of 20 pictures from Flickr will also be displayed.  Clicking on a picture will open the picture on Flickr.  Press the escape or click on the Search Again button to return to the Search filter.
 
-#### The Nuts and Bolts
+### The Nuts and Bolts
 This app uses the Google Maps API, the WikiMedia API and the Flickr API.  It also uses Knockout.js to implement the ballpark search filter and list.
