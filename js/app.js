@@ -258,10 +258,10 @@ var mapView = {
     markers: [],
 
     text: "Google Maps script ",
-    scriptURL: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw&callback=mapView.doGoogleMapsStuff',
+    scriptURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw&callback=mapView.buildMap",
     status: "null",
 
-    // loading Google Maps API using a modified version of the approach discussed here:
+    // loading Google Maps API using a modified version of the approach presented here:
     // https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282#using-jquery
     // and shown here:
     // http://codepen.io/SittingFox/pen/BoREqP
@@ -280,15 +280,7 @@ var mapView = {
             });
     },
 
-    // initialize and load the map and map objects
-    init: function() {
-
-        mapView.setMapDefaults();
-
-        mapView.loadGoogleMaps();
-    },
-
-    doGoogleMapsStuff: function() {
+    buildMap: function() {
         console.log("Google Maps API callback");
 
         // make a map
@@ -390,7 +382,15 @@ var mapView = {
         // create event listener for closing the infoWindow
         google.maps.event.addListener(infoWindow, 'closeclick', function() {
             mapView.reset(map);
-        })
+        });
+    },
+
+    // initialize and load the map and map objects
+    init: function() {
+
+        mapView.setMapDefaults();
+
+        mapView.loadGoogleMaps();
     },
 
     // this function saves the width of the window (viewport) for future use.
@@ -519,7 +519,7 @@ var viewModel = {
         // clear the ballpark list
         viewModel.ballparks.removeAll();
 
-        if (value == '') {
+        if (value === '') {
             // show all ballaparks if there is no search input
             viewModel.showAllBallparks();
 
@@ -534,8 +534,6 @@ var viewModel = {
         for (i = 0; i < mapView.markers.length; i++) {
             mapView.markers[i].setVisible(false);
         }
-
-        var activeBallparkFound = false;
 
         for (var ballpark in ballparks) {
             if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
