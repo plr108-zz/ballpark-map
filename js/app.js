@@ -327,7 +327,7 @@ var mapView = {
                     // get Wikipedia article
                     viewModel.getWikipediaArticles(marker.title);
 
-                    // make the marker bounce for 750ms
+                    // make the marker bounce for 700ms
                     mapView.setBounce(marker);
 
                     // Content for infoWindow is:
@@ -456,12 +456,12 @@ var mapView = {
         infoWindow.setContent(contentHTML);
     },
 
-    // make the marker bounce for 750ms
+    // make the marker bounce for 700ms
     setBounce: function(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
             marker.setAnimation(null);
-        }, 750);
+        }, 700);
     }
 };
 
