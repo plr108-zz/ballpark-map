@@ -543,10 +543,15 @@ var viewModel = {
         }
     },
 
-    // searchTermFound() returns true if searchTerm is found in ballparks,
+    // searchTermFound() returns true if searchTerm is found in one of the following fields of ballparks:
+    // ballpark, abbrev, location, nickname
     // otherwise searchTermFound() returns false
     searchTermFound: function(searchTerm, ballpark) {
-        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
+        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
+            || ballparks[ballpark].abbrev.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
+            || ballparks[ballpark].location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
+            || ballparks[ballpark].nickname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
+            ) {
             return true;
         } else {
             return false;
@@ -554,7 +559,7 @@ var viewModel = {
     },
 
     // Modified version of the keyboard input handler from mt Udacity FEND Project 3
-        keyListener: function() {
+    keyListener: function() {
 
         document.addEventListener('keyup', function(e) {
             var allowedKeys = {
