@@ -456,7 +456,7 @@ var mapView = {
         infoWindow.setContent(contentHTML);
     },
 
-    // make the marker bounce for 700ms
+    // make the marker bounce for 70ms
     setBounce: function(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
@@ -527,11 +527,6 @@ var viewModel = {
             return;
         }
 
-        // clear visibility of all map markers
-        for (i = 0; i < mapView.markers.length; i++) {
-            mapView.markers[i].setVisible(false);
-        }
-
         for (var ballpark in ballparks) {
             if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 // show ballpark in list
@@ -539,6 +534,10 @@ var viewModel = {
 
                 // make corresponding map marker visible
                 mapView.markers[ballpark].setVisible(true);
+            }
+            else {
+                // hide corresponding map marker
+                mapView.markers[ballpark].setVisible(false);
             }
         }
     },
