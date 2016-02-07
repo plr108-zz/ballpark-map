@@ -512,13 +512,13 @@ var viewModel = {
         }
     },
 
-    search: function(value) {
+    search: function(searchTerm) {
 
         // clear the ballpark list
         viewModel.ballparks.removeAll();
 
-        if (value === '') {
-            // show all ballaparks if there is no search input
+        if (searchTerm === '') {
+            // show all ballparks if there is no search input
             viewModel.showAllBallparks();
 
             // set visibility of all map markers
@@ -529,7 +529,8 @@ var viewModel = {
         }
 
         for (var ballpark in ballparks) {
-            if (ballparks[ballpark].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            //if searchTerm is found
+            if (viewModel.searchTermFound(searchTerm, ballpark)) {
                 // show ballpark in list
                 viewModel.ballparks.push(ballparks[ballpark]);
 
@@ -542,8 +543,18 @@ var viewModel = {
         }
     },
 
+    // searchTermFound() returns true if searchTerm is found in ballparks,
+    // otherwise searchTermFound() returns false
+    searchTermFound: function(searchTerm, ballpark) {
+        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
     // Modified version of the keyboard input handler from mt Udacity FEND Project 3
-    keyListener: function() {
+        keyListener: function() {
 
         document.addEventListener('keyup', function(e) {
             var allowedKeys = {
