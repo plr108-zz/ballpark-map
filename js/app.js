@@ -280,8 +280,9 @@ var mapView = {
             });
     },
 
+    // Google Maps API callback function.
+    // Make the map and related objects and event listeners.
     buildMap: function() {
-        console.log("Google Maps API callback");
 
         // make a map
         map = new google.maps.Map(document.getElementById('map'), {
@@ -297,7 +298,7 @@ var mapView = {
         infoWindow = new google.maps.InfoWindow();
 
         // create map markers for all ballparks
-        for (i = 0; i < ballparks.length; i++) {
+        for (var i = 0; i < ballparks.length; i++) {
             // Create path to custom marker.
             // Each marker features a color of the ballpark's home team!
             // I got the markers from this site:
@@ -506,7 +507,7 @@ var viewModel = {
     },
 
     showAllBallparks: function() {
-        for (i = 0; i < ballparks.length; i++) {
+        for (var i = 0; i < ballparks.length; i++) {
             this.ballparks.push(ballparks[i]);
         }
     },
@@ -521,7 +522,7 @@ var viewModel = {
             viewModel.showAllBallparks();
 
             // set visibility of all map markers
-            for (i = 0; i < mapView.markers.length; i++) {
+            for (var i = 0; i < mapView.markers.length; i++) {
                 mapView.markers[i].setVisible(true);
             }
             return;
@@ -534,8 +535,7 @@ var viewModel = {
 
                 // make corresponding map marker visible
                 mapView.markers[ballpark].setVisible(true);
-            }
-            else {
+            } else {
                 // hide corresponding map marker
                 mapView.markers[ballpark].setVisible(false);
             }
@@ -619,7 +619,7 @@ var viewModel = {
         // "ATT park baseball" returns over 7400 pictures so for a better user experience (more picture results) , search for "ATT park baseball"
         // https://www.flickr.com/search/?text=ATT%20park%20baseball
         if (ballparkName === "AT&T Park") {
-            requestString += encodeURIComponent("ATT Park baseball")
+            requestString += encodeURIComponent("ATT Park baseball");
         } else {
             // encode special characters in the ballparkName
             requestString += encodeURIComponent(ballparkName + " baseball");
@@ -627,11 +627,11 @@ var viewModel = {
 
         requestString += "&sort=relevance&media=photos&content_type=1&format=json&nojsoncallback=1&page=1&per_page=20";
 
-        var result = $.getJSON(requestString)
+        $.getJSON(requestString)
             .done(function(json) {
                 var flickrPicsHTML = '';
                 // Show 20 Flickr pictures for the ActiveBallpark
-                for (i = 0; i < 20; i++) {
+                for (var i = 0; i < 20; i++) {
 
                     // flickrURL is the link to open the pic on flickr.com
                     var flickrURL = "https://www.flickr.com/photos/" + json.photos.photo[i].owner + "/" + json.photos.photo[i].id;
@@ -639,7 +639,7 @@ var viewModel = {
                     // '_n' option requests a picture of 320px on longest side
                     var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server;
                     staticURL += "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
-                    thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
+                    var thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
 
                     flickrPicsHTML += thisPicHTML;
                 }
