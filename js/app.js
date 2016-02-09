@@ -386,6 +386,8 @@ var mapView = {
     // initialize and load the map and map objects
     init: function() {
 
+
+
         mapView.setMapDefaults();
 
         mapView.loadGoogleMaps();
@@ -473,6 +475,7 @@ var viewModel = {
 
     // used to display the active Ballpark name in activeBallpark div and infoWindow
     activeBallparkName: ko.observable(),
+    myActiveBallpark: ko.observable(),
 
     // used to display list of ballparks when search is visible
     ballparks: ko.observableArray(),
@@ -492,9 +495,12 @@ var viewModel = {
     // used to display the flickr pictures and the picture links
     flickrPics: ko.observable(),
 
+    observableBallparks: [],
+
     // initialize the map, viewModel and key input listener
     init: function() {
         mapView.init();
+        viewModel.buildBallparkObservables();
         this.showAllBallparks();
         viewModel.keyListener();
     },
@@ -547,11 +553,7 @@ var viewModel = {
     // ballpark, abbrev, location, nickname
     // otherwise searchTermFound() returns false
     searchTermFound: function(searchTerm, ballpark) {
-        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
-            || ballparks[ballpark].abbrev.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
-            || ballparks[ballpark].location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
-            || ballparks[ballpark].nickname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0
-            ) {
+        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || ballparks[ballpark].abbrev.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || ballparks[ballpark].location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || ballparks[ballpark].nickname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
             return true;
         } else {
             return false;
@@ -676,14 +678,86 @@ var viewModel = {
 
     hideInfo: function() {
         viewModel.infoVisible(false);
+    },
+
+    buildBallparkObservables: function() {
+
+        for (var i = 0; i < ballparks.length; i++) {
+            viewModel.observableBallparks[i] = new Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev);
+        }
+
+        ko.observableArray(viewModel.observableBallparks);
     }
 };
 
 // subscribe to search results
 viewModel.query.subscribe(viewModel.search);
 
-// activate Knockout
-ko.applyBindings(viewModel);
+////////////////////////////////////////////////////////////////////////////////////
+// Search binding.
+//
+// searchResult contains a display string of an invididual matching search result.
+// The title from the selected searchResult will be written to selectedBallpark.
+ko.bindingHandlers.search = {
+    init: function(element, valueAccessor, allBindingsAccessor) {
 
+        // On item select write the selected ballpark title to the input field and selectedBallpark
+        var select = function(event, ui) {
+            allBindingsAccessor().selectedBallpark(ui.item.value);
+        };
+
+        // This computed observable is a modified version of the approach shown here:
+        // http://stackoverflow.com/questions/7537002/how-to-create-an-auto-complete-combobox/7538860#7538860
+        var mappedSource = ko.computed(function() {
+
+            mapped = ko.utils.arrayMap(ko.utils.unwrapObservable(viewModel.observableBallparks), function(item) {
+                var result = {};
+
+                // result.label contains the label strings that can be displated in the suggestion menu
+                result.label = ko.utils.unwrapObservable(item[allBindingsAccessor().searchResult])
+
+                // result.value contains the values (ballpark titles) that can be displayed in the input field and assigned to selectedBallpark
+                result.value = ko.utils.unwrapObservable(item['title']);
+
+                return result;
+            });
+
+            return mapped;
+        });
+
+        var source = mappedSource();
+
+        // Initialize autocomplete
+        $(element).autocomplete({
+            select, source
+        });
+    }
+
+    // No update callback is needed.
+};
+
+function Ballpark(title, location, nickname, abbrev) {
+    this.title = ko.observable(title);
+    this.location = ko.observable(location);
+    this.nickname = ko.observable(nickname);
+    this.abbrev = ko.observable(abbrev);
+
+    this.searchResultString = ko.computed(function() {
+
+        var resultString = this.title() + " -- " + this.location() + " " + this.nickname();
+        // if searching for the Angels (or Angels' location or ballpark)
+        if (this.nickname() === "Angels") {
+            // Then add "of Anaheim" to the displayed Team Name.
+            resultString += " of Anaheim";
+        }
+
+        resultString += " (" + this.abbrev() + ")";
+
+        return resultString;
+    }, this);
+};
 // Initialize the viewModel
 viewModel.init();
+
+// activate Knockout
+ko.applyBindings(viewModel);

@@ -14,7 +14,8 @@ ul {
     padding: 0;
 }
 
-li {
+li,
+#active-ballpark {
     border: 1px solid #030;
     margin: 0;
     width: 75%;
@@ -55,7 +56,8 @@ li {
     width: 30%;
 }
 
-#search-input {
+#search-input,
+#search-autocomplete {
     margin-top: 10px;
     width: 75%;
     margin-left: 12.5%;
