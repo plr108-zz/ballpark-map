@@ -13,16 +13,13 @@
         <div id="info" data-bind="visible: infoVisible()">
             <div id="search" data-bind="visible: searchVisible()">
                 <div class="big-text" id="search-header">Major League Ballparks</div>
-                <div>
-                    <hr/>
-                    <input id="search-autocomplete" data-bind="search: null, selectedBallpark: myActiveBallpark, searchResult: 'searchResultString'">
-                    <div id="active-ballpark" data-bind="text: myActiveBallpark() ? myActiveBallpark() : 'None selected'"></div>
-                    <hr/>
-                </div>
-                <input id="search-input" type="search" name="search" placeholder="Search" data-bind="value: query, valueUpdate: 'input'" autocomplete="off" />
+                <input id="search-autocomplete" type="search" placeholder="Advanced Search" data-bind="visible: advancedSearchMode(), advancedSearch, selectedBallparkMarkerID: activeBallparkMarkerID, searchResult: 'searchResultString'">
+                <input id="search-input" type="search" name="search" placeholder="Search" data-bind="visible: ! advancedSearchMode(), value: query, valueUpdate: 'input'" autocomplete="off">
+                <input type="checkbox" name="search-mode-checkbox" data-bind="checked: advancedSearchMode"><span data-bind="text: viewModel.searchModeMessage"></span>
+                <br>
                 <div data-bind="visible: viewModel.ballparks().length > 0">
                     <ul data-bind="foreach: ballparks">
-                        <li class="ballpark" data-bind="text: title, click: $parent.setActiveBallpark, "></li>
+                        <li class="ballpark" data-bind="text: title, click: viewModel.setActiveBallpark"></li>
                     </ul>
                 </div>
             </div>
@@ -49,7 +46,7 @@
             <div id="map"></div>
         </div>
         <div>
-            <div class="button" id="search-again" data-bind="visible: infoVisible() && ! searchVisible(), click: viewModel.reset">Search Again</div>
+            <div class="button" id="search-again" data-bind="visible: infoVisible() && ! searchVisible(), click: function(){mapView.reset(); viewModel.reset()}">Search Again</div>
         </div>
     </div>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">

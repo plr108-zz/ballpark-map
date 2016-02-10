@@ -252,7 +252,7 @@ var mapView = {
     defaultZoom: 3,
 
     // the value of windowWidth will be set by getWindowWidth()
-    windowWidth: null,
+    windowWidth: undefined,
 
     // markers is used to track the map markers
     markers: [],
@@ -379,7 +379,8 @@ var mapView = {
 
         // create event listener for closing the infoWindow
         google.maps.event.addListener(infoWindow, 'closeclick', function() {
-            mapView.reset(map);
+            mapView.reset();
+            viewModel.reset();
         });
     },
 
@@ -396,6 +397,14 @@ var mapView = {
     // this function saves the width of the window (viewport) for future use.
     getWindowWidth: function() {
         mapView.windowWidth = Math.max($(window).width(), $(window).innerWidth() || 0);
+    },
+
+    openMarker: function(markerID) {
+
+        // simulate a marker click
+        google.maps.event.trigger(mapView.markers[markerID], 'click', {
+            latLng: new google.maps.LatLng(0, 0)
+        });
     },
 
     // setMapDefaults checks the viewport size and determines
@@ -473,9 +482,21 @@ var mapView = {
 // Wikipedia article is shown, and Flickr pics of the ballpark are displayed.
 var viewModel = {
 
+    // search result for advanced search
+    searchResult: ko.observable(),
+
+    // used to display message about search mode to user
+    searchModeMessage: ko.observable("Advanced Search OFF"),
+
+    // used to track search Mode
+    advancedSearchMode: ko.observable(false),
+
+    advancedSearchInputText: ko.observable("Some Text"),
+
     // used to display the active Ballpark name in activeBallpark div and infoWindow
     activeBallparkName: ko.observable(),
-    myActiveBallpark: ko.observable(),
+
+    activeBallparkMarkerID: ko.observable(),
 
     // used to display list of ballparks when search is visible
     ballparks: ko.observableArray(),
@@ -486,8 +507,8 @@ var viewModel = {
     // Used to open and close the info div
     infoVisible: ko.observable(true),
 
-    // used to show search results
-    query: ko.observable(''),
+    // used to show regular search results
+    query: ko.observable(null),
 
     // used to display the snippet of the activeBallpark's Wikipedia article and the article link
     snippet: ko.observable(),
@@ -506,10 +527,17 @@ var viewModel = {
     },
 
     setActiveBallpark: function(activeBallpark) {
-        // simulate marker click to show infoWindow containing activeBallpark info
-        google.maps.event.trigger(mapView.markers[activeBallpark.markerID], 'click', {
-            latLng: new google.maps.LatLng(0, 0)
-        });
+        viewModel.activeBallparkMarkerID(activeBallpark.markerID);
+
+        // simulate a click on the marker for the activeBallpark
+        mapView.openMarker(activeBallpark.markerID);
+
+    },
+
+    // Toggle between regular search and advanced search
+    // Note: To provide a better user experience the regular search input is intentionally not cleared here.
+    toggleSearchMode: function() {
+        $("#search-mode-checkbox").toggle(this.checked);
     },
 
     showAllBallparks: function() {
@@ -549,11 +577,9 @@ var viewModel = {
         }
     },
 
-    // searchTermFound() returns true if searchTerm is found in one of the following fields of ballparks:
-    // ballpark, abbrev, location, nickname
-    // otherwise searchTermFound() returns false
+    // searchTermFound() returns true if searchTerm is found in the ballpark title (name)
     searchTermFound: function(searchTerm, ballpark) {
-        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || ballparks[ballpark].abbrev.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || ballparks[ballpark].location.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || ballparks[ballpark].nickname.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
+        if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
             return true;
         } else {
             return false;
@@ -577,6 +603,7 @@ var viewModel = {
             case 'ESC':
                 // reset the mapView when escape key pressed
                 mapView.reset();
+                viewModel.reset();
                 break;
             default:
                 // do nothing
@@ -584,9 +611,10 @@ var viewModel = {
         }
     },
 
-    // reset is calledby the "Search Again" button
+    // reset all viewModel values related to performing another search
     reset: function() {
-        mapView.reset();
+        // Reset regular search query
+        viewModel.search("");
     },
 
     getWikipediaArticles: function(ballparkName) {
@@ -657,7 +685,7 @@ var viewModel = {
                     // '_n' option requests a picture of 320px on longest side
                     var staticURL = "https://farm" + json.photos.photo[i].farm + ".staticflickr.com/" + json.photos.photo[i].server;
                     staticURL += "/" + json.photos.photo[i].id + "_" + json.photos.photo[i].secret + "_n.jpg";
-                    var thisPicHTML = '<a target="_blank" href="' + flickrURL + '"> <img src="' + staticURL + '"></a>';
+                    var thisPicHTML = '<a target="_blank" href="' + flickrURL + '"><img src="' + staticURL + '"></a>';
 
                     flickrPicsHTML += thisPicHTML;
                 }
@@ -683,41 +711,79 @@ var viewModel = {
     buildBallparkObservables: function() {
 
         for (var i = 0; i < ballparks.length; i++) {
-            viewModel.observableBallparks[i] = new Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev);
+            viewModel.observableBallparks[i] = new Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev, ballparks[i].markerID);
         }
 
         ko.observableArray(viewModel.observableBallparks);
     }
 };
 
-// subscribe to search results
+// subscribe to changes to search results
 viewModel.query.subscribe(viewModel.search);
+
+// subscribe to changes to advancedSearchMode
+viewModel.advancedSearchMode.subscribe(function(newValue) {
+    // toggle searchModeMessage based on state of advancedSearchMode
+    (newValue === true) ? viewModel.searchModeMessage("Advanced Search ON"): viewModel.searchModeMessage("Advanced Search OFF");
+});
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Search binding.
 //
-// searchResult contains a display string of an invididual matching search result.
+// searchResult contains a display string of an individual matching search result.
 // The title from the selected searchResult will be written to selectedBallpark.
-ko.bindingHandlers.search = {
-    init: function(element, valueAccessor, allBindingsAccessor) {
+// The markerID of the selected ballpark will be written to activeBallparkMarkerID
+// Search is a modified version of the approach shown here:
+// http://stackoverflow.com/questions/7537002/how-to-create-an-auto-complete-combobox/7538860#7538860
+ko.bindingHandlers.advancedSearch = {
+    init: function(element, valueAccessor, allBindingsAccessor, bindingContext) {
 
-        // On item select write the selected ballpark title to the input field and selectedBallpark
+        // On item select
         var select = function(event, ui) {
-            allBindingsAccessor().selectedBallpark(ui.item.value);
+
+            // Override default onSelect behavior.
+            // This prevents the selected label from being displayed in the input
+            event.preventDefault();
+
+            // write marker ID value to selectedBallparkMarkerID
+            allBindingsAccessor().selectedBallparkMarkerID(ui.item.markerID);
+
+            for (var ballpark in ballparks) {
+
+                //if this ballpark was selected
+                if (allBindingsAccessor().selectedBallparkMarkerID() === ballparks[ballpark].markerID) {
+
+                    // Note: since selection of the autocomplete item opens the activeBallpark view
+                    // the ballpark list in the search view does not need to be updated.
+                    viewModel.ballparks.push(ballparks[ballpark]);
+
+                    // make corresponding map marker visible
+                    mapView.markers[ballpark].setVisible(true);
+                } else {
+                    // hide corresponding map marker
+                    mapView.markers[ballpark].setVisible(false);
+                }
+            }
+
+            // Clear the user input
+            $(element).val(null);
+
+            // simulate a click on the marker for the activeBallpark
+            mapView.openMarker(allBindingsAccessor().selectedBallparkMarkerID());
         };
 
-        // This computed observable is a modified version of the approach shown here:
-        // http://stackoverflow.com/questions/7537002/how-to-create-an-auto-complete-combobox/7538860#7538860
         var mappedSource = ko.computed(function() {
 
             mapped = ko.utils.arrayMap(ko.utils.unwrapObservable(viewModel.observableBallparks), function(item) {
                 var result = {};
 
-                // result.label contains the label strings that can be displated in the suggestion menu
+                // result.label contains the label strings that can be displayed in the suggestion menu
                 result.label = ko.utils.unwrapObservable(item[allBindingsAccessor().searchResult])
 
-                // result.value contains the values (ballpark titles) that can be displayed in the input field and assigned to selectedBallpark
-                result.value = ko.utils.unwrapObservable(item['title']);
+                // result.markerID contains the markerID used to open the ballpark marker on the map
+                result.markerID = ko.utils.unwrapObservable(item['markerID']);;
+
+                // result.value is not set since activeBallpark view will be opened on selection of a ballpark's label
 
                 return result;
             });
@@ -727,20 +793,19 @@ ko.bindingHandlers.search = {
 
         var source = mappedSource();
 
-        // Initialize autocomplete
+        // Initialize autocomplete attibute of input element
         $(element).autocomplete({
             select, source
         });
     }
-
-    // No update callback is needed.
 };
 
-function Ballpark(title, location, nickname, abbrev) {
+function Ballpark(title, location, nickname, abbrev, markerID) {
     this.title = ko.observable(title);
     this.location = ko.observable(location);
     this.nickname = ko.observable(nickname);
     this.abbrev = ko.observable(abbrev);
+    this.markerID = ko.observable(markerID);
 
     this.searchResultString = ko.computed(function() {
 

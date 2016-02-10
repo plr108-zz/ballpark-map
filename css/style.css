@@ -14,8 +14,7 @@ ul {
     padding: 0;
 }
 
-li,
-#active-ballpark {
+li {
     border: 1px solid #030;
     margin: 0;
     width: 75%;
