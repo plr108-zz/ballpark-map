@@ -241,7 +241,7 @@ var ballparks = [{
     markerID: 29
 }];
 
-// mapView is used to create and manipulate a map from the Google Maps API
+// mapView is used to create and manipulate a map using the Google Maps API
 var mapView = {
 
     map: null,
@@ -261,7 +261,7 @@ var mapView = {
     scriptURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw&callback=mapView.buildMap",
     status: "null",
 
-    // loading Google Maps API using a modified version of the approach presented here:
+    // Load Google Maps API using a modified version of the approach presented here:
     // https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282#using-jquery
     // and shown here:
     // http://codepen.io/SittingFox/pen/BoREqP
@@ -508,7 +508,7 @@ var viewModel = {
     infoVisible: ko.observable(true),
 
     // used to show regular search results
-    query: ko.observable(null),
+    regularSearchQuery: ko.observable(null),
 
     // used to display the snippet of the activeBallpark's Wikipedia article and the article link
     snippet: ko.observable(),
@@ -546,7 +546,7 @@ var viewModel = {
         }
     },
 
-    search: function(searchTerm) {
+    regularSearch: function(searchTerm) {
 
         // clear the ballpark list
         viewModel.ballparks.removeAll();
@@ -614,7 +614,12 @@ var viewModel = {
     // reset all viewModel values related to performing another search
     reset: function() {
         // Reset regular search query
-        viewModel.search("");
+        viewModel.regularSearch("");
+
+        // Reset regular search input string
+        viewModel.regularSearchQuery("");
+
+        // Note: no advancedSearch viewModel values need to be reset here
     },
 
     getWikipediaArticles: function(ballparkName) {
@@ -708,10 +713,43 @@ var viewModel = {
         viewModel.infoVisible(false);
     },
 
+    // Ballpark() is used in advanced search and only contains the
+    // properties of a ballpark object necessary to perform the advanced search
+    Ballpark: function(title, location, nickname, abbrev, markerID) {
+        // title, location, nickname and abbreviation are searchable fields for
+        // advanced search
+        this.title = ko.observable(title);
+        this.location = ko.observable(location);
+        this.nickname = ko.observable(nickname);
+        this.abbrev = ko.observable(abbrev);
+
+        // markerID is used to show the selected ballpark on the map
+        this.markerID = ko.observable(markerID);
+
+        // searchResultString is the advanced search result displayed and has
+        // this format:
+        // BallparkTitle -- TeamLocation TeamNickname (TeamAbbreviation)
+        this.searchResultString = ko.computed(function() {
+
+            var resultString = this.title() + " -- " + this.location() + " " + this.nickname();
+            // if searching for the Angels (or Angels' location or ballpark)
+            if (this.nickname() === "Angels") {
+                // Then add "of Anaheim" to the displayed Team Name.
+                resultString += " of Anaheim";
+            }
+
+            resultString += " (" + this.abbrev() + ")";
+
+            return resultString;
+        }, this);
+    },
+
+    // buildBallparkObservables creates an observable array of Ballparks.
+    // The observable array will be used by advanced search
     buildBallparkObservables: function() {
 
         for (var i = 0; i < ballparks.length; i++) {
-            viewModel.observableBallparks[i] = new Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev, ballparks[i].markerID);
+            viewModel.observableBallparks[i] = new viewModel.Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev, ballparks[i].markerID);
         }
 
         ko.observableArray(viewModel.observableBallparks);
@@ -719,7 +757,7 @@ var viewModel = {
 };
 
 // subscribe to changes to search results
-viewModel.query.subscribe(viewModel.search);
+viewModel.regularSearchQuery.subscribe(viewModel.regularSearch);
 
 // subscribe to changes to advancedSearchMode
 viewModel.advancedSearchMode.subscribe(function(newValue) {
@@ -800,27 +838,7 @@ ko.bindingHandlers.advancedSearch = {
     }
 };
 
-function Ballpark(title, location, nickname, abbrev, markerID) {
-    this.title = ko.observable(title);
-    this.location = ko.observable(location);
-    this.nickname = ko.observable(nickname);
-    this.abbrev = ko.observable(abbrev);
-    this.markerID = ko.observable(markerID);
 
-    this.searchResultString = ko.computed(function() {
-
-        var resultString = this.title() + " -- " + this.location() + " " + this.nickname();
-        // if searching for the Angels (or Angels' location or ballpark)
-        if (this.nickname() === "Angels") {
-            // Then add "of Anaheim" to the displayed Team Name.
-            resultString += " of Anaheim";
-        }
-
-        resultString += " (" + this.abbrev() + ")";
-
-        return resultString;
-    }, this);
-};
 // Initialize the viewModel
 viewModel.init();
 
