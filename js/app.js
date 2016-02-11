@@ -417,11 +417,10 @@ var mapView = {
         // if windowWidth < 610px
         if (mapView.windowWidth < 610) {
 
-            // hide the info div
-            viewModel.infoVisible(false);
-
             // recenter the map
             mapView.defaultLng = -97;
+
+            // info div is visible by default
 
             // if 610 <= windowWidth < 900
         } else if (mapView.windowWidth < 900) {
@@ -429,10 +428,16 @@ var mapView = {
             // ballparks to account for space info div takes up.
             mapView.defaultLng = -108 - (mapView.windowWidth) / 50;
 
+            // show the info div
+            viewModel.infoVisible(true);
+
             // else windowWidth is >= 900
         } else {
             // change zoom to show more detail
             mapView.defaultZoom = 4;
+
+            // show the info div
+            viewModel.infoVisible(true);
         }
     },
 
@@ -477,7 +482,7 @@ var mapView = {
 var viewModel = {
 
     // infoVisible contains a boolean value related to visibility of the info div
-    infoVisible: ko.observable(true),
+    infoVisible: ko.observable(false),
 
     // searchVisible contains a boolean value related to visibility of the search view and activeBallpark views
     searchVisible: ko.observable(true),
@@ -619,15 +624,14 @@ var viewModel = {
     // reset all viewModel values related to performing another search
     reset: function() {
 
-        // show the search div and hide the activeBallpark div
+
         viewModel.searchVisible(true);
 
         mapView.getWindowWidth();
 
-        // Only show the info window if viewport 610px or greater.
-        if (mapView.windowWidth < 610) {
-            viewModel.infoVisible(false);
-        } else {
+        // If viewport 610px or greater show the info div.
+        // If viewport less than 610px keep info div in current display state.
+        if (mapView.windowWidth >= 610) {
             viewModel.infoVisible(true);
         }
 
@@ -793,6 +797,8 @@ viewModel.advancedSearchMode.subscribe(function(newValue) {
     // reset the map view and viewModel
     mapView.reset();
     viewModel.reset();
+
+
 });
 
 
