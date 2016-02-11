@@ -1,3 +1,9 @@
+///////////////////////////////////////////////////////////////////////////////
+// Udacity Front End Developer Nanodegree Project 5-1: Neighborhood Map Project
+// By: Patrick Roche
+//     patrick.l.roche@gmail.com
+//     https://github.com/plr108
+///////////////////////////////////////////////////////////////////////////////
 // The locations for this map app are the ballparks for all 30 Major League Baseball teams
 var ballparks = [{
     title: 'Angel Stadium of Anaheim',
@@ -241,10 +247,8 @@ var ballparks = [{
     markerID: 29
 }];
 
-// mapView is used to create and manipulate a map using the Google Maps API
+// mapView creates and manipulates a map using the Google Maps API
 var mapView = {
-
-    map: null,
 
     // Default map coordinates are in the center of all 30 ballparks
     defaultLat: 39,
@@ -254,12 +258,11 @@ var mapView = {
     // the value of windowWidth will be set by getWindowWidth()
     windowWidth: undefined,
 
-    // markers is used to track the map markers
+    // markers[] is used to track the map markers
     markers: [],
 
-    text: "Google Maps script ",
     scriptURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw&callback=mapView.buildMap",
-    status: "null",
+    status: null,
 
     // Load Google Maps API using a modified version of the approach presented here:
     // https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282#using-jquery
@@ -280,7 +283,7 @@ var mapView = {
             });
     },
 
-    // Google Maps API callback function.
+    // buildMap is the Google Maps API callback function.
     // Make the map and related objects and event listeners.
     buildMap: function() {
 
@@ -301,7 +304,7 @@ var mapView = {
         for (var i = 0; i < ballparks.length; i++) {
             // Create path to custom marker.
             // Each marker features a color of the ballpark's home team!
-            // I got the markers from this site:
+            // The markers were created using this site:
             // https://mapicons.mapsmarker.com/markers/sports/ball-sports/baseball/
             var image = "img/" + ballparks[i].abbrev + '.png';
 
@@ -326,12 +329,12 @@ var mapView = {
                     viewModel.getFlickrPics(marker.title);
 
                     // get Wikipedia article
-                    viewModel.getWikipediaArticles(marker.title);
+                    viewModel.getWikipediaArticle(marker.title);
 
                     // make the marker bounce for 700ms
                     mapView.setBounce(marker);
 
-                    // Content for infoWindow is:
+                    // Content for infoWindow is in this format:
                     // ballpark name,
                     // "Home of the (Location and Team Name)" message,
                     // and lat/lng coordinates
@@ -364,7 +367,7 @@ var mapView = {
 
                     var mapLng = marker.lng;
 
-                    // if viewport is large enough that infowindow
+                    // if viewport is large enough that infoWindow
                     // will be shown, shift map center so the ballpark appears
                     // in center of visible portion of the map
                     if (mapView.windowWidth > 609) {
@@ -386,28 +389,24 @@ var mapView = {
 
     // initialize and load the map and map objects
     init: function() {
-
-
-
         mapView.setMapDefaults();
-
         mapView.loadGoogleMaps();
     },
 
-    // this function saves the width of the window (viewport) for future use.
+    // saves the width of the window (viewport) for future use.
     getWindowWidth: function() {
         mapView.windowWidth = Math.max($(window).width(), $(window).innerWidth() || 0);
     },
 
+    // simulate click on the map marker that corresponds to markerID
     openMarker: function(markerID) {
 
-        // simulate a marker click
         google.maps.event.trigger(mapView.markers[markerID], 'click', {
             latLng: new google.maps.LatLng(0, 0)
         });
     },
 
-    // setMapDefaults checks the viewport size and determines
+    // Check the viewport size and determine:
     // 1) the map zoom and center, and
     // 2) if the info div should be shown or hidden
     setMapDefaults: function() {
@@ -424,14 +423,13 @@ var mapView = {
             // recenter the map
             mapView.defaultLng = -97;
 
-            // 610 <= windowWidth < 900
+            // if 610 <= windowWidth < 900
         } else if (mapView.windowWidth < 900) {
-            // Make center coordinates slightly west of the center of the ballparks
-            // to account for space info div takes up
-            // info div is shown on top of the map.
+            // Make center coordinates slightly west of the center of the
+            // ballparks to account for space info div takes up.
             mapView.defaultLng = -108 - (mapView.windowWidth) / 50;
 
-            // windowWidth is >= 900
+            // else windowWidth is >= 900
         } else {
             // change zoom to show more detail
             mapView.defaultZoom = 4;
@@ -439,6 +437,7 @@ var mapView = {
     },
 
     reset: function() {
+
         // close the infoWindow
         infoWindow.close();
 
@@ -446,29 +445,23 @@ var mapView = {
         map.setCenter(new google.maps.LatLng(mapView.defaultLat, mapView.defaultLng));
         map.setZoom(mapView.defaultZoom);
 
-        // show the search div and hide the activeBallpark div
-        viewModel.searchVisible(true);
-
-        // only show the info window if viewport 610px or greater
-        if (mapView.windowWidth < 610) {
-            viewModel.infoVisible(false);
-            viewModel.searchVisible(true);
-        } else {
-            viewModel.infoVisible(true);
-            viewModel.searchVisible(true);
+        // make all map markers visible
+        for (var ballpark in ballparks) {
+            mapView.markers[ballpark].setVisible(true);
         }
     },
 
-    // set InfoWindow content
-    // I decided to show the Wikipedia article snippet and Flicker pics
-    // in the activeBallpark div instead of infoWindow because it just looked better to me.
-    // To meet the rubric requirement of "[each marker] shows unique information
-    // about a location in an infoWindow" I am showing a "Home of the (Home Team)" message and the park's latitude and longitude.
+    // Set InfoWindow content.
+    // I decided to show the Wikipedia article snippet and Flicker pics in the
+    // activeBallpark div instead of infoWindow because it just looked better
+    // to me.  To meet the rubric requirement of "[each marker] shows unique
+    // information about a location in an infoWindow" I am showing a
+    // "Home of the (Home Team)" message and the park's latitude and longitude.
     initializeInfoWindow: function(marker, contentHTML, infoWindow) {
         infoWindow.setContent(contentHTML);
     },
 
-    // make the marker bounce for 70ms
+    // Make the marker bounce for 700ms
     setBounce: function(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
@@ -477,56 +470,64 @@ var mapView = {
     }
 };
 
-// viewModel is used to display a search input and a ballpark list.
-// When a ballpark is selected, the activeBallpark is shown, a snippet of the ballpark's
-// Wikipedia article is shown, and Flickr pics of the ballpark are displayed.
+// viewModel displays a search input and a ballpark list.
+// When a ballpark is selected, the activeBallpark is shown, a snippet of the
+// ballpark's Wikipedia article is shown, and Flickr pics of the ballpark are
+// displayed.
 var viewModel = {
 
-    // search result for advanced search
-    searchResult: ko.observable(),
-
-    // used to display message about search mode to user
-    searchModeMessage: ko.observable("Advanced Search OFF"),
-
-    // used to track search Mode
-    advancedSearchMode: ko.observable(false),
-
-    advancedSearchInputText: ko.observable("Some Text"),
-
-    // used to display the active Ballpark name in activeBallpark div and infoWindow
-    activeBallparkName: ko.observable(),
-
-    activeBallparkMarkerID: ko.observable(),
-
-    // used to display list of ballparks when search is visible
-    ballparks: ko.observableArray(),
-
-    // used to toggle between search view and activeBallpark view
-    searchVisible: ko.observable(true),
-
-    // Used to open and close the info div
+    // infoVisible contains a boolean value related to visibility of the info div
     infoVisible: ko.observable(true),
 
-    // used to show regular search results
-    regularSearchQuery: ko.observable(null),
+    // searchVisible contains a boolean value related to visibility of the search view and activeBallpark views
+    searchVisible: ko.observable(true),
 
-    // used to display the snippet of the activeBallpark's Wikipedia article and the article link
+    // activeBallparkName contains the title (name) of the activeBallpark
+    activeBallparkName: ko.observable(),
+
+    // activeBallparkName contains the markerID of the activeBallpark
+    activeBallparkMarkerID: ko.observable(),
+
+    // snippet contains a snippet (i.e., the beginning text of) an article about activeBallpark
     snippet: ko.observable(),
 
-    // used to display the flickr pictures and the picture links
+    // flickrPics contains the HTML necessary to show flickr pictures related to the activeBallpark
     flickrPics: ko.observable(),
 
-    observableBallparks: [],
+    // searchModeMessage contains a message about the search mode status
+    searchModeMessage: ko.observable("Advanced Search OFF"),
 
-    // initialize the map, viewModel and key input listener
+    // advancedSearchMode contains a boolean value related to search mode status
+    advancedSearchMode: ko.observable(false),
+
+    // regularSearchQuery contains the regular search query
+    regularSearchQuery: ko.observable(null),
+
+    // advancedSearchResult contains the search result for advanced search
+    advancedSearchResult: ko.observable(),
+
+    // ballparkList contains an array of ballparks for use in regular search queries and the search view
+    ballparkList: ko.observableArray(),
+
+    // observableBallparks contains an array of Ballparks for use in advanced
+    // search queries.  Note that ballparkList contains ballpark objects (the model object)
+    // and observableBallparks contains Ballpark objects (an object containing the
+    // observable ballpark properties required for advanced search).
+    observableBallparks: ko.observableArray(),
+
+    // Initialize the map, viewModel and key input listener.
+    // Build observableBallparks.
     init: function() {
         mapView.init();
-        viewModel.buildBallparkObservables();
-        this.showAllBallparks();
+        viewModel.showAllBallparks();
         viewModel.keyListener();
+        viewModel.buildBallparkObservables();
     },
 
+    // set the activeBallpark title and markerID.
+    // Show the activeBallpark on the map.
     setActiveBallpark: function(activeBallpark) {
+        viewModel.activeBallparkName(activeBallpark.title);
         viewModel.activeBallparkMarkerID(activeBallpark.markerID);
 
         // simulate a click on the marker for the activeBallpark
@@ -534,22 +535,25 @@ var viewModel = {
 
     },
 
-    // Toggle between regular search and advanced search
-    // Note: To provide a better user experience the regular search input is intentionally not cleared here.
-    toggleSearchMode: function() {
-        $("#search-mode-checkbox").toggle(this.checked);
-    },
-
+    // reset the ballparkList to show all ballparks
     showAllBallparks: function() {
+        // clear the ballparkList
+        viewModel.ballparkList.removeAll();
+
+        // populate the ballparkList with all ballparks
         for (var i = 0; i < ballparks.length; i++) {
-            this.ballparks.push(ballparks[i]);
+            viewModel.ballparkList.push(ballparks[i]);
         }
     },
 
+    // Search for the searchTerm in the title values for each ballpark.
+    // If a ballpark's title contains the search term, the ballpark is
+    // displayed in the ballpark list and the ballpark's marker is displayed
+    // on the map.
     regularSearch: function(searchTerm) {
 
         // clear the ballpark list
-        viewModel.ballparks.removeAll();
+        viewModel.ballparkList.removeAll();
 
         if (searchTerm === '') {
             // show all ballparks if there is no search input
@@ -566,7 +570,7 @@ var viewModel = {
             //if searchTerm is found
             if (viewModel.searchTermFound(searchTerm, ballpark)) {
                 // show ballpark in list
-                viewModel.ballparks.push(ballparks[ballpark]);
+                viewModel.ballparkList.push(ballparks[ballpark]);
 
                 // make corresponding map marker visible
                 mapView.markers[ballpark].setVisible(true);
@@ -586,7 +590,8 @@ var viewModel = {
         }
     },
 
-    // Modified version of the keyboard input handler from mt Udacity FEND Project 3
+    // Modified version of the keyboard input handler from my Udacity FEND Project 3 submission
+    // https://github.com/plr108/FrontEndNanodegreeProject3/blob/master/js/app.js
     keyListener: function() {
 
         document.addEventListener('keyup', function(e) {
@@ -601,7 +606,7 @@ var viewModel = {
     handleInput: function(key) {
         switch (key) {
             case 'ESC':
-                // reset the mapView when escape key pressed
+                // reset the app when the escape key is pressed
                 mapView.reset();
                 viewModel.reset();
                 break;
@@ -613,8 +618,24 @@ var viewModel = {
 
     // reset all viewModel values related to performing another search
     reset: function() {
-        // Reset regular search query
-        viewModel.regularSearch("");
+
+        // show the search div and hide the activeBallpark div
+        viewModel.searchVisible(true);
+
+        mapView.getWindowWidth();
+
+        // Only show the info window if viewport 610px or greater.
+        if (mapView.windowWidth < 610) {
+            viewModel.infoVisible(false);
+        } else {
+            viewModel.infoVisible(true);
+        }
+
+        // Make the search view visible when info window is shown
+        viewModel.searchVisible(true);
+
+        // show all ballparks
+        viewModel.showAllBallparks();
 
         // Reset regular search input string
         viewModel.regularSearchQuery("");
@@ -622,7 +643,9 @@ var viewModel = {
         // Note: no advancedSearch viewModel values need to be reset here
     },
 
-    getWikipediaArticles: function(ballparkName) {
+    // Using the MediaWiki API show a snippet of a Wikipedia article about ballparkName
+    // and a link to the full article
+    getWikipediaArticle: function(ballparkName) {
 
         var requestString = null;
 
@@ -657,6 +680,8 @@ var viewModel = {
             });
     },
 
+    // Using the Flickr API show thumbnails of 20 Flickr pictures about ballparkName
+    // and links to the pictures on Flickr
     getFlickrPics: function(ballparkName) {
 
         // Clear any previously-displayed Flickr Pics
@@ -705,19 +730,21 @@ var viewModel = {
             });
     },
 
+    // Show the info div
     showInfo: function() {
         viewModel.infoVisible(true);
     },
 
+    // Hide the info div
     hideInfo: function() {
         viewModel.infoVisible(false);
     },
 
-    // Ballpark() is used in advanced search and only contains the
-    // properties of a ballpark object necessary to perform the advanced search
+    // Ballpark() contains the set of observable ballpark properties
+    // necessary to perform the advanced search
     Ballpark: function(title, location, nickname, abbrev, markerID) {
         // title, location, nickname and abbreviation are searchable fields for
-        // advanced search
+        // the advanced search
         this.title = ko.observable(title);
         this.location = ko.observable(location);
         this.nickname = ko.observable(nickname);
@@ -726,8 +753,8 @@ var viewModel = {
         // markerID is used to show the selected ballpark on the map
         this.markerID = ko.observable(markerID);
 
-        // searchResultString is the advanced search result displayed and has
-        // this format:
+        // searchResultString is the displayed advanced search result
+        // and has this format:
         // BallparkTitle -- TeamLocation TeamNickname (TeamAbbreviation)
         this.searchResultString = ko.computed(function() {
 
@@ -744,15 +771,14 @@ var viewModel = {
         }, this);
     },
 
-    // buildBallparkObservables creates an observable array of Ballparks.
-    // The observable array will be used by advanced search
+    // buildBallparkObservables populates observableBallparks with Ballpark objects.
+    // Each Ballpark object contains observables containing individual ballpark properties.
     buildBallparkObservables: function() {
 
         for (var i = 0; i < ballparks.length; i++) {
-            viewModel.observableBallparks[i] = new viewModel.Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev, ballparks[i].markerID);
+            var thisBallpark = new viewModel.Ballpark(ballparks[i].title, ballparks[i].location, ballparks[i].nickname, ballparks[i].abbrev, ballparks[i].markerID);
+            viewModel.observableBallparks.push(thisBallpark);
         }
-
-        ko.observableArray(viewModel.observableBallparks);
     }
 };
 
@@ -763,42 +789,48 @@ viewModel.regularSearchQuery.subscribe(viewModel.regularSearch);
 viewModel.advancedSearchMode.subscribe(function(newValue) {
     // toggle searchModeMessage based on state of advancedSearchMode
     (newValue === true) ? viewModel.searchModeMessage("Advanced Search ON"): viewModel.searchModeMessage("Advanced Search OFF");
+
+    // reset the map view and viewModel
+    mapView.reset();
+    viewModel.reset();
 });
 
-////////////////////////////////////////////////////////////////////////////////////
-// Search binding.
-//
-// searchResult contains a display string of an individual matching search result.
-// The title from the selected searchResult will be written to selectedBallpark.
-// The markerID of the selected ballpark will be written to activeBallparkMarkerID
-// Search is a modified version of the approach shown here:
+
+// Search for the search term in the following values for each ballpark:
+// title, location, nickname, abbrev
+// Using jQuery-UI autocomplete, return a list of all ballparks where the search term
+// is found in any of the fields listed above.
+// When the user selects a search result, display the selected ballpark on the map and in the activeBallpark view.
+// advancedSearch is a modified version of the approach shown here:
 // http://stackoverflow.com/questions/7537002/how-to-create-an-auto-complete-combobox/7538860#7538860
 ko.bindingHandlers.advancedSearch = {
-    init: function(element, valueAccessor, allBindingsAccessor, bindingContext) {
+    init: function(element, valueAccessor, allBindingsAccessor) {
 
         // On item select
         var select = function(event, ui) {
 
             // Override default onSelect behavior.
-            // This prevents the selected label from being displayed in the input
+            // This prevents the selected label from being displayed as the input value
             event.preventDefault();
 
             // write marker ID value to selectedBallparkMarkerID
             allBindingsAccessor().selectedBallparkMarkerID(ui.item.markerID);
+
+            // clear the ballparkList
+            viewModel.ballparkList.removeAll();
 
             for (var ballpark in ballparks) {
 
                 //if this ballpark was selected
                 if (allBindingsAccessor().selectedBallparkMarkerID() === ballparks[ballpark].markerID) {
 
-                    // Note: since selection of the autocomplete item opens the activeBallpark view
-                    // the ballpark list in the search view does not need to be updated.
-                    viewModel.ballparks.push(ballparks[ballpark]);
+                    // add the selected ballpark to the ballparkList
+                    viewModel.ballparkList.push(ballparks[ballpark]);
 
-                    // make corresponding map marker visible
+                    // make the selected ballpark's map marker visible
                     mapView.markers[ballpark].setVisible(true);
                 } else {
-                    // hide corresponding map marker
+                    // hide all other map markers
                     mapView.markers[ballpark].setVisible(false);
                 }
             }
@@ -812,14 +844,15 @@ ko.bindingHandlers.advancedSearch = {
 
         var mappedSource = ko.computed(function() {
 
-            mapped = ko.utils.arrayMap(ko.utils.unwrapObservable(viewModel.observableBallparks), function(item) {
+            // map the possible results to the corresponding values tracked by observableBallparks
+            var mapped = ko.utils.arrayMap(ko.utils.unwrapObservable(viewModel.observableBallparks), function(item) {
                 var result = {};
 
-                // result.label contains the label strings that can be displayed in the suggestion menu
-                result.label = ko.utils.unwrapObservable(item[allBindingsAccessor().searchResult])
+                // result.label contains the label string displayed in the suggestion menu
+                result.label = ko.utils.unwrapObservable(item[allBindingsAccessor().advancedSearchResult]);
 
                 // result.markerID contains the markerID used to open the ballpark marker on the map
-                result.markerID = ko.utils.unwrapObservable(item['markerID']);;
+                result.markerID = ko.utils.unwrapObservable(item['markerID']);
 
                 // result.value is not set since activeBallpark view will be opened on selection of a ballpark's label
 
@@ -833,7 +866,8 @@ ko.bindingHandlers.advancedSearch = {
 
         // Initialize autocomplete attibute of input element
         $(element).autocomplete({
-            select, source
+            select,
+            source
         });
     }
 };
