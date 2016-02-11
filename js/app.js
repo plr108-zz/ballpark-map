@@ -164,8 +164,8 @@ var ballparks = [{
     abbrev: 'PIT',
     location: 'Pittsburgh',
     nickname: 'Pirates',
-    lat: 40.4470471765,
-    lng: -80.0061745423,
+    lat: 40.4470472,
+    lng: -80.006175,
     markerID: 20
 }, {
     title: 'Progressive Field',

@@ -13,10 +13,11 @@
         <div id="info" data-bind="visible: infoVisible()">
             <div id="search" data-bind="visible: searchVisible()">
                 <div class="big-text" id="search-header">Major League Ballparks</div>
-                <input id="search-autocomplete" placeholder="Advanced Search" data-bind="visible: advancedSearchMode(), advancedSearch, selectedBallparkMarkerID: activeBallparkMarkerID, searchResult: 'searchResultString'">
-                <input id="search-input" placeholder="Regular Search" data-bind="visible: ! advancedSearchMode(), value: regularSearchQuery, valueUpdate: 'input'" autocomplete="off">
-                <input type="checkbox" name="search-mode-checkbox" data-bind="checked: advancedSearchMode"><span data-bind="text: viewModel.searchModeMessage"></span>
-                <br>
+                <input class="search-input" id="search-advanced" placeholder="Advanced Search" size="26" data-bind="visible: advancedSearchMode(), advancedSearch, selectedBallparkMarkerID: activeBallparkMarkerID, searchResult: 'searchResultString'">
+                <input class="search-input" id="search-regular" placeholder="Regular Search" size="26" data-bind="visible: ! advancedSearchMode(), value: regularSearchQuery, valueUpdate: 'input'" autocomplete="off">
+                <div id="search-mode">
+                    <input type="checkbox" name="search-mode-checkbox" data-bind="checked: advancedSearchMode"><span data-bind="text: viewModel.searchModeMessage"></span>
+                </div>
                 <div data-bind="visible: viewModel.ballparks().length > 0">
                     <ul data-bind="foreach: ballparks">
                         <li class="ballpark" data-bind="text: title, click: viewModel.setActiveBallpark"></li>
@@ -33,7 +34,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="flickr-container">
+                <div id="fli
+ckr-container">
                     <div class="big-text" id="flickr-header">Flickr Pictures</div>
                     <div id="flickr-pics" data-bind="html: viewModel.flickrPics">
                     </div>

@@ -14,12 +14,10 @@ ul {
     padding: 0;
 }
 
-li {
+.ballpark {
     border: 1px solid #030;
-    margin: 0;
+    margin: 0 12.5% 0 12.5%;
     width: 75%;
-    margin-left: 12.5%;
-    margin-right: 12.5%;
 }
 
 .container {
@@ -55,12 +53,13 @@ li {
     width: 30%;
 }
 
-#search-input,
-#search-autocomplete {
-    margin-top: 10px;
-    width: 75%;
-    margin-left: 12.5%;
-    margin-right: 12.5%;
+.search-input {
+    margin: 10px 10% 5px 10%;
+}
+
+#search-mode {
+    margin: 0 15% 0 15%;
+    text-align: left;
 }
 
 #search-header,
@@ -116,7 +115,9 @@ li {
     #info {
         width: 348px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 16px;
     }
     #snippet,
@@ -136,7 +137,9 @@ li {
     .big-text {
         font-size: 19px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 17px;
     }
     #snippet,
@@ -150,7 +153,9 @@ li {
     .big-text {
         font-size: 18px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 16px;
     }
     #snippet,
@@ -164,7 +169,9 @@ li {
     .big-text {
         font-size: 17px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 15px;
     }
     #snippet,
@@ -178,7 +185,9 @@ li {
     .big-text {
         font-size: 16px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 14px;
     }
     #snippet,
@@ -195,7 +204,9 @@ li {
     #info {
         width: 260px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 14px;
     }
     #snippet,
@@ -214,7 +225,9 @@ li {
     #info {
         width: 260px;
     }
-    .ballpark {
+    .ballpark,
+    .search-input,
+    #search-mode {
         font-size: 14px;
     }
     #snippet,
