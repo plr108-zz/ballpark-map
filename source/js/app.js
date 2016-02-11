@@ -812,8 +812,11 @@ viewModel.advancedSearchMode.subscribe(function(newValue) {
 ko.bindingHandlers.advancedSearch = {
     init: function(element, valueAccessor, allBindingsAccessor) {
 
+        // options for jQueryUI autocomplete
+        var options = {};
+
         // On item select
-        var select = function(event, ui) {
+        options.select = function(event, ui) {
 
             // Override default onSelect behavior.
             // This prevents the selected label from being displayed as the input value
@@ -868,13 +871,10 @@ ko.bindingHandlers.advancedSearch = {
             return mapped;
         });
 
-        var source = mappedSource();
+        options.source = mappedSource();
 
         // Initialize autocomplete attibute of input element
-        $(element).autocomplete({
-            select,
-            source
-        });
+        $(element).autocomplete(options);
     }
 };
 
