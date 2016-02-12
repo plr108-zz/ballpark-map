@@ -261,28 +261,6 @@ var mapView = {
     // markers[] is used to track the map markers
     markers: [],
 
-    scriptURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA6iBuksqPJTyum-cfdpN_nAMkp3_YINJw&callback=mapView.buildMap",
-    status: null,
-
-    // Load Google Maps API using a modified version of the approach presented here:
-    // https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282#using-jquery
-    // and shown here:
-    // http://codepen.io/SittingFox/pen/BoREqP
-    loadGoogleMaps: function() {
-        $.getScript(mapView.scriptURL)
-            // if getting the script is successful
-            .done(function() {
-                mapView.status = 'loaded';
-            })
-            .fail(function(jqxhr) {
-                mapView.status = 'not-loaded';
-                alert("Sorry, there was an error loading Google Maps.");
-                console.log("Error loading Google Maps API script");
-                //write the returned object to console.log
-                console.log(jqxhr);
-            });
-    },
-
     // buildMap is the Google Maps API callback function.
     // Make the map and related objects and event listeners.
     buildMap: function() {
@@ -387,10 +365,15 @@ var mapView = {
         });
     },
 
+    // onerror calls googleMapsFail() if there is an error calling the Google Maps JavaScript API
+    googleMapsFail: function() {
+        alert("Sorry, there was an error loading Google Maps.");
+        console.log("Error loading Google Maps");
+    },
+
     // initialize and load the map and map objects
     init: function() {
         mapView.setMapDefaults();
-        mapView.loadGoogleMaps();
     },
 
     // saves the width of the window (viewport) for future use.
