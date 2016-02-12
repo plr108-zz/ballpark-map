@@ -1,7 +1,7 @@
 # Udacity Front-End Web Developer Nanodegree
 ## Project 5-1: Neighborhood Map Project by Patrick Roche
 
-This repository contains my submission for the Front-End Web Developer Nanodegree project of the [Udacity Front-End Web Developer Nanodegree](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001).
+This repository contains my submission for Project 5-1 of the [Udacity Front-End Web Developer Nanodegree](https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001).
 
 ### Overview
 This map displays a Google Map of the ballparks for all 30 Major League Baseball Teams!  It also links to the Wikipedia page and a set of 20 Flickr pics for each park.
@@ -13,7 +13,7 @@ The dist folder can be rebuilt using the default gulp task.  To rebuild, install
 
 ### Starting the App
 
-After installing the app, to start the app open index.html (e.g., http://your_domain_name/index.html) in your favorite browser.
+After installing the app, start the app by openening index.html (e.g., http://your_domain_name/index.html) in your favorite browser.
 
 ### Using the App
 
