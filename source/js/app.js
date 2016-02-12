@@ -434,8 +434,8 @@ var mapView = {
         map.setZoom(mapView.defaultZoom);
 
         // make all map markers visible
-        for (var ballpark in ballparks) {
-            mapView.markers[ballpark].setVisible(true);
+        for (var i = 0; i < ballparks.length; i++) {
+            mapView.markers[i].setVisible(true);
         }
     },
 
@@ -554,17 +554,17 @@ var viewModel = {
             return;
         }
 
-        for (var ballpark in ballparks) {
+        for (var i = 0; i < ballparks.length; i++) {
             //if searchTerm is found
-            if (viewModel.searchTermFound(searchTerm, ballpark)) {
+            if (viewModel.searchTermFound(searchTerm, i)) {
                 // show ballpark in list
-                viewModel.ballparkList.push(ballparks[ballpark]);
+                viewModel.ballparkList.push(ballparks[i]);
 
                 // make corresponding map marker visible
-                mapView.markers[ballpark].setVisible(true);
+                mapView.markers[i].setVisible(true);
             } else {
                 // hide corresponding map marker
-                mapView.markers[ballpark].setVisible(false);
+                mapView.markers[i].setVisible(false);
             }
         }
     },
@@ -811,19 +811,19 @@ ko.bindingHandlers.advancedSearch = {
             // clear the ballparkList
             viewModel.ballparkList.removeAll();
 
-            for (var ballpark in ballparks) {
+            for (var i = 0; i < ballparks.length; i++) {
 
                 //if this ballpark was selected
-                if (allBindingsAccessor().selectedBallparkMarkerID() === ballparks[ballpark].markerID) {
+                if (allBindingsAccessor().selectedBallparkMarkerID() === ballparks[i].markerID) {
 
                     // add the selected ballpark to the ballparkList
-                    viewModel.ballparkList.push(ballparks[ballpark]);
+                    viewModel.ballparkList.push(ballparks[i]);
 
                     // make the selected ballpark's map marker visible
-                    mapView.markers[ballpark].setVisible(true);
+                    mapView.markers[i].setVisible(true);
                 } else {
                     // hide all other map markers
-                    mapView.markers[ballpark].setVisible(false);
+                    mapView.markers[i].setVisible(false);
                 }
             }
 
