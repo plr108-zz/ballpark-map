@@ -7,9 +7,13 @@ This repository contains my submission for the Front-End Web Developer Nanodegre
 This map displays a Google Map of the ballparks for all 30 Major League Baseball Teams!  It also links to the Wikipedia page and a set of 20 Flickr pics for each park.
 
 ### Installing the App
-To install this website copy all files in the dist folder to the desired location on your web server.  Open index.html in your favorite browser.
+To install this website copy all files in the dist folder to the desired location on your web server.
 
 The dist folder can be rebuilt using the default gulp task.  To rebuild, install the packages listed in the JavaScript Packages Used section and run the `gulp` command.  Please see [this site](https://www.npmjs.com/package/gulp) for more information on using gulp and installing the packages.
+
+### Starting the App
+
+After installing the app, to start the app open index.html (e.g., http://your_domain_name/index.html) in your favorite browser.
 
 ### Using the App
 

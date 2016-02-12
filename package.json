@@ -1,0 +1,41 @@
+{
+  "name": "project-5-1",
+  "version": "1.0.0",
+  "description": "Major League Ballpark Map by Patrick Roche.  This is my submission for Project 5-1 of the Udacity Front-End Web Developer Nanodegree.  See the README file for more information.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "del": "^2.2.0",
+    "gulp-imagemin": "^2.4.0",
+    "gulp": "^3.9.0",
+    "gulp-minifier": "^0.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plr108/FrontEndNanodegreeProject5-1.git"
+  },
+  "keywords": [
+    "baseball",
+    "ballpark",
+    "map",
+    "Google Maps",
+    "Flickr",
+    "Wikipedia",
+    "MediaWiki",
+    "API",
+    "Knockout",
+    "KnockoutJS",
+    "jQuery",
+    "jQuery-ui",
+    "jQuery UI"
+  ],
+  "author": "Patrick Roche",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plr108/FrontEndNanodegreeProject5-1/issues"
+  },
+  "homepage": "https://github.com/plr108/FrontEndNanodegreeProject5-1#readme"
+}
