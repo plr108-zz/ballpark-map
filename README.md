@@ -13,7 +13,7 @@ The dist folder can be rebuilt using the default gulp task.  To rebuild, install
 
 ### Starting the App
 
-After installing the app, start the app by openening index.html (e.g., http://your_domain_name/index.html) in your favorite browser.
+After installing the app, start the app by opening index.html (e.g., http://your_domain_name/index.html) in your favorite browser.
 
 ### Using the App
 
@@ -36,7 +36,7 @@ APIs used:
 
 * [MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page) -- Used to get Wikipedia information about the ballparks.
 
-* [Flickr API](https://www.flickr.com/services/api/) -- Used to get Flickr pcitures related to the ballparks.
+* [Flickr API](https://www.flickr.com/services/api/) -- Used to get Flickr pictures related to the ballparks.
 
 Framework used:
 
