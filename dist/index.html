@@ -14,8 +14,8 @@
         <div id="info" data-bind="visible: infoVisible()">
             <div id="search" data-bind="visible: searchVisible()">
                 <div class="big-text" id="search-header">Major League Ballparks</div>
-                <input class="search-input" id="search-advanced" placeholder="Advanced Search" size="26" data-bind="visible: advancedSearchMode(), advancedSearch, selectedBallparkMarkerID: activeBallparkMarkerID, advancedSearchResult: 'searchResultString'">
-                <input class="search-input" id="search-regular" placeholder="Regular Search" size="26" data-bind="visible: ! advancedSearchMode(), value: regularSearchQuery, valueUpdate: 'input'" autocomplete="off">
+                <input class="search-input" id="search-advanced" placeholder="Advanced Search" size="23" data-bind="visible: advancedSearchMode(), advancedSearch, selectedBallparkMarkerID: activeBallparkMarkerID, advancedSearchResult: 'searchResultString'">
+                <input class="search-input" id="search-regular" placeholder="Regular Search" size="23" data-bind="visible: ! advancedSearchMode(), value: regularSearchQuery, valueUpdate: 'input'" autocomplete="off">
                 <div id="search-mode">
                     <input type="checkbox" name="search-mode-checkbox" data-bind="checked: advancedSearchMode"><span data-bind="text: viewModel.searchModeMessage"></span>
                 </div>
