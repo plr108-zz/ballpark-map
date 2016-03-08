@@ -140,7 +140,7 @@ ul {
     .ballpark,
     .search-input,
     #search-mode {
-        font-size: 17px;
+        font-size: 16px;
     }
     #snippet,
     .button,
@@ -156,7 +156,7 @@ ul {
     .ballpark,
     .search-input,
     #search-mode {
-        font-size: 16px;
+        font-size: 15px;
     }
     #snippet,
     .button,
@@ -167,12 +167,12 @@ ul {
 
 @media only screen and (min-width: 986px) and (max-width: 1044px) {
     .big-text {
-        font-size: 17px;
+        font-size: 15px;
     }
     .ballpark,
     .search-input,
     #search-mode {
-        font-size: 15px;
+        font-size: 14px;
     }
     #snippet,
     .button,
@@ -207,7 +207,7 @@ ul {
     .ballpark,
     .search-input,
     #search-mode {
-        font-size: 14px;
+        font-size: 13px;
     }
     #snippet,
     #info-window-content {
@@ -220,7 +220,7 @@ ul {
 
 @media only screen and (max-width: 609px) {
     .big-text {
-        font-size: 14px;
+        font-size: 15px;
     }
     #info {
         width: 260px;
@@ -228,7 +228,7 @@ ul {
     .ballpark,
     .search-input,
     #search-mode {
-        font-size: 14px;
+        font-size: 13px;
     }
     #snippet,
     .button,
