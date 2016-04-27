@@ -11,7 +11,7 @@
 
 <body>
     <div class="container">
-        <div id="info" data-bind="visible: infoVisible()">
+        <div id="info" style="display:none" data-bind="visible: infoVisible()">
             <div id="search" data-bind="visible: searchVisible()">
                 <div class="big-text" id="search-header">Major League Ballparks</div>
                 <input class="search-input" id="search-advanced" placeholder="Advanced Search" size="23" data-bind="visible: advancedSearchMode(), advancedSearch, selectedBallparkMarkerID: activeBallparkMarkerID, advancedSearchResult: 'searchResultString'">
@@ -43,12 +43,12 @@
             </div>
         </div>
         <div>
-            <div class="button" id="hide-info" data-bind="visible: infoVisible(), click: viewModel.hideInfo">Hide Ballpark Info</div>
-            <div class="button" id="open-info" data-bind="visible: ! infoVisible(), click: viewModel.showInfo">Show Ballpark Info</div>
+            <div class="button" id="hide-info" style="display:none" data-bind="visible: infoVisible(), click: viewModel.hideInfo">Hide Ballpark Info</div>
+            <div class="button" id="open-info" style="display:none" data-bind="visible: ! infoVisible(), click: viewModel.showInfo">Show Ballpark Info</div>
             <div id="map"></div>
         </div>
         <div>
-            <div class="button" id="search-again" data-bind="visible: infoVisible() && ! searchVisible(), click: function(){mapView.reset(); viewModel.reset()}">Search Again</div>
+            <div class="button" id="search-again" style="display:none" data-bind="visible: infoVisible() && ! searchVisible(), click: function(){mapView.reset(); viewModel.reset()}">Search Again</div>
         </div>
     </div>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
