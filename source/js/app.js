@@ -403,8 +403,8 @@ var mapView = {
             // recenter the map
             mapView.defaultLng = -97;
 
-            // info div is visible by default
-
+            // info div is not visible by default
+            
             // if 610 <= windowWidth < 900
         } else if (mapView.windowWidth < 900) {
             // Make center coordinates slightly west of the center of the
