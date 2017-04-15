@@ -88,20 +88,20 @@ var ballparks = [{
   lng: -71.097229,
   markerID: 9
 }, {
-  title: 'Great American Ball Park',
-  abbrev: 'CIN',
-  location: 'Cincinnati',
-  nickname: 'Reds',
-  lat: 39.097466,
-  lng: -84.507029,
-  markerID: 10
-}, {
   title: 'Globe Life Park in Arlington',
   abbrev: 'TEX',
   location: 'Texas',
   nickname: 'Rangers',
   lat: 32.750289,
   lng: -97.081287,
+  markerID: 10
+}, {
+  title: 'Great American Ball Park',
+  abbrev: 'CIN',
+  location: 'Cincinnati',
+  nickname: 'Reds',
+  lat: 39.097466,
+  lng: -84.507029,
   markerID: 11
 }, {
   title: 'Kauffman Stadium',
