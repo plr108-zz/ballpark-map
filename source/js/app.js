@@ -535,7 +535,8 @@ var viewModel = {
   // searchTermFound() returns true if searchTerm is
   // found in the ballpark title (name)
   searchTermFound: function(searchTerm, ballpark) {
-    if (ballparks[ballpark].title.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
+    var ballparkTitle = ballparks[ballpark].title;
+    if (ballparkTitle.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
       return true;
     } else {
       return false;
