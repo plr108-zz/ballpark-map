@@ -104,6 +104,14 @@ var ballparks = [{
   lng: -84.507029,
   markerID: 11
 }, {
+  title: 'Guaranteed Rate Field',
+  abbrev: 'CWS',
+  location: 'Chicago',
+  nickname: 'White Sox',
+  lat: 41.830176,
+  lng: -87.634225,
+  markerID: 27
+}, {
   title: 'Kauffman Stadium',
   abbrev: 'KC',
   location: 'Kansas City',
@@ -223,14 +231,6 @@ var ballparks = [{
   lat: 33.735085,
   lng: -84.389973,
   markerID: 26
-}, {
-  title: 'Guaranteed Rate Field',
-  abbrev: 'CWS',
-  location: 'Chicago',
-  nickname: 'White Sox',
-  lat: 41.830176,
-  lng: -87.634225,
-  markerID: 27
 }, {
   title: 'Wrigley Field',
   abbrev: 'CHC',
