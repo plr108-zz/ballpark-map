@@ -14,7 +14,7 @@ var ballparks = [{
   nickname: 'Angels',
   lat: 33.800326,
   lng: -117.882762,
-  markerID: 0
+  markerId: 0
 }, {
   title: 'AT&T Park',
   abbrev: 'SF',
@@ -22,7 +22,7 @@ var ballparks = [{
   nickname: 'Giants',
   lat: 37.778858,
   lng: -122.389248,
-  markerID: 1
+  markerId: 1
 }, {
   title: 'Busch Stadium',
   abbrev: 'STL',
@@ -30,7 +30,7 @@ var ballparks = [{
   nickname: 'Cardinals',
   lat: 38.622837,
   lng: -90.192799,
-  markerID: 2
+  markerId: 2
 }, {
   title: 'Chase Field',
   abbrev: 'ARI',
@@ -38,7 +38,7 @@ var ballparks = [{
   nickname: 'Diamondbacks',
   lat: 33.445039,
   lng: -112.066732,
-  markerID: 3
+  markerId: 3
 }, {
   title: 'Citi Field',
   abbrev: 'NYM',
@@ -46,7 +46,7 @@ var ballparks = [{
   nickname: 'Mets',
   lat: 40.757226,
   lng: -73.845824,
-  markerID: 4
+  markerId: 4
 }, {
   title: 'Citizens Bank Park',
   abbrev: 'PHI',
@@ -54,7 +54,7 @@ var ballparks = [{
   nickname: 'Phillies',
   lat: 39.905569,
   lng: -75.166591,
-  markerID: 5
+  markerId: 5
 }, {
   title: 'Comerica Park',
   abbrev: 'DET',
@@ -62,7 +62,7 @@ var ballparks = [{
   nickname: 'Tigers',
   lat: 42.339420,
   lng: -83.048942,
-  markerID: 6
+  markerId: 6
 }, {
   title: 'Coors Field',
   abbrev: 'COL',
@@ -70,7 +70,7 @@ var ballparks = [{
   nickname: 'Rockies',
   lat: 39.755907,
   lng: -104.994173,
-  markerID: 7
+  markerId: 7
 }, {
   title: 'Dodger Stadium',
   abbrev: 'LAD',
@@ -78,7 +78,7 @@ var ballparks = [{
   nickname: 'Dodgers',
   lat: 34.072974,
   lng: -118.240619,
-  markerID: 8
+  markerId: 8
 }, {
   title: 'Fenway Park',
   abbrev: 'BOS',
@@ -86,7 +86,7 @@ var ballparks = [{
   nickname: 'Red Sox',
   lat: 42.346859,
   lng: -71.097229,
-  markerID: 9
+  markerId: 9
 }, {
   title: 'Globe Life Park in Arlington',
   abbrev: 'TEX',
@@ -94,7 +94,7 @@ var ballparks = [{
   nickname: 'Rangers',
   lat: 32.750289,
   lng: -97.081287,
-  markerID: 10
+  markerId: 10
 }, {
   title: 'Great American Ball Park',
   abbrev: 'CIN',
@@ -102,7 +102,7 @@ var ballparks = [{
   nickname: 'Reds',
   lat: 39.097466,
   lng: -84.507029,
-  markerID: 11
+  markerId: 11
 }, {
   title: 'Guaranteed Rate Field',
   abbrev: 'CWS',
@@ -110,7 +110,7 @@ var ballparks = [{
   nickname: 'White Sox',
   lat: 41.830176,
   lng: -87.634225,
-  markerID: 12
+  markerId: 12
 }, {
   title: 'Kauffman Stadium',
   abbrev: 'KC',
@@ -118,7 +118,7 @@ var ballparks = [{
   nickname: 'Royals',
   lat: 39.051839,
   lng: -94.480303,
-  markerID: 13
+  markerId: 13
 }, {
   title: 'Marlins Park',
   abbrev: 'MIA',
@@ -126,7 +126,7 @@ var ballparks = [{
   nickname: 'Marlins',
   lat: 25.778344,
   lng: -80.219723,
-  markerID: 14
+  markerId: 14
 }, {
   title: 'Miller Park',
   abbrev: 'MIL',
@@ -134,7 +134,7 @@ var ballparks = [{
   nickname: 'Brewers',
   lat: 43.028213,
   lng: -87.971172,
-  markerID: 15
+  markerId: 15
 }, {
   title: 'Minute Maid Park',
   abbrev: 'HOU',
@@ -142,7 +142,7 @@ var ballparks = [{
   nickname: 'Astros',
   lat: 29.757413,
   lng: -95.355529,
-  markerID: 16
+  markerId: 16
 }, {
   title: 'Nationals Park',
   abbrev: 'WSH',
@@ -150,7 +150,7 @@ var ballparks = [{
   nickname: 'Nationals',
   lat: 38.873219,
   lng: -77.007411,
-  markerID: 17
+  markerId: 17
 }, {
   title: 'Oakland-Alameda County Coliseum',
   abbrev: 'OAK',
@@ -158,7 +158,7 @@ var ballparks = [{
   nickname: 'Athletics',
   lat: 37.751595,
   lng: -122.200528,
-  markerID: 18
+  markerId: 18
 }, {
   title: 'Oriole Park at Camden Yards',
   abbrev: 'BAL',
@@ -166,7 +166,7 @@ var ballparks = [{
   nickname: 'Orioles',
   lat: 39.283505,
   lng: -76.621911,
-  markerID: 19
+  markerId: 19
 }, {
   title: 'Petco Park',
   abbrev: 'SD',
@@ -174,7 +174,7 @@ var ballparks = [{
   nickname: 'Padres',
   lat: 32.707582,
   lng: -117.156999,
-  markerID: 20
+  markerId: 20
 }, {
   title: 'PNC Park',
   abbrev: 'PIT',
@@ -182,7 +182,7 @@ var ballparks = [{
   nickname: 'Pirates',
   lat: 40.4470472,
   lng: -80.006175,
-  markerID: 21
+  markerId: 21
 }, {
   title: 'Progressive Field',
   abbrev: 'CLE',
@@ -190,7 +190,7 @@ var ballparks = [{
   nickname: 'Indians',
   lat: 41.495537,
   lng: -81.685278,
-  markerID: 22
+  markerId: 22
 }, {
   title: 'Rogers Centre',
   abbrev: 'TOR',
@@ -198,7 +198,7 @@ var ballparks = [{
   nickname: 'Blue Jays',
   lat: 43.641453,
   lng: -79.389353,
-  markerID: 23
+  markerId: 23
 }, {
   title: 'Safeco Field',
   abbrev: 'SEA',
@@ -206,7 +206,7 @@ var ballparks = [{
   nickname: 'Mariners',
   lat: 47.591653,
   lng: -122.332335,
-  markerID: 24
+  markerId: 24
 }, {
   title: 'Target Field',
   abbrev: 'MIN',
@@ -214,7 +214,7 @@ var ballparks = [{
   nickname: 'Twins',
   lat: 44.981911,
   lng: -93.277830,
-  markerID: 25
+  markerId: 25
 }, {
   title: 'Tropicana Field',
   abbrev: 'TB',
@@ -222,7 +222,7 @@ var ballparks = [{
   nickname: 'Rays',
   lat: 27.768485,
   lng: -82.653345,
-  markerID: 26
+  markerId: 26
 }, {
   title: 'SunTrust Park',
   abbrev: 'ATL',
@@ -230,7 +230,7 @@ var ballparks = [{
   nickname: 'Braves',
   lat: 33.890879,
   lng: -84.467775,
-  markerID: 27
+  markerId: 27
 }, {
   title: 'Wrigley Field',
   abbrev: 'CHC',
@@ -238,7 +238,7 @@ var ballparks = [{
   nickname: 'Cubs',
   lat: 41.947902,
   lng: -87.655823,
-  markerID: 28
+  markerId: 28
 }, {
   title: 'Yankee Stadium',
   abbrev: 'NYY',
@@ -246,7 +246,7 @@ var ballparks = [{
   nickname: 'Yankees',
   lat: 40.829848,
   lng: -73.926191,
-  markerID: 29
+  markerId: 29
 }];
 
 // mapView creates and manipulates a map using the Google Maps API
@@ -368,9 +368,9 @@ var mapView = {
     );
   },
 
-  // simulate click on the map marker that corresponds to markerID
-  openMarker: function(markerID) {
-    google.maps.event.trigger(mapView.markers[markerID], 'click', {
+  // simulate click on the map marker that corresponds to markerId
+  openMarker: function(markerId) {
+    google.maps.event.trigger(mapView.markers[markerId], 'click', {
       latLng: new google.maps.LatLng(0, 0)
     });
   },
@@ -448,8 +448,8 @@ var viewModel = {
   searchVisible: ko.observable(true),
   // activeBallparkName contains the title (name) of the activeBallpark
   activeBallparkName: ko.observable(),
-  // activeBallparkName contains the markerID of the activeBallpark
-  activeBallparkMarkerID: ko.observable(),
+  // activeBallparkName contains the markerId of the activeBallpark
+  activeBallparkMarkerId: ko.observable(),
   // snippet contains a snippet (i.e., the beginning text of)
   // an article about activeBallpark
   snippet: ko.observable(),
@@ -483,13 +483,13 @@ var viewModel = {
     viewModel.buildBallparkObservables();
   },
 
-  // set the activeBallpark title and markerID.
+  // set the activeBallpark title and markerId.
   // Show the activeBallpark on the map.
   setActiveBallpark: function(activeBallpark) {
     viewModel.activeBallparkName(activeBallpark.title);
-    viewModel.activeBallparkMarkerID(activeBallpark.markerID);
+    viewModel.activeBallparkMarkerId(activeBallpark.markerId);
     // simulate a click on the marker for the activeBallpark
-    mapView.openMarker(activeBallpark.markerID);
+    mapView.openMarker(activeBallpark.markerId);
   },
 
   // reset the ballparkList to show all ballparks
@@ -685,15 +685,15 @@ var viewModel = {
 
   // Ballpark() contains the set of observable ballpark properties
   // necessary to perform the advanced search
-  Ballpark: function(title, location, nickname, abbrev, markerID) {
+  Ballpark: function(title, location, nickname, abbrev, markerId) {
     // title, location, nickname and abbreviation are searchable fields for
     // the advanced search
     this.title = ko.observable(title);
     this.location = ko.observable(location);
     this.nickname = ko.observable(nickname);
     this.abbrev = ko.observable(abbrev);
-    // markerID is used to show the selected ballpark on the map
-    this.markerID = ko.observable(markerID);
+    // markerId is used to show the selected ballpark on the map
+    this.markerId = ko.observable(markerId);
     // searchResultString is the displayed advanced search result
     // and has this format:
     // BallparkTitle -- TeamLocation TeamNickname (TeamAbbreviation)
@@ -717,7 +717,7 @@ var viewModel = {
     for (var i = 0; i < ballparks.length; i++) {
       var thisBallpark = new viewModel.Ballpark(
         ballparks[i].title, ballparks[i].location, ballparks[i].nickname,
-        ballparks[i].abbrev, ballparks[i].markerID
+        ballparks[i].abbrev, ballparks[i].markerId
       );
       viewModel.observableBallparks.push(thisBallpark);
     }
@@ -755,15 +755,15 @@ ko.bindingHandlers.advancedSearch = {
       // Override default onSelect behavior.  This prevents the selected
       // label from being displayed as the input value
       event.preventDefault();
-      // write marker ID value to selectedBallparkMarkerID
-      allBindingsAccessor().selectedBallparkMarkerID(ui.item.markerID);
+      // write marker ID value to selectedBallparkMarkerId
+      allBindingsAccessor().selectedBallparkMarkerId(ui.item.markerId);
       // clear the ballparkList
       viewModel.ballparkList.removeAll();
       for (var i = 0; i < ballparks.length; i++) {
         //if this ballpark was selected
         if (
-          allBindingsAccessor().selectedBallparkMarkerID() ===
-          ballparks[i].markerID
+          allBindingsAccessor().selectedBallparkMarkerId() ===
+          ballparks[i].markerId
         ) {
           // add the selected ballpark to the ballparkList
           viewModel.ballparkList.push(ballparks[i]);
@@ -777,7 +777,7 @@ ko.bindingHandlers.advancedSearch = {
       // Clear the user input
       $(element).val(null);
       // simulate a click on the marker for the activeBallpark
-      mapView.openMarker(allBindingsAccessor().selectedBallparkMarkerID());
+      mapView.openMarker(allBindingsAccessor().selectedBallparkMarkerId());
     };
     var mappedSource = ko.computed(
       function() {
@@ -792,9 +792,9 @@ ko.bindingHandlers.advancedSearch = {
             result.label = ko.utils.unwrapObservable(
               item[allBindingsAccessor().advancedSearchResult]
             );
-            // result.markerID contains the markerID used
+            // result.markerId contains the markerId used
             // to open the ballpark marker on the map
-            result.markerID = ko.utils.unwrapObservable(item['markerID']);
+            result.markerId = ko.utils.unwrapObservable(item['markerId']);
             // result.value is not set since activeBallpark view
             // will be opened on selection of a ballpark's label
             return result;
