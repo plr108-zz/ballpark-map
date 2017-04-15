@@ -582,7 +582,7 @@ var viewModel = {
     viewModel.showAllBallparks();
     // Reset regular search input string
     viewModel.regularSearchQuery("");
-    // Note: no advancedSearch viewModel values need to be reset here
+    // NOTE: no advancedSearch viewModel values need to be reset here
   },
 
   // Using the MediaWiki API show a snippet of a Wikipedia article about
