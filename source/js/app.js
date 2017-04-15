@@ -224,12 +224,12 @@ var ballparks = [{
   lng: -82.653345,
   markerID: 25
 }, {
-  title: 'Turner Field',
+  title: 'SunTrust Park',
   abbrev: 'ATL',
   location: 'Atlanta',
   nickname: 'Braves',
-  lat: 33.735085,
-  lng: -84.389973,
+  lat: 33.890879,
+  lng: -84.467775,
   markerID: 26
 }, {
   title: 'Wrigley Field',
