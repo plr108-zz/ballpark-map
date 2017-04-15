@@ -224,7 +224,7 @@ var ballparks = [{
   lng: -84.389973,
   markerID: 26
 }, {
-  title: 'U.S. Cellular Field',
+  title: 'Guaranteed Rate Field',
   abbrev: 'CWS',
   location: 'Chicago',
   nickname: 'White Sox',
