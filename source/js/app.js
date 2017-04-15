@@ -110,7 +110,7 @@ var ballparks = [{
   nickname: 'White Sox',
   lat: 41.830176,
   lng: -87.634225,
-  markerID: 27
+  markerID: 12
 }, {
   title: 'Kauffman Stadium',
   abbrev: 'KC',
@@ -118,7 +118,7 @@ var ballparks = [{
   nickname: 'Royals',
   lat: 39.051839,
   lng: -94.480303,
-  markerID: 12
+  markerID: 13
 }, {
   title: 'Marlins Park',
   abbrev: 'MIA',
@@ -126,7 +126,7 @@ var ballparks = [{
   nickname: 'Marlins',
   lat: 25.778344,
   lng: -80.219723,
-  markerID: 13
+  markerID: 14
 }, {
   title: 'Miller Park',
   abbrev: 'MIL',
@@ -134,7 +134,7 @@ var ballparks = [{
   nickname: 'Brewers',
   lat: 43.028213,
   lng: -87.971172,
-  markerID: 14
+  markerID: 15
 }, {
   title: 'Minute Maid Park',
   abbrev: 'HOU',
@@ -142,7 +142,7 @@ var ballparks = [{
   nickname: 'Astros',
   lat: 29.757413,
   lng: -95.355529,
-  markerID: 15
+  markerID: 16
 }, {
   title: 'Nationals Park',
   abbrev: 'WSH',
@@ -150,7 +150,7 @@ var ballparks = [{
   nickname: 'Nationals',
   lat: 38.873219,
   lng: -77.007411,
-  markerID: 16
+  markerID: 17
 }, {
   title: 'Oakland-Alameda County Coliseum',
   abbrev: 'OAK',
@@ -158,7 +158,7 @@ var ballparks = [{
   nickname: 'Athletics',
   lat: 37.751595,
   lng: -122.200528,
-  markerID: 17
+  markerID: 18
 }, {
   title: 'Oriole Park at Camden Yards',
   abbrev: 'BAL',
@@ -166,7 +166,7 @@ var ballparks = [{
   nickname: 'Orioles',
   lat: 39.283505,
   lng: -76.621911,
-  markerID: 18
+  markerID: 19
 }, {
   title: 'Petco Park',
   abbrev: 'SD',
@@ -174,7 +174,7 @@ var ballparks = [{
   nickname: 'Padres',
   lat: 32.707582,
   lng: -117.156999,
-  markerID: 19
+  markerID: 20
 }, {
   title: 'PNC Park',
   abbrev: 'PIT',
@@ -182,7 +182,7 @@ var ballparks = [{
   nickname: 'Pirates',
   lat: 40.4470472,
   lng: -80.006175,
-  markerID: 20
+  markerID: 21
 }, {
   title: 'Progressive Field',
   abbrev: 'CLE',
@@ -190,7 +190,7 @@ var ballparks = [{
   nickname: 'Indians',
   lat: 41.495537,
   lng: -81.685278,
-  markerID: 21
+  markerID: 22
 }, {
   title: 'Rogers Centre',
   abbrev: 'TOR',
@@ -198,7 +198,7 @@ var ballparks = [{
   nickname: 'Blue Jays',
   lat: 43.641453,
   lng: -79.389353,
-  markerID: 22
+  markerID: 23
 }, {
   title: 'Safeco Field',
   abbrev: 'SEA',
@@ -206,7 +206,7 @@ var ballparks = [{
   nickname: 'Mariners',
   lat: 47.591653,
   lng: -122.332335,
-  markerID: 23
+  markerID: 24
 }, {
   title: 'Target Field',
   abbrev: 'MIN',
@@ -214,7 +214,7 @@ var ballparks = [{
   nickname: 'Twins',
   lat: 44.981911,
   lng: -93.277830,
-  markerID: 24
+  markerID: 25
 }, {
   title: 'Tropicana Field',
   abbrev: 'TB',
@@ -222,7 +222,7 @@ var ballparks = [{
   nickname: 'Rays',
   lat: 27.768485,
   lng: -82.653345,
-  markerID: 25
+  markerID: 26
 }, {
   title: 'SunTrust Park',
   abbrev: 'ATL',
@@ -230,7 +230,7 @@ var ballparks = [{
   nickname: 'Braves',
   lat: 33.890879,
   lng: -84.467775,
-  markerID: 26
+  markerID: 27
 }, {
   title: 'Wrigley Field',
   abbrev: 'CHC',
