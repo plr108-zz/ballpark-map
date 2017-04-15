@@ -152,7 +152,7 @@ var ballparks = [{
   lng: -77.007411,
   markerID: 16
 }, {
-  title: 'O.co Coliseum',
+  title: 'Oakland-Alameda County Coliseum',
   abbrev: 'OAK',
   location: 'Oakland',
   nickname: 'Athletics',
